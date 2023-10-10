@@ -1,0 +1,130 @@
+{
+    "welcome_screen": {
+        "title": "Bienvenue",
+        "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum incidunt laborum consequatur eius quod impedit ab asperiores eveniet molestias nihil.",
+        "login_btn": "Connexion",
+        "register_btn": "Inscription"
+    },
+    "connexion_screen": {
+        "title": "Connexion",
+        "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum incidunt laborum consequatur eius quod impedit ab asperiores eveniet molestias nihil.",
+        "phone_field": "Numéro de téléphone*",
+        "password_field": "Mot de passe*",
+        "register_link": "S'inscrire",
+        "forgot_password_link": "Mot de passe oublié!",
+        "errors": {
+            "phone_field_empty": "Un numéro de téléphone est requis.",
+            "password_field_empty": "Un mot de passe est requis.",
+            "incorrect": "Un numéro de téléphone ou mot de passe incorrect.",
+            "signature_condition": "Veuillez accepter les conditions générales d'abord."
+        }
+    },
+    "inscription_screen": {
+        "infos": {
+            "title": "Inscription",
+            "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum incidunt laborum",
+            "phone_field": "Numéro de téléphone",
+            "name": "Nom",
+            "firstname": "Prénom",
+            "birth": "Date de naissance",
+            "errors": {
+                "phone_field_empty": "Un numéro de téléphone est requis.",
+                "name_field_empty": "Un nom est requis.",
+                "firstname": "Un prenom est requis.",
+                "password_field_empty": "Un mot de passe est requis.",
+                "phone_incorrect": "Format numéro de téléphone incorrect."
+            }
+        },
+        "account": {
+            "title": "Inscription",
+            "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum incidunt laborum",
+            "address": "Adresse",
+            "email": "Email",
+            "account_choice_radio": {
+                "text": "Avez-vous un compte UBA?",
+                "oui": "oui",
+                "non": "non"
+            },
+            "account_count_field": "Numéro de compte UBA",
+            "errors": {
+                "address_field_empty": "Une adresse est requise.",
+                "email_field_empty": "Un email est requis."
+            }
+        },
+        "document": {
+            "title": "Inscription",
+            "description": "Choisir votre document",
+            "nina": "NINA",
+            "passport": "PASSPORT",
+            "cin": "CIN",
+            "photo_text": "Faire la photo de votre pièce d'identité",
+            "errors": {
+                "choice": "Le choix d'un document est neccessaire."
+            }
+        },
+        "identity": {
+            "selfie": {
+                "title": "Inscription",
+                "description": "Faire un selfie",
+                "errors": {
+                    "photo": "Votre photo est requise."
+                }
+            },
+            "signature": {
+                "title": "Conditions générales & Signature",
+                "description": "Signez manuellement dans le champ ci-dessous.",
+                "authorize": "J'accepte les conditions générales",
+                "errors": {
+                    "signature": "Votre signature est requise.",
+                    "authorize": "Veuillez accepté les conditions générales."
+                }
+            },
+            "finalisation": {
+                "title": "Créer votre mot de passe",
+                "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit.",
+                "password": "Mot de passe",
+                "confirm": "Confirmation mot de passe",
+                "errors": {
+                    "password_empty": "Un mot de passe est requis.",
+                    "confirm_empty": "Les mots de passe ne se correspondent pas.",
+                    "password_size": "Taille mot de passe trop court.",
+                    "password_faible": "Mot de passe faible."
+                }
+            }
+        },
+        "waiting": {
+            "title": "Vérification en cours",
+            "description": "Votre compte est en cours de vérification. Une confirmation vous sera envoyé dans un instant "
+        }
+    },
+    "forgot_screen": {
+        "title": "Mot de passe oublié",
+        "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum incidunt laborum consequatur eius quod impedit ab asperiores eveniet molestias nihil.",
+        "phone_field": "Numéro de téléphone*",
+        "errors": {
+            "phone_field_empty": "Un numéro de téléphone est requis.",
+            "phone_field_format": "Format numéro de téléphone est incorrect."
+        }
+    },
+    "verify_screen": {
+        "title": "Verification numéro de téléphone",
+        "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum incidunt laborum consequatur eius quod impedit ab asperiores eveniet molestias nihil.",
+        "no_code": "Vous n'avez pas encore reçu de code?",
+        "retry": "réessayer.",
+        "errors": {
+            "incorrect": "Code de vérification incorrect"
+        }
+    },
+    "reset_screen": {
+        "title": "Réinitialisation du mot de passe",
+        "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit.",
+        "password": "Mot de passe",
+        "confirm": "Confirmation mot de passe",
+        "errors": {
+            "password_empty": "Un mot de passe est requis.",
+            "confirm_empty": "Les mots de passe ne se correspondent pas.",
+            "password_size": "Taille mot de passe trop court.",
+            "password_weak": "Mot de passe faible."
+        }
+    }
+}
