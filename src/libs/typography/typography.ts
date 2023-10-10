@@ -1,4 +1,3 @@
-import { Dimensions } from 'react-native'
 
 export const roboto = {
     black: 'Roboto-Black',
@@ -31,4 +30,3 @@ export const colors = {
     warning: '#edb95e',
 }
 
-export const { height, width } = Dimensions.get('window')
