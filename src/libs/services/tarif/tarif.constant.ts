@@ -1,0 +1,3 @@
+export const LOADING_TARIF = 'LOADING_TARIF'
+export const ERROR_TARIF = 'ERROR_TARIF'
+export const GET_ALL_TARIFS = 'GET_ALL_TARIFS'

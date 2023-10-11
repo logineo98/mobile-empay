@@ -28,5 +28,14 @@ export const colors = {
     success: '#82dd55',
     error: '#e23636',
     warning: '#edb95e',
+
+    // tz
+    gradient_color: ['#B9B1E2', '#CDA0C4', '#E48DA0'],
+    drawer_bg_color: '#0B0B0B',
+    drawer_icon_color: '#CDA0C4',
+    profil_bg_color: '#AAAAAA',
+
+    screen_bg_color: '#181818',
+    home_icon_bg_color: '#EFD3C8',
 }
 

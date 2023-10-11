@@ -11,7 +11,15 @@ export const images = {
     login_bg_img: 'https://picsum.photos/200/300/?blur=2',
     passport: require('../assets/images/passport.jpg'),
     avatar: require('../assets/images/avatar1.png'),
-    noimage: require('../assets/images/no_img.png')
+    noimage: require('../assets/images/no_img.png'),
+
+    // tz
+    logout: require('../assets/images/logout.png'),
+    plus: require('../assets/images/plus.png'),
+    minus: require('../assets/images/minus.png'),
+    arrow_left: require('../assets/images/arrow_left.png'),
+    home: require('../assets/images/home.png'),
+
 }
 
 
