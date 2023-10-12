@@ -10,15 +10,25 @@ export const images = {
     bg: require('../assets/images/bg.jpg'),
     login_bg_img: 'https://picsum.photos/200/300/?blur=2',
     passport: require('../assets/images/passport.jpg'),
-    avatar: require('../assets/images/avatar1.png'),
     noimage: require('../assets/images/no_img.png'),
 
     // tz
+    avatar: require('../assets/images/avatar.png'),
     logout: require('../assets/images/logout.png'),
+    tarif: require('../assets/images/tarif.png'),
+    parrainage: require('../assets/images/parrainage.png'),
+    partenaire: require('../assets/images/partenaire.png'),
+    update: require('../assets/images/update.png'),
+    service_client: require('../assets/images/service_client.png'),
+    about: require('../assets/images/about.png'),
+    status: require('../assets/images/status.png'),
     plus: require('../assets/images/plus.png'),
     minus: require('../assets/images/minus.png'),
     arrow_left: require('../assets/images/arrow_left.png'),
+    arrow_right: require('../assets/images/arrow_right.png'),
     home: require('../assets/images/home.png'),
+    guichet: require('../assets/images/guichet.png'),
+    mobile_money: require('../assets/images/mobile_money.png'),
 
 }
 

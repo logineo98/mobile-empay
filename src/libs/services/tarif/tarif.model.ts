@@ -1,6 +1,6 @@
 export type TARIF_TYPE = {
-    id?: string,
-    tarif: string,
+    id?: string
+    tarif: string
     description: string
 }
 

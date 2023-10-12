@@ -46,3 +46,5 @@ export const inputSeparatorMille = (v: string, fieldName: string, setInputs: any
 export const formatNumberWithSpaces = (data: string) => data?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
 
 export const deleteSeparator = (input: string) => { return input.replace(/\D/g, '') }
+
+export const isPair = (value: number) => value % 2 === 0

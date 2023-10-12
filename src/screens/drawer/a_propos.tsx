@@ -1,15 +1,18 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View, useWindowDimensions } from 'react-native'
 import React, { FC } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 // my importations
 import ScreenContainer2 from '../../components/common/drawer/screen_container2'
 import { images } from '../../libs/constants/constants'
 import { colors, roboto } from '../../libs/typography/typography'
+import CustomLinearGradient from '../../components/common/drawer/gradient/CustomLinearGradient'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
 
 const APropos: FC<COMPONENT_TYPE> = (props) => {
     const { navigation } = props
+
+    const { height, width, } = useWindowDimensions()
 
     return (
         <ScreenContainer2 title='À Propos' scroll navigation={navigation}>
@@ -19,7 +22,9 @@ const APropos: FC<COMPONENT_TYPE> = (props) => {
                 </View>
 
                 <View style={styles.info_title_description_container}>
-                    <Text style={styles.info_title}>Information sur l'application</Text>
+                    <CustomLinearGradient style={styles.gradient}>
+                        <Text style={styles.info_title}>Information sur l'application</Text>
+                    </CustomLinearGradient>
                     <Text style={styles.info_description}>
                         La carte EMPAY est acceptée dans tous les points d'acception des cartes Visa
                         (guichets automatiques, points de vente et Web) dans plus de 200 pays.
@@ -31,14 +36,16 @@ const APropos: FC<COMPONENT_TYPE> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    a_propos_container: { alignItems: 'center', marginTop: 20, },
+    a_propos_container: { alignItems: 'center', padding: 20, paddingBottom: 40, },
 
     logo_img_container: { height: 200, width: 200, },
     logo_img: { height: '100%', width: '100%', objectFit: 'cover', },
 
     info_title_description_container: { alignItems: 'center', },
-    info_title: { backgroundColor: colors.drawer_icon_color, color: colors.black, fontFamily: roboto.regular, padding: 10, borderRadius: 20, marginVertical: 20, },
+    info_title: { color: colors.black, fontFamily: roboto.regular, },
     info_description: { color: colors.white, fontFamily: roboto.regular, textAlign: 'justify', },
+
+    gradient: { padding: 10, borderRadius: 20, marginVertical: 20, },
 })
 
 export default APropos

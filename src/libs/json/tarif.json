@@ -1,0 +1,22 @@
+[
+    {
+        "id": "1",
+        "tarif": "",
+        "description": "0 FCFA sur les frais de retrait."
+    },
+    {
+        "id": "2",
+        "tarif": "",
+        "description": "1,5% sur le montant de la recharge."
+    },
+    {
+        "id": "3",
+        "tarif": "",
+        "description": "2% sur le montant de la recharge VIA MOBILE MONEY (ORANGE MONEY, MOOV MONEY)."
+    },
+    {
+        "id": "4",
+        "tarif": "",
+        "description": "500 FCFA sur les retraits dans tous les guichets GIM-UEMOA."
+    }
+]

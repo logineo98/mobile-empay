@@ -18,7 +18,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
         <View style={styles.drawer_container}>
             <TouchableOpacity activeOpacity={0.5} style={styles.profil_info_container} onPress={() => navigation.closeDrawer()}>
                 <View style={styles.profil_img_container}>
-                    <Image source={images.passport} style={styles.profil_img} />
+                    <Image source={images.avatar} style={styles.profil_img} />
                 </View>
                 <View style={styles.info_container}>
                     <Text numberOfLines={1} style={styles.info_name}>Tz Nation</Text>
@@ -29,37 +29,37 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
             <View style={[styles.item_global_container, { height: height - (135 + 70), marginTop: 10, }]}>
                 <ScrollView contentContainerStyle={{}} showsVerticalScrollIndicator={false}>
                     <TouchableOpacity activeOpacity={0.5} style={[styles.item_container, { marginTop: 20, }]} onPress={() => navigation.navigate('status')}>
-                        <Image source={images.logout} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
+                        <Image source={images.status} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
                         <Text style={styles.item_name}>Statut/Disponibilité</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity activeOpacity={0.5} style={styles.item_container} onPress={() => navigation.navigate('tarif')}>
-                        <Image source={images.logout} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
+                        <Image source={images.tarif} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
                         <Text style={styles.item_name}>Tarif</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity activeOpacity={0.5} style={styles.item_container} onPress={() => navigation.navigate('partenaire')}>
-                        <Image source={images.logout} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
+                        <Image source={images.partenaire} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
                         <Text style={styles.item_name}>Partenaire</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity activeOpacity={0.5} style={styles.item_container} onPress={() => navigation.navigate('a_propos')}>
-                        <Image source={images.logout} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
+                        <Image source={images.about} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
                         <Text style={styles.item_name}>A propos</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity activeOpacity={0.5} style={styles.item_container}>
-                        <Image source={images.logout} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
+                        <Image source={images.service_client} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
                         <Text style={styles.item_name}>Service client</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity activeOpacity={0.5} style={styles.item_container}>
-                        <Image source={images.logout} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
+                        <Image source={images.parrainage} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
                         <Text style={styles.item_name}>Parrainage</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity activeOpacity={0.5} style={styles.item_container}>
-                        <Image source={images.logout} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
+                        <Image source={images.update} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
                         <Text style={styles.item_name}>Mise à jour disponible</Text>
                     </TouchableOpacity>
 
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     item_icon: { height: 30, width: 30, objectFit: 'cover', },
     item_name: { color: colors.white, fontSize: 18, fontFamily: roboto.black, marginLeft: 5, },
 
-    divider: { height: 2, backgroundColor: colors.drawer_icon_color, borderRadius: 10, },
+    divider: { height: 2, backgroundColor: colors.drawer_icon_color, borderRadius: 10, marginBottom: 20, },
 
     logout_apli_version_container: { width: '100%', },
     apli_version: { color: colors.profil_bg_color, fontFamily: roboto.regular, textAlign: 'center', },

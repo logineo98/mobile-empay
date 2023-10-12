@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Image, ScrollView, StatusBar, StyleSheet, Switch, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { FC, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 // my importations
@@ -21,6 +21,7 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
 
     return (
         <View style={styles.screen_container_2}>
+
             <View style={styles.header_container}>
                 <TouchableOpacity activeOpacity={0.5} style={styles.arrow_left_icon_container} onPress={() => navigation.goBack()}>
                     <Image source={images.arrow_left} style={styles.arrow_left_icon} tintColor={colors.white} />
@@ -29,7 +30,7 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
                 <View />
             </View>
 
-            <View style={[styles.body_container, { height: height - 142 }]}>
+            <View style={[styles.body_container, { height: height - 138 }]}>
                 {scroll ?
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {children}
@@ -55,9 +56,9 @@ const styles = StyleSheet.create({
     arrow_left_icon: { height: '100%', width: '100%', objectFit: 'cover', },
     screen_name: { color: colors.white, fontSize: 20, fontFamily: roboto.black, },
 
-    body_container: { marginTop: 0, },
+    body_container: { marginTop: 5, },
 
-    bottom_tab_container: { width: '100%', padding: 10, position: 'absolute', left: 10, bottom: 10, alignItems: 'center', },
+    bottom_tab_container: { width: '100%', padding: 10, position: 'absolute', left: 10, bottom: 0, alignItems: 'center', },
     bottom_item_container: { backgroundColor: colors.home_icon_bg_color, height: 50, width: 50, borderRadius: 50, padding: 10, },
     bottom_item: { height: '100%', width: '100%', objectFit: 'cover', },
 })
