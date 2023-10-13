@@ -6,7 +6,7 @@ import { colors, roboto } from '../../../libs/typography/typography'
 import { isPair } from '../../../libs/constants/utils'
 // my icons
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import CustomLinearGradient from '../../common/drawer/gradient/CustomLinearGradient'
+import CustomLinearGradient from '../../common/drawer/gradient/custom_linear_gradient'
 
 type COMPONENT_TYPE = {
     data: PARTNER_TYPE

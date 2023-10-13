@@ -5,7 +5,7 @@ import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript
 import ScreenContainer2 from '../../components/common/drawer/screen_container2'
 import { images } from '../../libs/constants/constants'
 import { colors, roboto } from '../../libs/typography/typography'
-import CustomLinearGradient from '../../components/common/drawer/gradient/CustomLinearGradient'
+import CustomLinearGradient from '../../components/common/drawer/gradient/custom_linear_gradient'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
 
@@ -36,7 +36,7 @@ const APropos: FC<COMPONENT_TYPE> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    a_propos_container: { alignItems: 'center', padding: 20, paddingBottom: 40, },
+    a_propos_container: { alignItems: 'center', padding: 20, },
 
     logo_img_container: { height: 200, width: 200, },
     logo_img: { height: '100%', width: '100%', objectFit: 'cover', },

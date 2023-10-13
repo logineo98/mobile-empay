@@ -37,5 +37,9 @@ export const colors = {
 
     screen_bg_color: '#181818',
     home_icon_bg_color: '#EFD3C8',
+    home_icon_gradient: ['#FBF9FA', '#F6E3DF', '#F1D1C6'],
+
+    ika_wari_taa_bg_color: '#E91F8B',
+    recharge_bg_color: '#EEF0F1',
 }
 

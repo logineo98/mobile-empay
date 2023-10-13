@@ -29,6 +29,12 @@ export const images = {
     home: require('../assets/images/home.png'),
     guichet: require('../assets/images/guichet.png'),
     mobile_money: require('../assets/images/mobile_money.png'),
+    visa_recto: require('../assets/images/visa_recto.png'),
+    visa_verso: require('../assets/images/visa_verso.png'),
+    ika_wari_taa: require('../assets/images/ika_wari_taa.png'),
+    facture: require('../assets/images/facture.png'),
+    recharge: require('../assets/images/recharge.png'),
+    restaurant: require('../assets/images/restaurant.png'),
 
 }
 

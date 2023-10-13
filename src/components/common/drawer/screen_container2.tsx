@@ -1,11 +1,10 @@
-import { Image, ScrollView, StatusBar, StyleSheet, Switch, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
-import React, { FC, useState } from 'react'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import React, { FC, } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 // my importations
 import { colors, roboto } from '../../../libs/typography/typography'
 import { images } from '../../../libs/constants/constants'
-// my icons
-import Entypo from 'react-native-vector-icons/Entypo'
+import CustomLinearGradient from './gradient/custom_linear_gradient'
 
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers
@@ -40,9 +39,11 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
             </View>
 
             <View style={styles.bottom_tab_container}>
-                <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => navigation.navigate('home')}>
-                    <Image source={images.home} style={styles.bottom_item} tintColor={colors.black} />
-                </TouchableOpacity>
+                <CustomLinearGradient colors_={colors.home_icon_gradient} style={styles.gradient}>
+                    <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => navigation.navigate('home')}>
+                        <Image source={images.home} style={styles.bottom_item} tintColor={colors.black} />
+                    </TouchableOpacity>
+                </CustomLinearGradient>
             </View>
         </View>
     )
@@ -59,8 +60,10 @@ const styles = StyleSheet.create({
     body_container: { marginTop: 5, },
 
     bottom_tab_container: { width: '100%', padding: 10, position: 'absolute', left: 10, bottom: 0, alignItems: 'center', },
-    bottom_item_container: { backgroundColor: colors.home_icon_bg_color, height: 50, width: 50, borderRadius: 50, padding: 10, },
+    bottom_item_container: {},
     bottom_item: { height: '100%', width: '100%', objectFit: 'cover', },
+
+    gradient: { height: 50, width: 50, padding: 10, borderRadius: 50, },
 })
 
 export default ScreenContainer2

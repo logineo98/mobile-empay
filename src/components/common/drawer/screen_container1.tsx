@@ -6,6 +6,7 @@ import { colors, roboto } from '../../../libs/typography/typography'
 import { images } from '../../../libs/constants/constants'
 // my icons
 import Entypo from 'react-native-vector-icons/Entypo'
+import CustomLinearGradient from './gradient/custom_linear_gradient'
 
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers
@@ -36,7 +37,7 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
                 <Switch />
             </View>
 
-            <View style={[styles.body_container, { height: height - 153 }]}>
+            <View style={[styles.body_container, { height: height - 139 }]}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     {children}
                 </ScrollView>
@@ -44,9 +45,11 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
 
             {!show ?
                 <View style={[styles.bottom_tab_container, { padding: 10, }]}>
-                    <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => setShow(true)}>
-                        <Image source={images.plus} style={styles.bottom_item} tintColor={colors.black} />
-                    </TouchableOpacity>
+                    <CustomLinearGradient colors_={colors.home_icon_gradient} style={styles.gradient}>
+                        <TouchableOpacity activeOpacity={0.5} style={{}} onPress={() => setShow(true)}>
+                            <Image source={images.plus} style={styles.bottom_item} tintColor={colors.black} />
+                        </TouchableOpacity>
+                    </CustomLinearGradient>
                 </View> :
                 <View style={styles.bottom_tab_container}>
                     <View style={styles.bottom_tab_active_container}>
@@ -77,8 +80,8 @@ const styles = StyleSheet.create({
 
     header_container: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
     profil_info_container: { width: 215, backgroundColor: colors.profil_bg_color, flexDirection: 'row', alignItems: 'center', padding: 5, borderRadius: 40, },
-    profil_img_container: { height: 50, width: 50, borderRadius: 50, padding: 3, backgroundColor: colors.profil_bg_color, elevation: 5, },
-    profil_img: { height: '100%', width: '100%', objectFit: 'contain', borderRadius: 50, },
+    profil_img_container: { height: 36, width: 36, borderRadius: 36, padding: 3, backgroundColor: colors.profil_bg_color, elevation: 5, },
+    profil_img: { height: '100%', width: '100%', objectFit: 'contain', borderRadius: 36, },
     info_container: { marginLeft: 5, },
     info_name: { color: colors.black, fontSize: 15, fontFamily: roboto.black, },
     info_email: { color: colors.black, fontSize: 10, fontFamily: roboto.regular, },
@@ -90,6 +93,9 @@ const styles = StyleSheet.create({
     bottom_item: { height: '100%', width: '100%', objectFit: 'cover', },
 
     bottom_tab_active_container: { width: '90%', padding: 10, borderRadius: 30, backgroundColor: colors.profil_bg_color, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' },
+
+    gradient: { height: 50, width: 50, padding: 10, borderRadius: 50, },
+
 })
 
 export default ScreenContainer1
