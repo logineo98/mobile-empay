@@ -1,12 +1,11 @@
-import { Image, ScrollView, StatusBar, StyleSheet, Switch, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
-import React, { FC, useState } from 'react'
+import { Image, Keyboard, ScrollView, StatusBar, StyleSheet, Switch, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import React, { FC, useEffect, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 // my importations
-import { colors, roboto } from '../../../libs/typography/typography'
-import { images } from '../../../libs/constants/constants'
+import { colors, roboto } from '../../../../libs/typography/typography'
+import { images } from '../../../../libs/constants/constants'
 // my icons
-import Entypo from 'react-native-vector-icons/Entypo'
-import CustomLinearGradient from './gradient/custom_linear_gradient'
+import CustomLinearGradient from '../gradient/custom_linear_gradient'
 
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers
@@ -20,6 +19,22 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
 
     const [show, setShow] = useState(false)
     const [isSwitchActive, setIsSwitchActive] = useState(false)
+    const [isKeyboardActive, setIsKeyboardActive] = useState(false)
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+            setIsKeyboardActive(true)
+        })
+
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+            setIsKeyboardActive(false)
+        })
+
+        return () => {
+            keyboardDidShowListener.remove()
+            keyboardDidHideListener.remove()
+        }
+    }, [])
 
     return (
         <View style={styles.screen_container_1}>
@@ -39,12 +54,13 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
             </View>
 
             <View style={[styles.body_container, { height: height - 139 }]}>
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
                     {children}
                 </ScrollView>
             </View>
 
-            {!show ?
+            {!isKeyboardActive &&
+                !show ?
                 <View style={[styles.bottom_tab_container, { padding: 10, }]}>
                     <CustomLinearGradient colors_={colors.home_icon_gradient} style={styles.gradient}>
                         <TouchableOpacity activeOpacity={0.5} style={{}} onPress={() => setShow(true)}>

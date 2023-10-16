@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions, }
 import React, { FC, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 // my importations
-import ScreenContainer1 from '../../components/common/drawer/screen_container1'
+import ScreenContainer1 from '../../components/common/drawer/container/screen_container1'
 import GradientText from '../../components/common/drawer/gradient/gradient_text'
 import { images } from '../../libs/constants/constants'
 import CustomLinearGradient from '../../components/common/drawer/gradient/custom_linear_gradient'
@@ -18,7 +18,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
     const [verso, setVerso] = useState(false)
 
     return (
-        <ScreenContainer1 navigation={navigation} >
+        <ScreenContainer1 navigation={navigation}>
             <View style={styles.home_container}>
                 {/* carte visa */}
                 <View style={styles.visa_img_global_container}>

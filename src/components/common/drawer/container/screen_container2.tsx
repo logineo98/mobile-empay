@@ -1,10 +1,10 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
-import React, { FC, } from 'react'
+import { Image, Keyboard, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import React, { FC, useEffect, useState, } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 // my importations
-import { colors, roboto } from '../../../libs/typography/typography'
-import { images } from '../../../libs/constants/constants'
-import CustomLinearGradient from './gradient/custom_linear_gradient'
+import { colors, roboto } from '../../../../libs/typography/typography'
+import { images } from '../../../../libs/constants/constants'
+import CustomLinearGradient from '../gradient/custom_linear_gradient'
 
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers
@@ -17,6 +17,23 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
     const { navigation, children, title, scroll } = props
 
     const { height, width, } = useWindowDimensions()
+
+    const [isKeyboardActive, setIsKeyboardActive] = useState(false)
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+            setIsKeyboardActive(true)
+        })
+
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+            setIsKeyboardActive(false)
+        })
+
+        return () => {
+            keyboardDidShowListener.remove()
+            keyboardDidHideListener.remove()
+        }
+    }, [])
 
     return (
         <View style={styles.screen_container_2}>
@@ -31,20 +48,22 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
 
             <View style={[styles.body_container, { height: height - 138 }]}>
                 {scroll ?
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
                         {children}
                     </ScrollView> :
                     children
                 }
             </View>
 
-            <View style={styles.bottom_tab_container}>
-                <CustomLinearGradient colors_={colors.home_icon_gradient} style={styles.gradient}>
-                    <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => navigation.navigate('home')}>
-                        <Image source={images.home} style={styles.bottom_item} tintColor={colors.black} />
-                    </TouchableOpacity>
-                </CustomLinearGradient>
-            </View>
+            {!isKeyboardActive &&
+                <View style={styles.bottom_tab_container}>
+                    <CustomLinearGradient colors_={colors.home_icon_gradient} style={styles.gradient}>
+                        <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => navigation.navigate('home')}>
+                            <Image source={images.home} style={styles.bottom_item} tintColor={colors.black} />
+                        </TouchableOpacity>
+                    </CustomLinearGradient>
+                </View>
+            }
         </View>
     )
 }
