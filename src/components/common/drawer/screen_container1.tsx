@@ -19,6 +19,7 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
     const { height, width } = useWindowDimensions()
 
     const [show, setShow] = useState(false)
+    const [isSwitchActive, setIsSwitchActive] = useState(false)
 
     return (
         <View style={styles.screen_container_1}>
@@ -34,7 +35,7 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
                         <Text numberOfLines={1} style={styles.info_email}>tz@gmail.com</Text>
                     </View>
                 </TouchableOpacity>
-                <Switch />
+                <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={isSwitchActive ? colors.success : colors.error} value={isSwitchActive} onValueChange={setIsSwitchActive} />
             </View>
 
             <View style={[styles.body_container, { height: height - 139 }]}>

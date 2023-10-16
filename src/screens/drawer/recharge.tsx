@@ -1,14 +1,23 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { FC } from 'react'
+import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
+// my importations
+import ScreenContainer2 from '../../components/common/drawer/screen_container2'
 
-const Recharge = () => {
+type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
+
+const Recharge: FC<COMPONENT_TYPE> = (props) => {
+    const { navigation } = props
+
     return (
-        <View>
-            <Text>Recharge</Text>
-        </View>
+        <ScreenContainer2 title='Recharge' navigation={navigation}>
+
+        </ScreenContainer2>
     )
 }
 
-export default Recharge
+const styles = StyleSheet.create({
 
-const styles = StyleSheet.create({})
+})
+
+export default Recharge

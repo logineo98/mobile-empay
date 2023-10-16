@@ -35,7 +35,8 @@ export const images = {
     facture: require('../assets/images/facture.png'),
     recharge: require('../assets/images/recharge.png'),
     restaurant: require('../assets/images/restaurant.png'),
-
+    paypal: require('../assets/images/paypal.png'),
+    facebook: require('../assets/images/facebook.png'),
 }
 
 

@@ -23,7 +23,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                 {/* carte visa */}
                 <View style={styles.visa_img_global_container}>
                     <TouchableOpacity activeOpacity={0.5} style={styles.visa_img_container} onPress={() => setVerso(!verso)}>
-                        {!verso ? <Image source={images.visa_recto} style={styles.visa_img} /> : <Image source={images.visa_verso} style={styles.visa_img} />}
+                        {!verso ? <Image source={images.visa_recto} style={[styles.visa_img, { objectFit: width < 400 ? 'cover' : 'contain', }]} /> : <Image source={images.visa_verso} style={[styles.visa_img, { objectFit: width < 400 ? 'cover' : 'contain', }]} />}
                     </TouchableOpacity>
                 </View>
                 {/* mon solde */}
@@ -60,9 +60,48 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                 <View style={styles.historique_container}>
                     <View style={styles.historique_tile_see_more_container}>
                         <Text style={styles.historique_title}>Historique</Text>
-                        <TouchableOpacity activeOpacity={0.5} style={styles.historique_see_more_container}>
+                        <TouchableOpacity activeOpacity={0.5} style={styles.historique_see_more_container} onPress={() => navigation.navigate('historique')}>
                             <Text style={styles.historique_see_more_text}>Voir plus</Text>
                         </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.historique_item_container}>
+                        <View style={styles.historique_item}>
+                            <View style={styles.historique_item_icon_type_description_container}>
+                                <View style={styles.historique_item_icon_container}>
+                                    <Image source={images.paypal} tintColor={colors.black} style={styles.historique_item_icon} />
+                                </View>
+                                <View style={styles.historique_item_type_description_container}>
+                                    <Text style={styles.historique_item_type}>PayPal</Text>
+                                    <Text style={styles.historique_item_description}>Paiement client</Text>
+                                </View>
+                            </View>
+                            <Text style={styles.historique_amount}>-50.000 FCFA</Text>
+                        </View>
+                        <View style={styles.historique_item}>
+                            <View style={styles.historique_item_icon_type_description_container}>
+                                <View style={styles.historique_item_icon_container}>
+                                    <Image source={images.facebook} tintColor={colors.black} style={styles.historique_item_icon} />
+                                </View>
+                                <View style={styles.historique_item_type_description_container}>
+                                    <Text style={styles.historique_item_type}>Facebook</Text>
+                                    <Text style={styles.historique_item_description}>Sponsoring page Facebook</Text>
+                                </View>
+                            </View>
+                            <Text style={styles.historique_amount}>-15.000 FCFA</Text>
+                        </View>
+                        <CustomLinearGradient style={styles.historique_item}>
+                            <View style={styles.historique_item_icon_type_description_container}>
+                                <View style={styles.historique_item_icon_container}>
+                                    <Image source={images.restaurant} tintColor={colors.black} style={styles.historique_item_icon} />
+                                </View>
+                                <View style={styles.historique_item_type_description_container}>
+                                    <Text style={styles.historique_item_type}>Restaurant</Text>
+                                    <Text style={styles.historique_item_description}>Paiement par carte</Text>
+                                </View>
+                            </View>
+                            <Text style={styles.historique_amount}>-12.500 FCFA</Text>
+                        </CustomLinearGradient>
                     </View>
                 </View>
             </View>
@@ -75,7 +114,7 @@ const styles = StyleSheet.create({
 
     visa_img_global_container: { alignItems: 'center', marginBottom: 15, },
     visa_img_container: { height: 190, width: '100%', },
-    visa_img: { height: '100%', width: '100%', objectFit: 'contain', },
+    visa_img: { height: '100%', width: '100%', },
 
     solde_name_amount_container: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: colors.drawer_icon_color, borderRadius: 20, marginBottom: 15, },
     solde_name: { width: 120, fontSize: 16, textAlign: 'center', },
@@ -92,15 +131,17 @@ const styles = StyleSheet.create({
     historique_container: {},
     historique_tile_see_more_container: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
     historique_title: { color: colors.white, fontFamily: roboto.regular, },
-    historique_see_more_container: { backgroundColor: colors.profil_bg_color },
-    historique_see_more_text: { color: colors.black, fontSize: 12, fontFamily: roboto.regular, },
-    historique_item: {},
-    historique_item_icon_container: {},
-    historique_item_icon: {},
-    historique_item_type_description_container: {},
-    historique_item_type: {},
-    historique_item_description: {},
-    historique_amount: {},
+    historique_see_more_container: { backgroundColor: colors.profil_bg_color, borderRadius: 7, },
+    historique_see_more_text: { color: colors.black, fontSize: 12, fontFamily: roboto.regular, paddingHorizontal: 5, },
+    historique_item_container: { marginTop: 5, },
+    historique_item: { padding: 15, borderRadius: 30, marginBottom: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: colors.profil_bg_color, },
+    historique_item_icon_type_description_container: { flexDirection: 'row', alignItems: 'center', },
+    historique_item_icon_container: { height: 45, width: 45, padding: 10, borderRadius: 45, backgroundColor: colors.white, },
+    historique_item_icon: { height: '100%', width: '100%', objectFit: 'cover', },
+    historique_item_type_description_container: { marginLeft: 10, },
+    historique_item_type: { color: colors.black, fontFamily: roboto.black, },
+    historique_item_description: { color: colors.black, fontSize: 8, fontFamily: roboto.regular, },
+    historique_amount: { color: colors.black, fontFamily: roboto.regular, },
 })
 
 export default Home
