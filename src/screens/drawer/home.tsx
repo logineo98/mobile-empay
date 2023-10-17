@@ -43,7 +43,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                     </View>
                     <View style={styles.menu_title_container}>
                         <CustomLinearGradient style={styles.gradient}>
-                            <TouchableOpacity activeOpacity={0.5} style={[styles.menu_icon_container, { padding: 15, }]} onPress={() => navigation.navigate('facture')}>
+                            <TouchableOpacity activeOpacity={0.5} style={[styles.menu_icon_container, { padding: 15, }]} onPress={() => navigation.navigate('payment_stack')}>
                                 <Image source={images.facture} style={styles.menu_icon} />
                             </TouchableOpacity>
                         </CustomLinearGradient>

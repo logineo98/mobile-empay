@@ -1,60 +1,110 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { FC, useState } from 'react'
+import { Linking, StyleSheet, Text, TextInput, TouchableOpacity, Vibration, View } from 'react-native'
+import React, { FC, useEffect, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
+import QRCode from 'react-native-qrcode-svg'
+import { Camera, useCameraDevice, useCodeScanner } from 'react-native-vision-camera'
 // my importations
 import ScreenContainer3 from '../../components/common/drawer/container/screen_container3'
 import { colors, roboto } from '../../libs/typography/typography'
 import CustomLinearGradient from '../../components/common/drawer/gradient/custom_linear_gradient'
-import QRCode from 'react-native-qrcode-svg'
 
-type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
+type COMPONENT_TYPE = {
+    navigation: DrawerNavigationHelpers
+    screenName: string
+}
 
 const IkaWariTaa: FC<COMPONENT_TYPE> = (props) => {
-    const { navigation } = props
+    const { navigation, screenName } = props
+    const device = useCameraDevice('back')
 
     const [amount, setAmount] = useState('')
     const [showQrCode, setShowQrCode] = useState(false)
     const [scanQrCode, setScanQrCode] = useState(false)
+    const [granted, setGranted] = useState(false)
 
     const handleShowQrCode = () => {
         setShowQrCode(true)
+        setScanQrCode(false)
     }
 
+    const codeScanner = useCodeScanner({
+        codeTypes: ['qr'],
+        onCodeScanned: (codes) => {
+            Vibration.vibrate()
+            codes.map(code => console.log(code.value))
+        }
+    })
+
+    useEffect(() => {
+        if (screenName === 'ika_wari_taa') {
+            setAmount('')
+            setScanQrCode(false)
+            setShowQrCode(false)
+
+            const checkPermission = async () => {
+                const cameraPermission = await Camera.requestCameraPermission()
+                setGranted(cameraPermission === 'granted')
+            }
+
+            checkPermission()
+        }
+    }, [screenName])
+
+    if (!device) return <View></View>
     return (
         <ScreenContainer3 title='Ika Wari Taa' navigation={navigation}>
-            <View style={styles.ika_wari_taa_container}>
-                {/* montant à retirer */}
-                <View style={styles.amount_to_retirer_title_container}>
-                    <Text style={styles.amount_to_retirer_title}>Inscrire le montant à retirer</Text>
-                    <TextInput onChangeText={setAmount} keyboardType='numeric' style={styles.amount_input} />
-                    <Text style={styles.fcfa}>FCFA</Text>
-                </View>
+            {!granted ?
+                // quand la permission n'est pas accordée à la caméra
+                <View style={styles.camera_permission_denied_container}>
+                    <Text style={styles.camera_permission_denied_title}>Veuillez activer votre autorisation d'accès a la caméra en cliquant sur le bouton ci-dessous. Après l'avoir activé, fermer l'application dans le gestionnaire de tâche (effacé de la liste des applications récemment ouvertes) puis l'ouvrir à nouveau.</Text>
+                    <TouchableOpacity activeOpacity={0.5} style={styles.camera_permission_denied} onPress={() => Linking.openSettings()}>
+                        <CustomLinearGradient style={styles.camera_permission_denied_gradient}>
+                            <Text style={styles.camera_permission_denied_btn}>Cliquer pour autoriser</Text>
+                        </CustomLinearGradient>
+                    </TouchableOpacity>
+                </View> :
+                <View style={styles.ika_wari_taa_container}>
+                    {/* montant à retirer */}
+                    {(!showQrCode && scanQrCode) &&
+                        <View style={styles.amount_to_retirer_title_container}>
+                            <Text style={styles.amount_to_retirer_title}>Inscrire le montant à retirer</Text>
+                            <TextInput onChangeText={setAmount} keyboardType='numeric' value={amount} style={styles.amount_input} />
+                            <Text style={styles.fcfa}>FCFA</Text>
+                        </View>
+                    }
 
-                {/* afficher ou scanner qrcode */}
-                <View style={styles.afficher_scanner_qrcode_title_container}>
-                    <Text style={styles.afficher_scanner_qrcode_title}>QR Code</Text>
-                    <View style={styles.afficher_scanner_qrcode}>
-                        {showQrCode && <QRCode value={'tz nation'} size={150} />}
+                    {/* afficher ou scanner qrcode */}
+                    <View style={[styles.afficher_scanner_qrcode_title_container, { marginTop: !scanQrCode ? 30 : 0, }]}>
+                        <Text style={styles.afficher_scanner_qrcode_title}>QR Code</Text>
+                        <View style={styles.afficher_scanner_qrcode}>
 
-                        {(!scanQrCode && !showQrCode) && <Text style={styles.choose_afficher_scanner_qrcode_text}>Scanner ou afficher QR CODE</Text>}
+                            {showQrCode ? <QRCode value={'tz nation'} size={150} color={colors.white} backgroundColor={colors.black} /> :
+
+                                (scanQrCode && amount?.trim() !== '') ? <Camera device={device} isActive style={StyleSheet.absoluteFill} codeScanner={codeScanner} /> :
+
+                                    scanQrCode && <Text style={styles.choose_afficher_scanner_qrcode_text}>Inscrire le montant à retirer</Text>
+                            }
+
+                            {(!scanQrCode && !showQrCode) && <Text style={styles.choose_afficher_scanner_qrcode_text}>Scanner ou afficher QR CODE</Text>}
+                        </View>
+                        <Text style={styles.qr_message}>Retrait du (Montant saisi) est en cours de traitement.</Text>
                     </View>
-                    <Text style={styles.treatment_message}>Retrait du (Montant saisi) est en cours de traitement.</Text>
-                </View>
 
-                {/* bouton montrer et scanner qr code */}
-                <View style={styles.btn_afficher_scanner_qrcode_container}>
-                    <TouchableOpacity activeOpacity={0.5} style={styles.btn_afficher_scanner_qrcode} onPress={handleShowQrCode}>
-                        <CustomLinearGradient style={styles.btn_afficher_scanner_qrcode_gradient}>
-                            <Text style={styles.btn_afficher_scanner_qrcode_name}>Montrer le QR code</Text>
-                        </CustomLinearGradient>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.5} style={styles.btn_afficher_scanner_qrcode} onPress={() => { setShowQrCode(false); setScanQrCode(true); }}>
-                        <CustomLinearGradient style={styles.btn_afficher_scanner_qrcode_gradient}>
-                            <Text style={styles.btn_afficher_scanner_qrcode_name}>Scanner le QR code</Text>
-                        </CustomLinearGradient>
-                    </TouchableOpacity>
+                    {/* bouton montrer et scanner qr code */}
+                    <View style={styles.btn_afficher_scanner_qrcode_container}>
+                        <TouchableOpacity activeOpacity={0.5} style={styles.btn_afficher_scanner_qrcode} onPress={handleShowQrCode}>
+                            <CustomLinearGradient style={styles.btn_afficher_scanner_qrcode_gradient}>
+                                <Text style={styles.btn_afficher_scanner_qrcode_name}>Montrer le QR code</Text>
+                            </CustomLinearGradient>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={0.5} style={styles.btn_afficher_scanner_qrcode} onPress={() => { setShowQrCode(false); setScanQrCode(true); }}>
+                            <CustomLinearGradient style={styles.btn_afficher_scanner_qrcode_gradient}>
+                                <Text style={styles.btn_afficher_scanner_qrcode_name}>Scanner le QR code</Text>
+                            </CustomLinearGradient>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
+            }
         </ScreenContainer3>
     )
 }
@@ -71,15 +121,22 @@ const styles = StyleSheet.create({
     // afficher ou scanner qrcode
     afficher_scanner_qrcode_title_container: { alignItems: 'center', marginBottom: 25, },
     afficher_scanner_qrcode_title: { color: colors.white, fontSize: 18, fontFamily: roboto.regular, marginBottom: 10 },
-    afficher_scanner_qrcode: { height: 200, width: '100%', marginBottom: 10, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.profil_bg_color, borderRadius: 30, },
+    afficher_scanner_qrcode: { height: 200, width: '100%', overflow: 'hidden', marginBottom: 10, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.profil_bg_color, borderRadius: 30, },
     choose_afficher_scanner_qrcode_text: { color: colors.white, fontFamily: roboto.regular, textTransform: 'uppercase', },
-    treatment_message: { color: colors.white, fontFamily: roboto.black, textAlign: 'center', },
+    qr_message: { color: colors.white, fontFamily: roboto.black, textAlign: 'center', },
 
     // bouton montrer et scanner qr code
     btn_afficher_scanner_qrcode_container: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
     btn_afficher_scanner_qrcode: {},
     btn_afficher_scanner_qrcode_gradient: { padding: 10, borderRadius: 20, },
     btn_afficher_scanner_qrcode_name: { color: colors.black, fontFamily: roboto.black, },
+
+    // quand la permission n'est pas donnée a la camera
+    camera_permission_denied_container: { marginVertical: 100, },
+    camera_permission_denied_title: { color: colors.white, fontSize: 16, fontFamily: roboto.regular, textAlign: 'justify', marginBottom: 50, },
+    camera_permission_denied: { alignItems: 'center', },
+    camera_permission_denied_gradient: { padding: 10, width: 200, borderRadius: 20, },
+    camera_permission_denied_btn: { color: colors.black, fontFamily: roboto.black, textAlign: 'center', },
 
 })
 
