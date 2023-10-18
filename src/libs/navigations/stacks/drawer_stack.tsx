@@ -22,6 +22,7 @@ import PaymentIsago from '../../../screens/drawer/payment/payment_isago'
 import PaymentMalivision from '../../../screens/drawer/payment/payment_malivision'
 import PaymentSomagep from '../../../screens/drawer/payment/payment_somagep'
 import PaymentStarTimes from '../../../screens/drawer/payment/payment_startimes'
+import PaymentStack from './payment_stack'
 
 type COMPONENT_TYPE = {
     route: RouteProp<ParamListBase, 'main'>
@@ -56,7 +57,7 @@ const Drawer: FC<COMPONENT_TYPE> = ({ route }) => {
             <drawer.Screen name='tarif' component={Tarif} />
 
             {/* payment */}
-            <drawer.Screen name='payment_stack' component={Facture} />
+            <drawer.Screen name='payment_stack' component={PaymentStack} />
         </drawer.Navigator>
     )
 }

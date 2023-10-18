@@ -14,7 +14,7 @@ const PaymentStack = () => {
     const stack = createNativeStackNavigator()
 
     return (
-        <stack.Navigator initialRouteName='facture' screenOptions={{ headerShown: false, }} >
+        <stack.Navigator initialRouteName='facture' screenOptions={{ headerShown: false, animation: 'slide_from_bottom' }} >
             <stack.Screen name='facture' component={Facture} />
             <stack.Screen name='payment_canal_plus' component={PaymentCanalPlus} />
             <stack.Screen name='payment_edm' component={PaymentEdm} />

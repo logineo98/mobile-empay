@@ -10,7 +10,7 @@ const PaymentCanalPlus: FC<COMPONENT_TYPE> = (props) => {
     const { navigation } = props
 
     return (
-        <ScreenContainer2 title='Paiement facture Canal+' scroll payment navigation={navigation}>
+        <ScreenContainer2 title='Paiement facture Canal+' scroll navigation={navigation}>
 
         </ScreenContainer2>
     )

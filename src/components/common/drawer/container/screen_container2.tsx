@@ -12,11 +12,10 @@ type COMPONENT_TYPE = {
     children: JSX.Element | JSX.Element[]
     title: string
     scroll?: boolean
-    payment?: boolean
 }
 
 const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
-    const { navigation, children, title, scroll, payment } = props
+    const { navigation, children, title, scroll, } = props
 
     const { height, width, } = useWindowDimensions()
 
@@ -41,7 +40,7 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
         <View style={styles.screen_container_2}>
 
             <View style={styles.header_container}>
-                <TouchableOpacity activeOpacity={0.5} style={styles.arrow_left_icon_container} onPress={() => payment ? navigation.navigate('facture') : navigation.goBack()}>
+                <TouchableOpacity activeOpacity={0.5} style={styles.arrow_left_icon_container} onPress={() => navigation.goBack()}>
                     <Image source={images.arrow_left} style={styles.arrow_left_icon} tintColor={colors.white} />
                 </TouchableOpacity>
                 <Text numberOfLines={1} style={styles.screen_name}> {title} </Text>
