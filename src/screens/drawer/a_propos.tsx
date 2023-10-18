@@ -36,7 +36,7 @@ const APropos: FC<COMPONENT_TYPE> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    a_propos_container: { alignItems: 'center', padding: 20, },
+    a_propos_container: { alignItems: 'center', padding: 20, paddingBottom: 0, },
 
     logo_img_container: { height: 200, width: 200, },
     logo_img: { height: '100%', width: '100%', objectFit: 'cover', },

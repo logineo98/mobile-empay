@@ -110,7 +110,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    home_container: { paddingHorizontal: 20, paddingBottom: 10, },
+    home_container: { paddingHorizontal: 20, },
 
     visa_img_global_container: { alignItems: 'center', marginBottom: 15, },
     visa_img_container: { height: 190, width: '100%', },

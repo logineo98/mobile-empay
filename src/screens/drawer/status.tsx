@@ -43,7 +43,7 @@ const Status: FC<COMPONENT_TYPE> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    status_container: { paddingBottom: 20, },
+    status_container: {},
 
     // montant à retirer
     amount_to_retirer_title_container: { alignItems: 'center', marginVertical: 60, position: 'relative', },

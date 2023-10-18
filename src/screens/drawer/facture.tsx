@@ -62,7 +62,7 @@ const Facture: FC<COMPONENT_TYPE> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    facture_container: { padding: 20, },
+    facture_container: { paddingHorizontal: 20, },
 
     first_ligne_container: { flexDirection: 'row', alignContent: 'center', justifyContent: 'space-around', marginVertical: 60, },
     second_ligne_container: { flexDirection: 'row', alignContent: 'center', justifyContent: 'space-around', },

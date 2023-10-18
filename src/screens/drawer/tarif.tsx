@@ -6,6 +6,7 @@ import ScreenContainer2 from '../../components/common/drawer/container/screen_co
 import { colors, roboto } from '../../libs/typography/typography'
 import tarifs from '../../libs/json/tarif.json'
 import TarifCard from '../../components/card/drawer/tarif_card'
+import GradientText from '../../components/common/drawer/gradient/gradient_text'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
 
@@ -17,7 +18,7 @@ const Tarif: FC<COMPONENT_TYPE> = (props) => {
     return (
         <ScreenContainer2 title='Tarif' navigation={navigation}>
             <View style={styles.tarif_container}>
-                <Text style={styles.presentation}>Présentation des frais globaux de la carte</Text>
+                <GradientText text='Présentation des frais globaux de la carte' style={styles.presentation} />
 
                 <FlatList
                     data={tarifs}
@@ -34,7 +35,7 @@ const Tarif: FC<COMPONENT_TYPE> = (props) => {
 const styles = StyleSheet.create({
     tarif_container: { paddingHorizontal: 20, },
 
-    presentation: { color: colors.drawer_icon_color, fontSize: 16, fontFamily: roboto.black, textAlign: 'center', marginVertical: 20, },
+    presentation: { fontSize: 15, fontFamily: roboto.black, textAlign: 'center', marginVertical: 20, },
 })
 
 export default Tarif

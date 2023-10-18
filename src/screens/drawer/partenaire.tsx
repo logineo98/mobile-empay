@@ -33,7 +33,7 @@ const Partenaire: FC<COMPONENT_TYPE> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    list_partenaire_container: { flexGrow: 1, paddingHorizontal: 20, paddingBottom: 10, },
+    list_partenaire_container: { flexGrow: 1, paddingHorizontal: 20, },
 })
 
 export default Partenaire

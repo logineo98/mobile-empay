@@ -53,15 +53,13 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
                 <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={isSwitchActive ? colors.success : colors.error} value={isSwitchActive} onValueChange={setIsSwitchActive} />
             </View>
 
-            <View style={[styles.body_container, { height: height - 139 }]}>
-                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
-                    {children}
-                </ScrollView>
-            </View>
+            <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
+                {children}
+            </ScrollView>
 
             {!isKeyboardActive &&
                 !show ?
-                <View style={[styles.bottom_tab_container, { padding: 10, }]}>
+                <View style={[styles.bottom_tab_container, { paddingBottom: 0, }]}>
                     <CustomLinearGradient colors_={colors.home_icon_gradient} style={styles.gradient}>
                         <TouchableOpacity activeOpacity={0.5} style={{}} onPress={() => setShow(true)}>
                             <Image source={images.plus} style={styles.bottom_item} tintColor={colors.black} />
@@ -93,9 +91,9 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    screen_container_1: { flex: 1, backgroundColor: colors.screen_bg_color, padding: 10, position: 'relative', },
+    screen_container_1: { flex: 1, justifyContent: 'space-between', backgroundColor: colors.screen_bg_color, padding: 10, paddingBottom: 5, },
 
-    header_container: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
+    header_container: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5, },
     profil_info_container: { width: 215, backgroundColor: colors.profil_bg_color, flexDirection: 'row', alignItems: 'center', padding: 5, borderRadius: 40, },
     profil_img_container: { height: 36, width: 36, borderRadius: 36, padding: 3, backgroundColor: colors.profil_bg_color, elevation: 5, },
     profil_img: { height: '100%', width: '100%', objectFit: 'contain', borderRadius: 36, },
@@ -103,9 +101,7 @@ const styles = StyleSheet.create({
     info_name: { color: colors.black, fontSize: 15, fontFamily: roboto.black, },
     info_email: { color: colors.black, fontSize: 10, fontFamily: roboto.regular, },
 
-    body_container: { marginTop: 10, },
-
-    bottom_tab_container: { width: '100%', position: 'absolute', left: 10, bottom: 0, alignItems: 'center', },
+    bottom_tab_container: { width: '100%', alignItems: 'center', paddingTop: 5, },
     bottom_item_container: { backgroundColor: colors.home_icon_bg_color, height: 50, width: 50, borderRadius: 50, padding: 10, },
     bottom_item: { height: '100%', width: '100%', objectFit: 'cover', },
 

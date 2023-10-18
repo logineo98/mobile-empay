@@ -4,9 +4,9 @@ import React, { FC, useState } from 'react'
 import { PARTNER_TYPE } from '../../../libs/services/partner/partner.model'
 import { colors, roboto } from '../../../libs/typography/typography'
 import { isPair } from '../../../libs/constants/utils'
+import CustomLinearGradient from '../../common/drawer/gradient/custom_linear_gradient'
 // my icons
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import CustomLinearGradient from '../../common/drawer/gradient/custom_linear_gradient'
 
 type COMPONENT_TYPE = {
     data: PARTNER_TYPE
@@ -51,7 +51,7 @@ const PartenaireCard: FC<COMPONENT_TYPE> = (props) => {
 
             <Modal visible={visible} transparent animationType='slide'>
                 <View style={styles.modal_global_container}>
-                    <View style={[styles.modal_container, { height: height < 600 ? '80%' : '50%', }]}>
+                    <View style={[styles.modal_container, { height: height < 500 ? '80%' : '50%', }]}>
                         <View style={styles.modal_header_container}>
                             <Text style={styles.header_title}>Information detaillée</Text>
                             <TouchableOpacity activeOpacity={0.5} style={styles.header_close_icon_container} onPress={() => setVisible(false)}>

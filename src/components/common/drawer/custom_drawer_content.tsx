@@ -81,7 +81,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
             </View>
 
             {/* modal deconnexion */}
-            <Modal transparent visible={visibleLogoutModal}>
+            <Modal transparent animationType='slide' visible={visibleLogoutModal}>
                 <View style={styles.modal_global_container}>
                     <View style={styles.modal_container}>
                         <Text style={styles.modal_title}>Déconnexion</Text>
@@ -101,7 +101,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
             </Modal>
 
             {/* modal service client */}
-            <Modal transparent visible={visibleServiceClientModal}>
+            <Modal transparent animationType='slide' visible={visibleServiceClientModal}>
                 <View style={styles.modal_global_container}>
                     <View style={styles.modal_container}>
                         <Text style={[styles.modal_title, { marginBottom: 15, }]}>Service Client</Text>

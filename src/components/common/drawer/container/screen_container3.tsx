@@ -7,7 +7,6 @@ import { images } from '../../../../libs/constants/constants'
 import { colors, roboto } from '../../../../libs/typography/typography'
 import GradientText from '../gradient/gradient_text'
 
-
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers
     children: JSX.Element | JSX.Element[]

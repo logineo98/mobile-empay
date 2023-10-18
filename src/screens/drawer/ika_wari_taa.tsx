@@ -110,7 +110,7 @@ const IkaWariTaa: FC<COMPONENT_TYPE> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    ika_wari_taa_container: { paddingBottom: 20, },
+    ika_wari_taa_container: {},
 
     // montant à retirer
     amount_to_retirer_title_container: { alignItems: 'center', marginVertical: 10, position: 'relative', },

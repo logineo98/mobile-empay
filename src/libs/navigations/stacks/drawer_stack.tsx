@@ -6,7 +6,6 @@ import { ParamListBase, RouteProp, getFocusedRouteNameFromRoute } from '@react-n
 import Home from '../../../screens/drawer/home'
 import CustomDrawerContent from '../../../components/common/drawer/custom_drawer_content'
 import APropos from '../../../screens/drawer/a_propos'
-import Facture from '../../../screens/drawer/facture'
 import Geolocalisation from '../../../screens/drawer/geolocalisation'
 import Historique from '../../../screens/drawer/historique'
 import IkaWariTaaStatus from '../../../screens/drawer/ika_wari_taa_status'
@@ -16,19 +15,13 @@ import Recharge from '../../../screens/drawer/recharge'
 import ServiceClient from '../../../screens/drawer/service_client'
 import Status from '../../../screens/drawer/status'
 import Tarif from '../../../screens/drawer/tarif'
-import PaymentCanalPlus from '../../../screens/drawer/payment/payment_canal_plus'
-import PaymentEdm from '../../../screens/drawer/payment/payment_edm'
-import PaymentIsago from '../../../screens/drawer/payment/payment_isago'
-import PaymentMalivision from '../../../screens/drawer/payment/payment_malivision'
-import PaymentSomagep from '../../../screens/drawer/payment/payment_somagep'
-import PaymentStarTimes from '../../../screens/drawer/payment/payment_startimes'
 import PaymentStack from './payment_stack'
 
 type COMPONENT_TYPE = {
     route: RouteProp<ParamListBase, 'main'>
 }
 
-const Drawer: FC<COMPONENT_TYPE> = ({ route }) => {
+const DrawerStack: FC<COMPONENT_TYPE> = ({ route }) => {
     const drawer = createDrawerNavigator()
 
     const [screenName, setScreenName] = useState('')
@@ -66,4 +59,4 @@ const styles = StyleSheet.create({
     drawer_style: { opacity: 0.8, borderTopRightRadius: 40, borderBottomRightRadius: 40, },
 })
 
-export default Drawer
+export default DrawerStack

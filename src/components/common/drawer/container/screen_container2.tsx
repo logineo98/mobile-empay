@@ -12,10 +12,11 @@ type COMPONENT_TYPE = {
     children: JSX.Element | JSX.Element[]
     title: string
     scroll?: boolean
+    payment?: boolean
 }
 
 const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
-    const { navigation, children, title, scroll, } = props
+    const { navigation, children, title, scroll, payment } = props
 
     const { height, width, } = useWindowDimensions()
 
@@ -47,19 +48,16 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
                 <View />
             </View>
 
-            <View style={[styles.body_container, { height: height - 138 }]}>
-                {scroll ?
-                    <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
-                        {children}
-                    </ScrollView> :
-                    children
-                }
-            </View>
+            {!scroll ? children :
+                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
+                    {children}
+                </ScrollView>
+            }
 
             {!isKeyboardActive &&
                 <View style={styles.bottom_tab_container}>
                     <CustomLinearGradient colors_={colors.home_icon_gradient} style={styles.gradient}>
-                        <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => navigation.navigate('home')}>
+                        <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => payment ? navigation.navigate('facture') : navigation.navigate('home')}>
                             <Image source={images.home} style={styles.bottom_item} tintColor={colors.black} />
                         </TouchableOpacity>
                     </CustomLinearGradient>
@@ -70,16 +68,14 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    screen_container_2: { flex: 1, backgroundColor: colors.screen_bg_color, padding: 10, position: 'relative', },
+    screen_container_2: { flex: 1, padding: 10, backgroundColor: colors.screen_bg_color, },
 
     header_container: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
     arrow_left_icon_container: { height: 50, width: 50, },
     arrow_left_icon: { height: '100%', width: '100%', objectFit: 'cover', },
     screen_name: { color: colors.white, fontSize: 20, fontFamily: roboto.black, },
 
-    body_container: { marginTop: 5, },
-
-    bottom_tab_container: { width: '100%', padding: 10, position: 'absolute', left: 10, bottom: 0, alignItems: 'center', },
+    bottom_tab_container: { width: '100%', padding: 10, alignItems: 'center', },
     bottom_item_container: {},
     bottom_item: { height: '100%', width: '100%', objectFit: 'cover', },
 
