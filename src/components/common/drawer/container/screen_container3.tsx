@@ -11,10 +11,11 @@ type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers
     children: JSX.Element | JSX.Element[]
     title: string
+    hide_switch?: boolean
 }
 
 const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
-    const { children, navigation, title } = props
+    const { children, navigation, title, hide_switch } = props
 
     const [isSwitchActive, setIsSwitchActive] = useState(false)
 
@@ -32,7 +33,7 @@ const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
                             <Text numberOfLines={1} style={styles.info_email}>tz@gmail.com</Text>
                         </View>
                     </View>
-                    <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={isSwitchActive ? colors.success : colors.error} value={isSwitchActive} onValueChange={setIsSwitchActive} />
+                    {!hide_switch && <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={isSwitchActive ? colors.success : colors.error} value={isSwitchActive} onValueChange={setIsSwitchActive} />}
                 </View>
 
                 {/* montant actuel */}
