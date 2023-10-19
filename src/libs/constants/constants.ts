@@ -8,9 +8,12 @@ export const images = {
     vitepay: require('../assets/images/vitepay.png'),
     marker: require('../assets/images/marker.png'),
     bg: require('../assets/images/bg.jpg'),
+    auth_bg: require('../assets/images/auth_bg.jpeg'),
     login_bg_img: 'https://picsum.photos/200/300/?blur=2',
     passport: require('../assets/images/passport.jpg'),
     noimage: require('../assets/images/no_img.png'),
+    auth_action: require('../assets/images/btn.png'),
+
 
     // tz
     avatar: require('../assets/images/avatar.png'),

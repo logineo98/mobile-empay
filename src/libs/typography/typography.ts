@@ -28,6 +28,7 @@ export const colors = {
     success: '#82dd55',
     error: '#e23636',
     warning: '#edb95e',
+    gray: "gray",
 
     // tz
     gradient_color: ['#B9B1E2', '#CDA0C4', '#E48DA0'],
