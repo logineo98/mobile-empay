@@ -29,7 +29,8 @@ const Infos = () => {
 
                     <View style={styles.forms}>
                         <View style={{ flexDirection: "row", gap: 5, }}>
-                            <TextInput placeholder='+223' placeholderTextColor={colors.gray} style={[styles.input, { width: "20%" }]} />
+                            <View style={[{ width: "20%", backgroundColor: colors.white, borderRadius: 15, alignItems: "center", justifyContent: "center" }]}><Text  >+223</Text></View>
+
                             <TextInput placeholder='Numéro de téléphone' placeholderTextColor={colors.gray} style={[styles.input, { flex: 1 }]} />
                         </View>
                         <TextInput placeholder={"Nom"} placeholderTextColor={colors.gray} style={styles.input} />
