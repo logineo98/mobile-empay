@@ -65,7 +65,7 @@ const Historique: FC<COMPONENT_TYPE> = (props) => {
                         bezier
                         getDotColor={() => colors.screen_bg_color}
                         chartConfig={{
-                            backgroundGradientFrom: colors.drawer_bg_color,
+                            backgroundGradientFrom: colors.profil_bg_color,
                             backgroundGradientFromOpacity: 1,
                             backgroundGradientTo: colors.profil_bg_color,
                             backgroundGradientToOpacity: 1,
@@ -87,11 +87,11 @@ const styles = StyleSheet.create({
     historique_card: {},
 
     // statistique recente
-    statistic_recent_container: { marginVertical: 15, padding: 10, borderRadius: 30, alignItems: 'center', backgroundColor: colors.profil_bg_color, },
+    statistic_recent_container: { marginVertical: 15, padding: 10, borderWidth: 2, borderColor: colors.drawer_icon_color, borderRadius: 30, alignItems: 'center', backgroundColor: colors.profil_bg_color, },
     statistic_recent_title: { color: colors.black, fontSize: 15, fontFamily: roboto.regular, marginBottom: 10, },
     statistic_recent: {},
     // statistique globale
-    statistic_global_container: { marginTop: 10, padding: 10, borderWidth: 1, borderColor: colors.drawer_icon_color, borderRadius: 30, alignItems: 'center', backgroundColor: colors.drawer_bg_color, },
+    statistic_global_container: { marginTop: 10, padding: 10, borderWidth: 2, borderColor: colors.drawer_icon_color, borderRadius: 30, alignItems: 'center', backgroundColor: colors.profil_bg_color, },
     statistic_global_title: { color: colors.white, fontSize: 15, fontFamily: roboto.regular, marginBottom: 10, },
     statistic_global: {},
 

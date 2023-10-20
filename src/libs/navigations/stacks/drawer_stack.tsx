@@ -34,7 +34,7 @@ const DrawerStack: FC<COMPONENT_TYPE> = ({ route }) => {
     console.log('drawer_stack', screenName)
 
     return (
-        <drawer.Navigator initialRouteName='home' screenOptions={{ headerShown: false, drawerStyle: styles.drawer_style }}
+        <drawer.Navigator initialRouteName='home' screenOptions={{ headerShown: false, swipeEnabled: false, drawerStyle: styles.drawer_style }}
             drawerContent={({ navigation }) => <CustomDrawerContent navigation={navigation} />}
         >
             <drawer.Screen name='home' component={Home} />
