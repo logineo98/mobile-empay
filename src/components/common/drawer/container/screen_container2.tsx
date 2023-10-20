@@ -1,4 +1,4 @@
-import { Image, Keyboard, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Image, Keyboard, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { FC, useEffect, useState, } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 import { StackNavigationHelpers } from '@react-navigation/stack/lib/typescript/src/types'
@@ -13,10 +13,12 @@ type COMPONENT_TYPE = {
     title: string
     scroll?: boolean
     payment?: boolean
+    onRefresh?: any
+    refreshing?: any
 }
 
 const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
-    const { navigation, children, title, scroll, payment } = props
+    const { navigation, children, title, scroll, payment, onRefresh, refreshing } = props
 
     const { height, width, } = useWindowDimensions()
 
@@ -49,7 +51,7 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
             </View>
 
             {!scroll ? children :
-                <ScrollView contentContainerStyle={{ flexGrow: 1, }} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
+                <ScrollView contentContainerStyle={{ flexGrow: 1, }} keyboardShouldPersistTaps='handled' refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} showsVerticalScrollIndicator={false}>
                     {children}
                 </ScrollView>
             }
@@ -68,7 +70,7 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    screen_container_2: { flex: 1, padding: 10, paddingBottom: 0, backgroundColor: colors.screen_bg_color, },
+    screen_container_2: { flex: 1, justifyContent: 'space-between', padding: 10, paddingBottom: 0, backgroundColor: colors.screen_bg_color, },
 
     header_container: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
     arrow_left_icon_container: { height: 50, width: 50, },

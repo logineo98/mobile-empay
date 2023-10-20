@@ -1,11 +1,13 @@
 import { Image, StyleSheet, Switch, Text, View } from 'react-native'
 import React, { FC, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
+import { useSelector } from 'react-redux'
 // my importations
 import ScreenContainer2 from './screen_container2'
 import { images } from '../../../../libs/constants/constants'
 import { colors, roboto } from '../../../../libs/typography/typography'
 import GradientText from '../gradient/gradient_text'
+import { RootState } from '../../../../libs/services/store'
 
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers
@@ -16,6 +18,8 @@ type COMPONENT_TYPE = {
 
 const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
     const { children, navigation, title, hide_switch } = props
+
+    const { host } = useSelector((state: RootState) => state.user)
 
     const [isSwitchActive, setIsSwitchActive] = useState(false)
 
@@ -29,8 +33,8 @@ const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
                             <Image source={images.avatar} style={styles.profil_img} />
                         </View>
                         <View style={styles.info_container}>
-                            <Text numberOfLines={1} style={styles.info_name}>Tz Nation</Text>
-                            <Text numberOfLines={1} style={styles.info_email}>tz@gmail.com</Text>
+                            <Text numberOfLines={1} style={styles.info_name}> {host?.name} </Text>
+                            <Text numberOfLines={1} style={styles.info_email}> {host?.email} </Text>
                         </View>
                     </View>
                     {!hide_switch && <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={isSwitchActive ? colors.success : colors.error} value={isSwitchActive} onValueChange={setIsSwitchActive} />}

@@ -7,32 +7,32 @@ import { images } from '../../../libs/constants/constants'
 
 type COMPONENT_TYPE = {
     data: TARIF_TYPE
+    index: number
 }
 
 const TarifCard: FC<COMPONENT_TYPE> = (props) => {
-    const { data } = props
-    const { id, tarif, description } = data
+    const { data, index } = props
+    const { tarif, description } = data
 
     const { height, width } = useWindowDimensions()
-
 
     return (
         <View style={styles.tarif_container}>
             <View style={styles.one_tarif_container}>
                 <Image source={images.arrow_right} tintColor={colors.profil_bg_color} style={styles.arrow_right_icon} />
                 <View style={[styles.info_container, { width: width - (20 + 40 + 20 + 5) }]}>
-                    <Text style={styles.info_pourcentage}> {tarif} </Text>
-                    <Text style={styles.info_description}> {description} </Text>
+                    {/* <Text style={styles.info_pourcentage}> {tarif} </Text> */}
+                    <Text style={styles.info_description}> {tarif} {description} </Text>
                 </View>
             </View>
 
-            {id === '3' &&
+            {index === 2 &&
                 <View style={styles.mobile_img_container}>
                     <Image source={images.mobile_money} style={styles.mobile_img} />
                 </View>
             }
 
-            {id === '4' &&
+            {index === 3 &&
                 <View style={styles.guichet_img_container}>
                     <Image source={images.guichet} style={styles.guichet_img} />
                 </View>
@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
 
     arrow_right_icon: { height: 20, width: 20, objectFit: 'cover', },
 
-    info_container: { flexDirection: 'row', alignItems: 'center', marginLeft: 5, },
-    info_pourcentage: { color: colors.white, fontFamily: roboto.black, textAlign: 'center', },
+    info_container: { flexDirection: 'row', },
+    info_pourcentage: { color: colors.white, fontFamily: roboto.regular, textAlign: 'center', },
     info_description: { color: colors.white, fontFamily: roboto.regular, textAlign: 'left', },
 
     mobile_img_container: { height: 70, marginBottom: 10, alignItems: 'center', },

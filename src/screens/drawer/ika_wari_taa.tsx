@@ -40,14 +40,12 @@ const IkaWariTaa: FC<COMPONENT_TYPE> = (props) => {
         if (screenName === 'ika_wari_taa') {
             setAmount('')
             setScanQrCode(false)
-            setShowQrCode(false)
+            setShowQrCode(false);
 
-            const checkPermission = async () => {
+            (async () => {
                 const cameraPermission = await Camera.requestCameraPermission()
                 setGranted(cameraPermission === 'granted')
-            }
-
-            checkPermission()
+            })()
         }
     }, [screenName])
 

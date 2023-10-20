@@ -7,6 +7,7 @@ import { isPair } from '../../../libs/constants/utils'
 import CustomLinearGradient from '../../common/drawer/gradient/custom_linear_gradient'
 // my icons
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import { _end_point } from '../../../libs/services/endpoints'
 
 type COMPONENT_TYPE = {
     data: PARTNER_TYPE
@@ -15,7 +16,7 @@ type COMPONENT_TYPE = {
 
 const PartenaireCard: FC<COMPONENT_TYPE> = (props) => {
     const { data, index } = props
-    const { id, name, description, logo } = data
+    const { name, description, logo } = data
 
     const { height, width } = useWindowDimensions()
 
@@ -27,7 +28,7 @@ const PartenaireCard: FC<COMPONENT_TYPE> = (props) => {
                 <CustomLinearGradient style={styles.gradient}>
                     <TouchableOpacity activeOpacity={0.5} style={[styles.one_partenaire_container, {}]} onPress={() => setVisible(true)}>
                         <View style={styles.logo_img_container}>
-                            <Image source={logo as any} style={styles.logo_img} />
+                            <Image source={{ uri: `${_end_point.api_img}/${logo}` }} style={styles.logo_img} />
                         </View>
 
                         <View style={[styles.info_title_description_container, { width: width - 180 }]}>
@@ -39,7 +40,7 @@ const PartenaireCard: FC<COMPONENT_TYPE> = (props) => {
 
                 <TouchableOpacity activeOpacity={0.5} style={[styles.one_partenaire_container, { backgroundColor: colors.profil_bg_color, borderRadius: 20, marginBottom: 10, }]} onPress={() => setVisible(true)}>
                     <View style={styles.logo_img_container}>
-                        <Image source={logo as any} style={styles.logo_img} />
+                        <Image source={{ uri: `${_end_point.api_img}/${logo}` }} style={styles.logo_img} />
                     </View>
 
                     <View style={[styles.info_title_description_container, { width: width - 180 }]}>

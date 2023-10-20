@@ -1,33 +1,50 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React, { FC } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
+import { useDispatch, useSelector } from 'react-redux'
 // my importations
 import ScreenContainer2 from '../../components/common/drawer/container/screen_container2'
 import { images } from '../../libs/constants/constants'
 import PartenaireCard from '../../components/card/drawer/partenaire_card'
+import { RootState } from '../../libs/services/store'
+import { getAllPartners } from '../../libs/services/partner/partner.action'
+import NoElementFind from '../../components/common/no_element_find'
+import Loading from '../../components/common/loading'
+import { colors } from '../../libs/typography/typography'
 
-type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
+type COMPONENT_TYPE = {
+    navigation: DrawerNavigationHelpers
+    screenName: string
+}
 
 const Partenaire: FC<COMPONENT_TYPE> = (props) => {
-    const { navigation } = props
+    const { navigation, screenName } = props
 
-    const partenaires = [
-        { id: '1', name: 'Yara Oil', description: `Plus qu'un transporteur, Yara Oil apporte son expertise d'entreprise malienne et son savoir faire, de la prise de commande à la livraison. En savoir plus.`, logo: images.edm },
-        { id: '2', name: 'Brooklyn Burger', description: `Brooklyn Burger est un fast food de type américain situé à Bamako en plein coeur de l'ACI 2000 spécialisé dans les poulets frites et dans les burgers.`, logo: images.somagep },
-        { id: '3', name: 'Soyatt', description: `La société SOYATT, spécialisée dans l'importation, exploitation de station service et la commercialisation des produits pétroliers.`, logo: images.startimes },
-        { id: '4', name: 'Logineo', description: `LOGINEO est une société de service en ingénierie informatique fondée au Mali en Mai 2010. Chez LOGINEO, nous arborons un nouveau leitmotiv, <<KEEP IT SIMPLE>>.`, logo: images.passport },
-        { id: '5', name: 'UBA', description: `UBA Mali est la toute derniére filiale du Groupe Panafricain UBA, présent dans plus de 20 pays en Afrique et à travers le monde.`, logo: images.vitepay },
-    ]
+    const { loadingPartner, allPartners } = useSelector((state: RootState) => state.partner)
+    const dispatch = useDispatch<any>()
+
+    const [refreshing, setRefreshing] = useState(false)
+
+    // quand on tire l'ecran vers le bas pour rafraichir
+    const onRefresh = useCallback(() => {
+        dispatch(getAllPartners())
+    }, [])
+
+    useEffect(() => {
+        if (loadingPartner === false) setRefreshing(false)
+    }, [loadingPartner])
+
+    useEffect(() => {
+        if (screenName === 'partenaire') dispatch(getAllPartners())
+    }, [screenName])
 
     return (
-        <ScreenContainer2 title='Nos Partenaires' navigation={navigation}>
-            <FlatList
-                data={partenaires}
-                renderItem={({ item, index }) => <PartenaireCard data={item} index={index} />}
-                keyExtractor={item => item?.id as string}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.list_partenaire_container}
-            />
+        <ScreenContainer2 title='Nos Partenaires' scroll refreshing={refreshing} onRefresh={onRefresh} navigation={navigation}>
+
+            {loadingPartner ? <Loading color={colors.drawer_icon_color} /> :
+                allPartners?.length === 0 ? <NoElementFind message='Aucun partenaire trouvé.' /> :
+                    allPartners.map((partner, index) => <PartenaireCard key={partner?.id} data={partner} index={index} />)
+            }
         </ScreenContainer2>
     )
 }

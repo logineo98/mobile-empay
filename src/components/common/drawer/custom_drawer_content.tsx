@@ -1,10 +1,12 @@
 import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { FC, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 // my importations
 import { colors, roboto } from '../../../libs/typography/typography'
 import { images } from '../../../libs/constants/constants'
 import CustomLinearGradient from './gradient/custom_linear_gradient'
+import { RootState } from '../../../libs/services/store'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
 
@@ -12,6 +14,8 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
     const { navigation } = props
 
     const { height, width } = useWindowDimensions()
+
+    const { host } = useSelector((state: RootState) => state.user)
 
     const [visibleLogoutModal, setVisibleLogoutModal] = useState(false)
     const [visibleServiceClientModal, setVisibleServiceClientModal] = useState(false)
@@ -24,8 +28,8 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
                     <Image source={images.avatar} style={styles.profil_img} />
                 </View>
                 <View style={styles.info_container}>
-                    <Text numberOfLines={1} style={styles.info_name}>Tz Nation</Text>
-                    <Text numberOfLines={1} style={styles.info_email}>tz@gmail.com</Text>
+                    <Text numberOfLines={1} style={styles.info_name}> {host?.name} </Text>
+                    <Text numberOfLines={1} style={styles.info_email}> {host?.email} </Text>
                 </View>
             </TouchableOpacity>
 

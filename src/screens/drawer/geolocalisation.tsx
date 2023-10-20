@@ -20,12 +20,10 @@ const Geolocalisation: FC<COMPONENT_TYPE> = (props) => {
 
     useEffect(() => {
         if (screenName === 'geolocalisation') {
-            const checkPermission = async () => {
+            (async () => {
                 const geolocalisationPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
                 setGranted(geolocalisationPermission === 'granted')
-            }
-
-            checkPermission()
+            })()
         }
     }, [screenName])
 
