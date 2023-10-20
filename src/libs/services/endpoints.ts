@@ -15,7 +15,7 @@ export const get_credentials = async (type: string) => {
 }
 
 //----------- endpoints
-const _API_BASE = 'http://192.168.50.82:8000/api/v1'
+const _API_BASE = 'http://192.168.50.82:8080/api/v1'
 
 export const _end_point = {
     api_img: 'http://192.168.50.82:9000',

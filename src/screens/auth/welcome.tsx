@@ -1,14 +1,26 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Wrapper from '../../components/common/wrapper'
 import Container from '../../components/common/container'
 import { colors, roboto } from '../../libs/typography/typography'
 import { images } from '../../libs/constants/constants'
 import Spacer from '../../components/common/spacer'
 import { useNavigation } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../libs/services/store'
+import { checking } from '../../libs/services/user/user.action'
+import PrincipalLoader from '../../components/common/principal_loading'
 
 const Welcome = () => {
     const navigation = useNavigation<any>()
+    const dispatch = useDispatch<any>()
+    const { user_loading } = useSelector((state: RootState) => state?.user)
+
+    useEffect(() => { dispatch(checking()) }, [dispatch]);
+
+    if (user_loading)
+        return <PrincipalLoader text='Veuillez patienter pendant le chargement des données.' />
+
 
     return (
         <Wrapper image imageData={images.auth_bg} overlay={"#B61560B4"}  >

@@ -39,7 +39,7 @@ const Finalisation = () => {
                     <Spacer />
                 </View>
 
-                <TouchableOpacity onPress={() => navigation.navigate("secure")} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("login")} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
             </Container>
         </Wrapper>
     )

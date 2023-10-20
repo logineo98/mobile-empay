@@ -1,21 +1,101 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import CheckBox from '@react-native-community/checkbox';
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import { colors, roboto } from '../../../libs/typography/typography'
 import Wrapper from '../../../components/common/wrapper'
 import Container from '../../../components/common/container'
 import Spacer from '../../../components/common/spacer'
-import { images } from '../../../libs/constants/constants'
+import { allInputsFilled, images } from '../../../libs/constants/constants'
 import { useNavigation } from '@react-navigation/native'
+import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSpring } from 'react-native-reanimated';
+import { useDispatch, useSelector } from 'react-redux';
+import { userModel } from '../../../libs/services/user/user.model';
+import { RootState } from '../../../libs/services/store';
+import SignatureCapture from 'react-native-signature-capture'
+import Toast from 'react-native-toast-message';
+import { Image as CompressImg } from 'react-native-compressor';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { inscription_inputs_request } from '../../../libs/services/user/user.request';
+import ToastContainer from '../../../components/common/toast';
 
 const Signature = () => {
     const navigation = useNavigation<any>()
-    const [toggleCheckBox, setToggleCheckBox] = useState(false)
+    let scale = useSharedValue(1);
+    const dispatch = useDispatch<any>()
+    const [error, setError] = useState("");
+    const [click, setClick] = useState(false);
+    const [next, setNext] = useState(false);
+    const initial: userModel = { address: "", email: "" }
+    const [inputs, setInputs] = useState(initial);
+    const [store, setStore] = useState<userModel>();
+    const signatureRef = useRef<any>();
+    const [sign, setSign] = useState<any>('');
+    const [ok, setOk] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
+
+
+    const { user_info, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
+
+
+    //alert for info
+    useEffect(() => { if (user_info && user_info !== null) { Toast.show({ type: 'info', text1: 'Informations', text2: user_info, }); dispatch({ type: 'reset_user_info' }) }; }, [user_info, dispatch]);
+
+    //alert for errors form this app
+    useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
+
+    //alert for errors from api
+    useEffect(() => { if (user_errors && user_errors !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: user_errors, }); dispatch({ type: 'reset_user_errors' }) }; }, [user_errors, dispatch]);
+
+
+    //animate login button
+    useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
+
+    //setup signature
+    useEffect(() => {
+        if (sign === "") setInputs({ ...inputs, signature: "" })
+
+        const comp = async () => {
+            try {
+                const img = await CompressImg.compress(`file:///${sign}`, { output: "png", compressionMethod: "auto", quality: 0.5, })
+                setInputs({ ...inputs, signature: { uri: img, type: 'image/png', name: 'signature.png' } })
+            } catch (error: any) {
+                console.log("Erreur lors de la signature")
+            }
+        }
+        comp()
+    }, [sign, ok]);
+
+
+    //retrieve prev datas from localstorage
+    useEffect(() => { AsyncStorage.getItem("inputs").then((res: any) => { const _inpt = JSON.parse(res); setStore({ ..._inpt }) }) }, []);
+
+
+    //result of traitement
+    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("secure"); setNext(false); setClick(false) } }, [next, store]);
+
+
+    const resetSign = () => { signatureRef.current.resetImage(); setInputs({ ...inputs, signature: '' }) };
+    const _onSaveEvent = (result: any) => { setSign(result?.pathName); setOk(!ok) };
+    const _onDragEvent = () => { signatureRef.current.saveImage() };
+
+    //traitement of login
+    const handle_validate = () => {
+        const validation: userModel = { signature: inputs?.signature, isChecked: isChecked }
+        if (inscription_inputs_request("signature", validation, setError)) return;
+        setStore({ ...store, signature: inputs?.signature })
+
+        setNext(true)
+        setClick(true)
+    }
+
+
+    const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });
 
 
     return (
         <Wrapper image imageData={images.auth_bg} overlay={"#2E427DE5"}  >
+            <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View style={{ width: "100%", alignItems: "center" }}>
                     <Spacer />
@@ -28,22 +108,32 @@ const Signature = () => {
                     <Spacer />
 
                     <View style={styles.signatureZone}>
-                        <View style={styles.close} ><FontAwesome name="close" size={24} color={"blue"} /></View>
+                        <SignatureCapture
+                            style={[{ width: "100%", height: "100%" }]}
+                            ref={signatureRef}
+                            onSaveEvent={_onSaveEvent}
+                            onDragEvent={_onDragEvent}
+                            saveImageFileInExtStorage={true}
+                            showNativeButtons={false}
+                            showTitleLabel={false}
+                            viewMode={"portrait"} />
+                        <TouchableOpacity onPress={resetSign} activeOpacity={0.8} style={styles.close} ><FontAwesome name="close" size={24} color={"blue"} /></TouchableOpacity>
                     </View>
                     <Spacer height={15} />
                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
                         <CheckBox
                             disabled={false}
                             tintColors={{ true: colors.white, false: colors.white }}
-                            value={toggleCheckBox}
-                            onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                            value={isChecked}
+                            onValueChange={(newValue) => setIsChecked(newValue)}
                         />
                         <Text style={{ color: colors.white, fontFamily: roboto.bold, }}>J'accepte les conditions générales*</Text>
                     </View>
                     <Spacer />
                 </View>
-
-                <TouchableOpacity onPress={() => navigation.navigate("finalisation")} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
+                <Animated.View style={[animatedStyle, { alignSelf: "flex-end" }]}>
+                    <TouchableOpacity onPress={handle_validate} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
+                </Animated.View>
             </Container>
         </Wrapper>
     )
@@ -62,6 +152,6 @@ const styles = StyleSheet.create({
     registerBtn: { marginTop: 2, backgroundColor: colors.ika_wari_taa_bg_color, width: "35%", borderRadius: 15, alignItems: "center", padding: 2 },
     actionBtn: { alignSelf: "flex-end", width: 50, height: 50, backgroundColor: colors.white, alignItems: "center", justifyContent: "center", padding: 5, borderRadius: 50 },
     btnImage: { width: 80, height: 80, resizeMode: "contain" },
-    signatureZone: { height: 150, width: "90%", backgroundColor: colors.white, borderRadius: 15 },
+    signatureZone: { height: 150, width: "90%", backgroundColor: colors.white, borderRadius: 15, overflow: "hidden" },
     close: { left: 5, top: 5, borderRadius: 5, position: "absolute", height: 25, width: 35, alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: "blue" },
 })
