@@ -1,4 +1,4 @@
-package com.empay;
+package com.emploietmoi.empay;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

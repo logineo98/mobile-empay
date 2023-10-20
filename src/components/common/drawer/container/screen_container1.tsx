@@ -68,20 +68,14 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
                 </View> :
                 <View style={styles.bottom_tab_container}>
                     <View style={styles.bottom_tab_active_container}>
-                        <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container}>
-                            <Image source={images.plus} style={styles.bottom_item} tintColor={colors.black} />
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container}>
-                            <Image source={images.plus} style={styles.bottom_item} tintColor={colors.black} />
+                        <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => navigation.navigate('geolocalisation')}>
+                            <Image source={images.geolocalisation} style={styles.bottom_item} tintColor={colors.black} />
                         </TouchableOpacity>
                         <TouchableOpacity activeOpacity={0.5} style={[styles.bottom_item_container, { backgroundColor: colors.black }]} onPress={() => setShow(false)}>
                             <Image source={images.minus} style={styles.bottom_item} tintColor={colors.profil_bg_color} />
                         </TouchableOpacity>
                         <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container}>
-                            <Image source={images.plus} style={styles.bottom_item} tintColor={colors.black} />
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container}>
-                            <Image source={images.plus} style={styles.bottom_item} tintColor={colors.black} />
+                            <Image source={images.service_client} style={styles.bottom_item} tintColor={colors.black} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -105,7 +99,7 @@ const styles = StyleSheet.create({
     bottom_item_container: { backgroundColor: colors.home_icon_bg_color, height: 50, width: 50, borderRadius: 50, padding: 10, },
     bottom_item: { height: '100%', width: '100%', objectFit: 'cover', },
 
-    bottom_tab_active_container: { width: '90%', padding: 10, borderRadius: 30, backgroundColor: colors.profil_bg_color, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' },
+    bottom_tab_active_container: { width: '75%', padding: 10, borderRadius: 30, backgroundColor: colors.profil_bg_color, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' },
 
     gradient: { height: 50, width: 50, padding: 10, borderRadius: 50, },
 

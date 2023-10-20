@@ -49,7 +49,7 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
             </View>
 
             {!scroll ? children :
-                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
+                <ScrollView contentContainerStyle={{ flexGrow: 1, }} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
                     {children}
                 </ScrollView>
             }
@@ -68,14 +68,14 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    screen_container_2: { flex: 1, padding: 10, backgroundColor: colors.screen_bg_color, },
+    screen_container_2: { flex: 1, padding: 10, paddingBottom: 0, backgroundColor: colors.screen_bg_color, },
 
     header_container: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
     arrow_left_icon_container: { height: 50, width: 50, },
     arrow_left_icon: { height: '100%', width: '100%', objectFit: 'cover', },
     screen_name: { color: colors.white, fontSize: 20, fontFamily: roboto.black, },
 
-    bottom_tab_container: { width: '100%', padding: 10, alignItems: 'center', },
+    bottom_tab_container: { width: '100%', padding: 5, alignItems: 'center', },
     bottom_item_container: {},
     bottom_item: { height: '100%', width: '100%', objectFit: 'cover', },
 

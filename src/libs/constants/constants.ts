@@ -40,6 +40,7 @@ export const images = {
     restaurant: require('../assets/images/restaurant.png'),
     paypal: require('../assets/images/paypal.png'),
     facebook: require('../assets/images/facebook.png'),
+    geolocalisation: require('../assets/images/geolocalisation.png'),
 }
 
 

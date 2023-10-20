@@ -39,7 +39,7 @@ const Historique: FC<COMPONENT_TYPE> = (props) => {
                             backgroundGradientFromOpacity: 1,
                             backgroundGradientTo: colors.profil_bg_color,
                             backgroundGradientToOpacity: 1,
-                            color: (opacity = 1) => colors.black,
+                            color: (opacity = 1) => colors.screen_bg_color,
                             barPercentage: 0.55,
                             barRadius: 5,
                             decimalPlaces: 0,
@@ -57,19 +57,20 @@ const Historique: FC<COMPONENT_TYPE> = (props) => {
                             labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
                             datasets: [{
                                 data: [10, 20, 15, 12, 21, 18, 5, 8, 10, 4, 20, 25],
-                                color: () => colors.fond1,
+                                color: () => colors.drawer_icon_color,
                             }]
                         }}
                         height={180}
                         width={width - (20 + 40 + 20)}
                         bezier
-                        getDotColor={() => colors.screen_bg_color}
+                        getDotColor={() => colors.white}
+                        withHorizontalLines={false}
                         chartConfig={{
-                            backgroundGradientFrom: colors.profil_bg_color,
+                            backgroundGradientFrom: colors.drawer_bg_color,
                             backgroundGradientFromOpacity: 1,
-                            backgroundGradientTo: colors.profil_bg_color,
+                            backgroundGradientTo: colors.drawer_bg_color,
                             backgroundGradientToOpacity: 1,
-                            color: (opacity = 1) => colors.black,
+                            color: (opacity = 1) => colors.white,
                             barPercentage: 0.55,
                             barRadius: 5,
                             decimalPlaces: 0,
@@ -91,9 +92,9 @@ const styles = StyleSheet.create({
     statistic_recent_title: { color: colors.black, fontSize: 15, fontFamily: roboto.regular, marginBottom: 10, },
     statistic_recent: {},
     // statistique globale
-    statistic_global_container: { marginTop: 10, padding: 10, borderWidth: 2, borderColor: colors.drawer_icon_color, borderRadius: 30, alignItems: 'center', backgroundColor: colors.profil_bg_color, },
+    statistic_global_container: { marginTop: 10, padding: 10, borderWidth: 2, borderColor: colors.drawer_icon_color, borderRadius: 30, alignItems: 'center', backgroundColor: colors.drawer_bg_color, },
     statistic_global_title: { color: colors.white, fontSize: 15, fontFamily: roboto.regular, marginBottom: 10, },
-    statistic_global: {},
+    statistic_global: { borderColor: 'red' },
 
 })
 

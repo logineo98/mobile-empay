@@ -15,7 +15,7 @@ const RootNavigation = () => {
     return (
         <NavigationContainer >
             <root.Navigator screenOptions={{ headerShown: false }} initialRouteName='auth'>
-                {host ? <root.Screen name='main' component={DrawerStack} /> :
+                {host ? <root.Screen name='main' options={{ animation: 'slide_from_right' }} component={DrawerStack} /> :
                     <root.Screen name='auth' component={AuthStack} />}
             </root.Navigator>
         </NavigationContainer>

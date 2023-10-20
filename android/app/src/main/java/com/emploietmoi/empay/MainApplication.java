@@ -1,4 +1,4 @@
-package com.empay;
+package com.emploietmoi.empay;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

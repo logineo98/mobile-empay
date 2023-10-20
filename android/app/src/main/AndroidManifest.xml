@@ -22,6 +22,8 @@
       </intent-filter>
     </activity>
 
+    <meta-data android:name="com.google.android.geo.API_KEY"
+      android:value="AIzaSyAX9TeC0L6mev1OfAehOwV45cwNOyU9PFA" />
     <meta-data android:name="com.google.mlkit.vision.DEPENDENCIES" android:value="barcode" />
   </application>
 </manifest>

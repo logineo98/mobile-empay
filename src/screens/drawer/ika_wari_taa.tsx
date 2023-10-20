@@ -7,6 +7,7 @@ import { Camera, useCameraDevice, useCodeScanner } from 'react-native-vision-cam
 import ScreenContainer3 from '../../components/common/drawer/container/screen_container3'
 import { colors, roboto } from '../../libs/typography/typography'
 import CustomLinearGradient from '../../components/common/drawer/gradient/custom_linear_gradient'
+import NoPermissionCard from '../../components/card/drawer/no_permission_card'
 
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers
@@ -53,16 +54,8 @@ const IkaWariTaa: FC<COMPONENT_TYPE> = (props) => {
     if (!device) return <View></View>
     return (
         <ScreenContainer3 title='Ika Wari Taa' navigation={navigation}>
-            {!granted ?
-                // quand la permission n'est pas accordée à la caméra
-                <View style={styles.camera_permission_denied_container}>
-                    <Text style={styles.camera_permission_denied_title}>Veuillez activer votre autorisation d'accès a la caméra en cliquant sur le bouton ci-dessous. Après l'avoir activé, fermer l'application dans le gestionnaire de tâche (effacé de la liste des applications récemment ouvertes) puis l'ouvrir à nouveau.</Text>
-                    <TouchableOpacity activeOpacity={0.5} style={styles.camera_permission_denied} onPress={() => Linking.openSettings()}>
-                        <CustomLinearGradient style={styles.camera_permission_denied_gradient}>
-                            <Text style={styles.camera_permission_denied_btn}>Cliquer pour autoriser</Text>
-                        </CustomLinearGradient>
-                    </TouchableOpacity>
-                </View> :
+            {/* quand la permission n'est pas accordée à la caméra */}
+            {!granted ? <NoPermissionCard permission_type='à la caméra' /> :
                 <View style={styles.ika_wari_taa_container}>
                     {/* montant à retirer */}
                     {(!showQrCode && scanQrCode) &&
@@ -130,13 +123,6 @@ const styles = StyleSheet.create({
     btn_afficher_scanner_qrcode: {},
     btn_afficher_scanner_qrcode_gradient: { padding: 10, borderRadius: 20, },
     btn_afficher_scanner_qrcode_name: { color: colors.black, fontFamily: roboto.black, },
-
-    // quand la permission n'est pas donnée a la camera
-    camera_permission_denied_container: { marginVertical: 100, },
-    camera_permission_denied_title: { color: colors.white, fontSize: 16, fontFamily: roboto.regular, textAlign: 'justify', marginBottom: 50, },
-    camera_permission_denied: { alignItems: 'center', },
-    camera_permission_denied_gradient: { padding: 10, width: 200, borderRadius: 20, },
-    camera_permission_denied_btn: { color: colors.black, fontFamily: roboto.black, textAlign: 'center', },
 
 })
 
