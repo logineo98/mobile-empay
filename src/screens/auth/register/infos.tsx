@@ -125,7 +125,7 @@ const Infos = () => {
                                 onDateChange={(_date) => { setInputs({ ...inputs, age: _date }); setSelectDate(true) }}
                                 mode="date"
                                 style={{ backgroundColor: "white" }}
-                                textColor={colors.fond1}
+                                textColor={colors.black}
                             />
                             <TouchableOpacity onPress={toggleModal} style={[styles.button, { width: "75%", }]}>
                                 <Text style={{ color: colors.white, letterSpacing: 1, fontSize: 14 }}>Selectionner</Text>
