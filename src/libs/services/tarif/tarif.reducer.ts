@@ -1,4 +1,4 @@
-import { ERROR_TARIF, GET_ALL_TARIFS, LOADING_TARIF } from './tarif.constant'
+import { ERROR_TARIF, GET_ALL_TARIFS, GET_ALL_TARIFS_WHITHOUT_LOADING, LOADING_TARIF } from './tarif.constant'
 import { INITIAL_TARIF_STATE_TYPE } from './tarif.model'
 
 interface IAction { type: string, payload: any }
@@ -21,6 +21,9 @@ const tarifReducer = (state = initialState, action: IAction): INITIAL_TARIF_STAT
             return { ...state, error: payload, loadingTarif: false }
 
         case GET_ALL_TARIFS:
+            return { ...state, allTarifs: payload, loadingTarif: false, error: null }
+
+        case GET_ALL_TARIFS_WHITHOUT_LOADING:
             return { ...state, allTarifs: payload, loadingTarif: false, error: null }
 
         default: return state

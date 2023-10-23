@@ -1,6 +1,15 @@
-export type coordinateType = { la: string; lo: string }
+export type COORDINATE_TYPE = {
+    la: string
+    lo: string
+}
 
-export type statusGeoMontantType = { id?: string, la: string; lo: string; montant: string, disable?: boolean }
+export type STATUS_TYPE = {
+    id?: string
+    la: string
+    lo: string
+    montant: string
+    disable?: boolean
+}
 
 export type userModel = {
     id?: string
@@ -18,7 +27,7 @@ export type userModel = {
     birthday?: string
     signature?: any
     montant?: string
-    coordinates?: coordinateType,
+    coordinates?: COORDINATE_TYPE,
     isChecked?: boolean,
     age?: Date
 }

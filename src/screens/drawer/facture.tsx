@@ -51,7 +51,7 @@ const Facture: FC<COMPONENT_TYPE> = (props) => {
                     </View>
                     <View style={styles.society_container}>
                         <TouchableOpacity activeOpacity={1} style={styles.society_logo_container} onPress={() => navigation.navigate('payment_malivision')} >
-                            <Image source={images.edm} style={styles.society_logo} />
+                            <Image source={images.malivision} style={styles.society_logo} />
                         </TouchableOpacity>
                         <Text style={styles.society_name}>Malivision</Text>
                     </View>

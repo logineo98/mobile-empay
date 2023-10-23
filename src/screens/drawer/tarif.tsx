@@ -8,7 +8,7 @@ import TarifCard from '../../components/card/drawer/tarif_card'
 import GradientText from '../../components/common/drawer/gradient/gradient_text'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../libs/services/store'
-import { getAllTarifs } from '../../libs/services/tarif/tarif.action'
+import { getAllTarifs, getAllTarifsWithoutLoading } from '../../libs/services/tarif/tarif.action'
 import Loading from '../../components/common/drawer/others/loading'
 import NoElementFind from '../../components/common/drawer/others/no_element_find'
 
@@ -37,7 +37,7 @@ const Tarif: FC<COMPONENT_TYPE> = (props) => {
     }, [loadingTarif])
 
     useEffect(() => {
-        if (screenName === 'tarif') dispatch(getAllTarifs())
+        if (screenName === 'tarif') dispatch(getAllTarifsWithoutLoading())
     }, [screenName])
 
     return (

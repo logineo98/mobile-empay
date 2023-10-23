@@ -1,13 +1,12 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, } from 'react-native'
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 // my importations
 import ScreenContainer2 from '../../components/common/drawer/container/screen_container2'
-import { images } from '../../libs/constants/constants'
 import PartenaireCard from '../../components/card/drawer/partenaire_card'
 import { RootState } from '../../libs/services/store'
-import { getAllPartners } from '../../libs/services/partner/partner.action'
+import { getAllPartners, getAllPartnersWithoutLoading } from '../../libs/services/partner/partner.action'
 import NoElementFind from '../../components/common/drawer/others/no_element_find'
 import Loading from '../../components/common/drawer/others/loading'
 import { colors } from '../../libs/typography/typography'
@@ -35,7 +34,7 @@ const Partenaire: FC<COMPONENT_TYPE> = (props) => {
     }, [loadingPartner])
 
     useEffect(() => {
-        if (screenName === 'partenaire') dispatch(getAllPartners())
+        if (screenName === 'partenaire') dispatch(getAllPartnersWithoutLoading())
     }, [screenName])
 
     return (

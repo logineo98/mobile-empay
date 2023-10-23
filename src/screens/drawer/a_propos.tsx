@@ -18,7 +18,7 @@ const APropos: FC<COMPONENT_TYPE> = (props) => {
         <ScreenContainer2 title='À Propos' scroll navigation={navigation}>
             <View style={styles.a_propos_container}>
                 <View style={styles.logo_img_container}>
-                    <Image source={images.logo_png} style={styles.logo_img} />
+                    <Image source={images.logo_white} style={styles.logo_img} />
                 </View>
 
                 <View style={styles.info_title_description_container}>

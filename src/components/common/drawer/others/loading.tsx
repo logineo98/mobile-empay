@@ -17,7 +17,7 @@ const Loading: FC<COMPONENT_TYPE> = (props) => {
     return (
         <View style={styles.container}>
             <ActivityIndicator size='large' color={color || colors.white} />
-            <GradientText text={text || 'Veuillez patienter pendant le chargement des données.'} style={styles.text} />
+            <GradientText text={text || 'Chargement en cours...'} style={styles.text} />
         </View>
     )
 }

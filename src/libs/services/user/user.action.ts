@@ -1,15 +1,17 @@
 import axios from 'axios'
-import { scanModel, statusGeoMontantType, userModel } from './user.model'
-import { _end_point, get_credentials } from '../endpoints'
+import Toast from 'react-native-toast-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
+// my importations
+import { scanModel, STATUS_TYPE, userModel } from './user.model'
+import { _end_point, get_credentials } from '../endpoints'
 import { get_all_users, get_qr_code, scan_qr_code, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
 import { Expired, debug } from '../../constants/utils'
-import { StackNavigationHelpers } from '@react-navigation/stack/lib/typescript/src/types'
-import Toast from 'react-native-toast-message'
 import { connexion_request, forgot_request, reset_request, verify_request } from './user.request'
 
 
 const user_error = (error: any) => (dispatch: any) => {
+    console.log(error)
     if (error === "Network Error") dispatch({ type: user_errors, payload: "Erreur lors de la connexion au serveur" })
     else dispatch({ type: user_errors, payload: error })
 }
@@ -171,7 +173,7 @@ export const getAllusers = () => async (dispatch: any) => {
     }
 }
 
-export const send_status_geo_montant = (data: statusGeoMontantType) => async (dispatch: any) => {
+export const send_status_geo_montant = (data: STATUS_TYPE) => async (dispatch: any) => {
     try {
         dispatch({ type: user_loading })
 
@@ -206,7 +208,7 @@ export const getQrCode = (id: string) => async (dispatch: any) => {
     }
 }
 
-export const _scanQrCode = (data: scanModel, navigation: StackNavigationHelpers) => async (dispatch: any) => {
+export const _scanQrCode = (data: scanModel, navigation: DrawerNavigationHelpers) => async (dispatch: any) => {
     try {
         dispatch({ type: user_loading })
 
@@ -219,7 +221,7 @@ export const _scanQrCode = (data: scanModel, navigation: StackNavigationHelpers)
         navigation.navigate('ika_wari_taa_status', { status: response.data.status })
     } catch (error: any) {
         debug('SCAN QR CODE', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        // Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
         dispatch(user_error(error?.response?.data || error.message))
         // dispatch({ type: user_errors, payload: error?.response?.data })
     }

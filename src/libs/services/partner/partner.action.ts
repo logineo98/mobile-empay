@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ERROR_PARTNER, GET_ALL_PARTNERS, LOADING_PARTNER } from './partner.constant'
+import { ERROR_PARTNER, GET_ALL_PARTNERS, GET_ALL_PARTNERS_WITHOUT_LOADING, LOADING_PARTNER } from './partner.constant'
 import { _end_point, get_credentials } from '../endpoints'
 import { debug } from '../../constants/utils'
 
@@ -22,6 +22,19 @@ export const getAllPartners = () => async (dispatch: any) => {
         dispatch({ type: GET_ALL_PARTNERS, payload: response.data })
     } catch (error: any) {
         debug('GET ALL PARTNERS', error?.response?.data || error.message)
+        dispatch(errorPartner(error?.response?.data))
+    }
+}
+
+export const getAllPartnersWithoutLoading = () => async (dispatch: any) => {
+    try {
+        let token = await get_credentials('accessToken')
+
+        const response = await axios.get(`${_end_point.partenaire.find}`, { headers: { Authorization: `Bearer ${token}` } })
+
+        dispatch({ type: GET_ALL_PARTNERS_WITHOUT_LOADING, payload: response.data })
+    } catch (error: any) {
+        debug('GET ALL PARTNERS WITHOUT LOADING', error?.response?.data || error.message)
         dispatch(errorPartner(error?.response?.data))
     }
 }

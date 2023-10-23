@@ -81,12 +81,12 @@ export const inscription_inputs_request = (type: string, toStore: userModel, set
 }
 
 /****************************STATUT GEOLOCALISATION*********************************** */
-export const status_geo_montant_request = (montant: string) => {
+export const status_geo_montant_validation = (montant: string) => {
     const initialError = { montant: '' }
     let error = initialError
 
     if (!montant || montant.trim() === '') error = { ...error, montant: 'Veuillez renseigner le montant.' }
-    else if (parseInt(montant, 10) < 500) error = { ...error, montant: 'Montant doit être superieur à 500 FCFA.' }
+    else if (parseInt(montant, 10) < 500) error = { ...error, montant: `Montant doit être d'au moins 500 FCFA.` }
 
     return { error, initialError }
 }
@@ -103,7 +103,7 @@ export const vitepay_data_validation = (data: { phone: string, montant: string }
     else if (!phone_regex.test(phone)) error = { ...error, phone: 'Doit être un numéro ORANGE.' }
 
     if (!montant || montant.trim() === '') error = { ...error, montant: 'Veuillez renseigner le champ.' }
-    else if (parseInt(montant, 10) < 500) error = { ...error, montant: 'Montant doit être superieur à 500 FCFA.' }
+    else if (parseInt(montant, 10) < 500) error = { ...error, montant: `Montant doit être d'au moins 500 FCFA.` }
 
     return { error, initialError }
 }

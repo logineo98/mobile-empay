@@ -14,16 +14,16 @@ type COMPONENT_TYPE = {
     children: JSX.Element | JSX.Element[]
     title: string
     hide_switch?: boolean
+    isSwitchActive?: boolean
+    handleSwitchBtn?: (value: boolean) => void
 }
 
 const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
-    const { children, navigation, title, hide_switch } = props
+    const { children, navigation, title, hide_switch, isSwitchActive, handleSwitchBtn } = props
 
     const { height, width } = useWindowDimensions()
 
     const { host } = useSelector((state: RootState) => state.user)
-
-    const [isSwitchActive, setIsSwitchActive] = useState(false)
 
     return (
         <ScreenContainer2 title={title} scroll navigation={navigation}>
@@ -39,7 +39,7 @@ const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
                             <Text numberOfLines={1} style={styles.info_email}> {host?.email} </Text>
                         </View>
                     </View>
-                    {!hide_switch && <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={isSwitchActive ? colors.success : colors.error} value={isSwitchActive} onValueChange={setIsSwitchActive} />}
+                    {!hide_switch && <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={isSwitchActive ? colors.success : colors.error} value={isSwitchActive} onValueChange={(value) => handleSwitchBtn && handleSwitchBtn(value)} />}
                 </View>
 
                 {/* montant actuel */}
@@ -55,7 +55,7 @@ const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    screen_container_3: { paddingHorizontal: 20, },
+    screen_container_3: { flex: 1, paddingHorizontal: 20, },
 
     // profil et switch
     profil_switch_container: { padding: 10, borderRadius: 40, marginBottom: 10, backgroundColor: colors.profil_bg_color, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
