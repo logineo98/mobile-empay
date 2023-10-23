@@ -1,12 +1,14 @@
-import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Alert, Image, Modal, ScrollView, Share, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { FC, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 // my importations
 import { colors, roboto } from '../../../libs/typography/typography'
 import { images } from '../../../libs/constants/constants'
 import CustomLinearGradient from './gradient/custom_linear_gradient'
 import { RootState } from '../../../libs/services/store'
+import { logout } from '../../../libs/services/user/user.action'
+import ModalServiceClient from './modal/modal_service_client'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
 
@@ -16,9 +18,17 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
     const { height, width } = useWindowDimensions()
 
     const { host } = useSelector((state: RootState) => state.user)
+    const dispatch = useDispatch<any>()
 
     const [visibleLogoutModal, setVisibleLogoutModal] = useState(false)
     const [visibleServiceClientModal, setVisibleServiceClientModal] = useState(false)
+
+    const onShare = async () => {
+        try { await Share.share({ message: 'Veuillez, télécharger l\'application EM-PAY', }) }
+        catch (error: any) {
+            Alert.alert('Message d\'erreur', error?.message, [{ text: 'OK' }])
+        }
+    }
 
     return (
         <View style={styles.drawer_container}>
@@ -61,7 +71,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
                         <Text style={styles.item_name}>Service client</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity activeOpacity={0.5} style={styles.item_container}>
+                    <TouchableOpacity activeOpacity={0.5} style={styles.item_container} onPress={onShare}>
                         <Image source={images.parrainage} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
                         <Text style={styles.item_name}>Parrainage</Text>
                     </TouchableOpacity>
@@ -94,7 +104,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
                             <TouchableOpacity activeOpacity={0.5} style={[styles.back_validate, { padding: 10, }]} onPress={() => setVisibleLogoutModal(false)}>
                                 <Text style={styles.back_validate_name}>Annuler</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity activeOpacity={0.5} style={styles.back_validate}>
+                            <TouchableOpacity activeOpacity={0.5} style={styles.back_validate} onPress={() => dispatch(logout())}>
                                 <CustomLinearGradient style={styles.validate_gradient}>
                                     <Text style={[styles.back_validate_name, { color: colors.black, }]}>Se déconnecter</Text>
                                 </CustomLinearGradient>
@@ -105,40 +115,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
             </Modal>
 
             {/* modal service client */}
-            <Modal transparent animationType='slide' visible={visibleServiceClientModal}>
-                <View style={styles.modal_global_container}>
-                    <View style={styles.modal_container}>
-                        <Text style={[styles.modal_title, { marginBottom: 15, }]}>Service Client</Text>
-                        <TouchableOpacity activeOpacity={0.5} style={styles.service_client_container}>
-                            <View style={[styles.service_icon_type_container, { backgroundColor: colors.screen_bg_color, }]}>
-                                <View style={styles.service_icon_container}>
-                                    <Image source={images.service_client} tintColor={colors.drawer_icon_color} style={styles.service_icon} />
-                                </View>
-                                <Text style={[styles.service_type, { color: colors.white, }]}>Emploi et Moi</Text>
-                            </View>
-                            <Text style={styles.service_number_phone}>50 00 12 31</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.5} style={styles.service_client_container}>
-                            <CustomLinearGradient style={styles.service_client_gradient}>
-                                <View style={styles.service_icon_type_container}>
-                                    <View style={styles.service_icon_container}>
-                                        <Image source={images.service_client} tintColor={colors.drawer_icon_color} style={styles.service_icon} />
-                                    </View>
-                                    <Text style={[styles.service_type, { color: colors.black, }]}>UBA-GIM</Text>
-                                </View>
-                            </CustomLinearGradient>
-                            <Text style={styles.service_number_phone}>20 29 21 09</Text>
-                        </TouchableOpacity>
-
-                        {/* fermer service client modal */}
-                        <View style={styles.fermer_service_client_modal_container}>
-                            <TouchableOpacity activeOpacity={0.5} style={styles.fermer_service_client_modal} onPress={() => setVisibleServiceClientModal(false)}>
-                                <Text style={styles.fermer_service_client_modal_text}>Fermer</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+            <ModalServiceClient visibleServiceClientModal={visibleServiceClientModal} setVisibleServiceClientModal={setVisibleServiceClientModal} />
         </View>
     )
 }
@@ -150,7 +127,7 @@ const styles = StyleSheet.create({
     profil_info_container: { backgroundColor: colors.profil_bg_color, flexDirection: 'row', alignItems: 'center', padding: 10, borderRadius: 40, },
     profil_img_container: { height: 50, width: 50, borderRadius: 50, padding: 3, backgroundColor: colors.profil_bg_color, elevation: 5, },
     profil_img: { height: '100%', width: '100%', objectFit: 'cover', },
-    info_container: { marginLeft: 5, },
+    info_container: { width: 150, marginLeft: 5, },
     info_name: { color: colors.black, fontSize: 15, fontFamily: roboto.black, },
     info_email: { color: colors.black, fontSize: 10, fontFamily: roboto.regular, },
 
@@ -180,19 +157,6 @@ const styles = StyleSheet.create({
     back_validate: { width: 130, backgroundColor: colors.screen_bg_color, borderRadius: 20, },
     back_validate_name: { color: colors.white, fontFamily: roboto.regular, textAlign: 'center', },
     validate_gradient: { padding: 10, borderRadius: 20, },
-
-    // modal service client
-    service_client_container: { marginBottom: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
-    service_icon_type_container: { borderRadius: 40, flexDirection: 'row', alignItems: 'center', },
-    service_icon_container: { height: 40, width: 40, borderRadius: 40, padding: 5, backgroundColor: colors.white, },
-    service_icon: { height: '100%', width: '100%', objectFit: 'cover', },
-    service_type: { width: 110, marginLeft: 10, paddingRight: 15, fontFamily: roboto.black, textAlign: 'center', },
-    service_number_phone: { color: colors.black, fontSize: 20, fontFamily: roboto.black, },
-    service_client_gradient: { borderRadius: 40, },
-
-    fermer_service_client_modal_container: { alignItems: 'center', },
-    fermer_service_client_modal: { width: 130, padding: 10, borderRadius: 20, backgroundColor: colors.screen_bg_color, },
-    fermer_service_client_modal_text: { color: colors.white, fontFamily: roboto.regular, textAlign: 'center', },
 
 })
 

@@ -8,8 +8,8 @@ import { images } from '../../libs/constants/constants'
 import PartenaireCard from '../../components/card/drawer/partenaire_card'
 import { RootState } from '../../libs/services/store'
 import { getAllPartners } from '../../libs/services/partner/partner.action'
-import NoElementFind from '../../components/common/no_element_find'
-import Loading from '../../components/common/loading'
+import NoElementFind from '../../components/common/drawer/others/no_element_find'
+import Loading from '../../components/common/drawer/others/loading'
 import { colors } from '../../libs/typography/typography'
 
 type COMPONENT_TYPE = {
@@ -39,7 +39,7 @@ const Partenaire: FC<COMPONENT_TYPE> = (props) => {
     }, [screenName])
 
     return (
-        <ScreenContainer2 title='Nos Partenaires' scroll refreshing={refreshing} onRefresh={onRefresh} navigation={navigation}>
+        <ScreenContainer2 title='Nos Partenaires' reload refreshing={refreshing} onRefresh={onRefresh} navigation={navigation}>
 
             {loadingPartner ? <Loading color={colors.drawer_icon_color} /> :
                 allPartners?.length === 0 ? <NoElementFind message='Aucun partenaire trouvé.' /> :

@@ -13,12 +13,13 @@ type COMPONENT_TYPE = {
     title: string
     scroll?: boolean
     payment?: boolean
+    reload?: boolean
     onRefresh?: any
     refreshing?: any
 }
 
 const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
-    const { navigation, children, title, scroll, payment, onRefresh, refreshing } = props
+    const { navigation, children, title, scroll, payment, reload, onRefresh, refreshing } = props
 
     const { height, width, } = useWindowDimensions()
 
@@ -50,10 +51,15 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
                 <View />
             </View>
 
-            {!scroll ? children :
-                <ScrollView contentContainerStyle={{ flexGrow: 1, }} keyboardShouldPersistTaps='handled' refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} showsVerticalScrollIndicator={false}>
+            {scroll ?
+                <ScrollView contentContainerStyle={{ flexGrow: 1, }} keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false}>
                     {children}
-                </ScrollView>
+                </ScrollView> :
+                reload ?
+                    <ScrollView contentContainerStyle={{ flexGrow: 1, }} keyboardShouldPersistTaps='handled' refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} showsVerticalScrollIndicator={false}>
+                        {children}
+                    </ScrollView> :
+                    children
             }
 
             {!isKeyboardActive &&
@@ -72,7 +78,7 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
 const styles = StyleSheet.create({
     screen_container_2: { flex: 1, justifyContent: 'space-between', padding: 10, paddingBottom: 0, backgroundColor: colors.screen_bg_color, },
 
-    header_container: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
+    header_container: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5, },
     arrow_left_icon_container: { height: 50, width: 50, },
     arrow_left_icon: { height: '100%', width: '100%', objectFit: 'cover', },
     screen_name: { color: colors.white, fontSize: 20, fontFamily: roboto.black, },

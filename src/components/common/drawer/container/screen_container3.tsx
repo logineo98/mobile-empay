@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Switch, Text, View } from 'react-native'
+import { Image, StyleSheet, Switch, Text, View, useWindowDimensions } from 'react-native'
 import React, { FC, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 import { useSelector } from 'react-redux'
@@ -19,6 +19,8 @@ type COMPONENT_TYPE = {
 const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
     const { children, navigation, title, hide_switch } = props
 
+    const { height, width } = useWindowDimensions()
+
     const { host } = useSelector((state: RootState) => state.user)
 
     const [isSwitchActive, setIsSwitchActive] = useState(false)
@@ -32,7 +34,7 @@ const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
                         <View style={styles.profil_img_container}>
                             <Image source={images.avatar} style={styles.profil_img} />
                         </View>
-                        <View style={styles.info_container}>
+                        <View style={[styles.info_container, { width: width - (20 + 40 + 50 + 5 + 70) }]}>
                             <Text numberOfLines={1} style={styles.info_name}> {host?.name} </Text>
                             <Text numberOfLines={1} style={styles.info_email}> {host?.email} </Text>
                         </View>

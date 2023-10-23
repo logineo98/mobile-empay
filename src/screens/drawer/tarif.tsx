@@ -9,8 +9,8 @@ import GradientText from '../../components/common/drawer/gradient/gradient_text'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../libs/services/store'
 import { getAllTarifs } from '../../libs/services/tarif/tarif.action'
-import Loading from '../../components/common/loading'
-import NoElementFind from '../../components/common/no_element_find'
+import Loading from '../../components/common/drawer/others/loading'
+import NoElementFind from '../../components/common/drawer/others/no_element_find'
 
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers
@@ -41,7 +41,7 @@ const Tarif: FC<COMPONENT_TYPE> = (props) => {
     }, [screenName])
 
     return (
-        <ScreenContainer2 title='Tarif' scroll refreshing={refreshing} onRefresh={onRefresh} navigation={navigation}>
+        <ScreenContainer2 title='Tarif' reload refreshing={refreshing} onRefresh={onRefresh} navigation={navigation}>
             {loadingTarif ? <Loading color={colors.drawer_icon_color} /> :
                 <View style={styles.tarif_container}>
                     <GradientText text='Présentation des frais globaux de la carte' style={styles.presentation} />

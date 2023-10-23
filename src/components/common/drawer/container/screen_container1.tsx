@@ -8,6 +8,7 @@ import { images } from '../../../../libs/constants/constants'
 // my icons
 import CustomLinearGradient from '../gradient/custom_linear_gradient'
 import { RootState } from '../../../../libs/services/store'
+import ModalServiceClient from '../modal/modal_service_client'
 
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers
@@ -24,6 +25,7 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
     const [show, setShow] = useState(false)
     const [isSwitchActive, setIsSwitchActive] = useState(false)
     const [isKeyboardActive, setIsKeyboardActive] = useState(false)
+    const [visibleServiceClientModal, setVisibleServiceClientModal] = useState(false)
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -78,12 +80,15 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
                         <TouchableOpacity activeOpacity={0.5} style={[styles.bottom_item_container, { backgroundColor: colors.black }]} onPress={() => setShow(false)}>
                             <Image source={images.minus} style={styles.bottom_item} tintColor={colors.profil_bg_color} />
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container}>
+                        <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => setVisibleServiceClientModal(true)}>
                             <Image source={images.service_client} style={styles.bottom_item} tintColor={colors.black} />
                         </TouchableOpacity>
                     </View>
                 </View>
             }
+
+            {/* modal service client */}
+            <ModalServiceClient visibleServiceClientModal={visibleServiceClientModal} setVisibleServiceClientModal={setVisibleServiceClientModal} />
         </View>
     )
 }
@@ -95,7 +100,7 @@ const styles = StyleSheet.create({
     profil_info_container: { width: 215, backgroundColor: colors.profil_bg_color, flexDirection: 'row', alignItems: 'center', padding: 5, borderRadius: 40, },
     profil_img_container: { height: 36, width: 36, borderRadius: 36, padding: 3, backgroundColor: colors.profil_bg_color, elevation: 5, },
     profil_img: { height: '100%', width: '100%', objectFit: 'contain', borderRadius: 36, },
-    info_container: { marginLeft: 5, },
+    info_container: { marginLeft: 5, width: 215 - (36 + 10 + 5), },
     info_name: { color: colors.black, fontSize: 15, fontFamily: roboto.black, },
     info_email: { color: colors.black, fontSize: 10, fontFamily: roboto.regular, },
 

@@ -1,8 +1,8 @@
 import { ActivityIndicator, StyleSheet, Text, View, useWindowDimensions } from 'react-native'
 import React, { FC } from 'react'
 // my importations
-import { colors, roboto } from '../../libs/typography/typography'
-import GradientText from './drawer/gradient/gradient_text'
+import { colors, roboto } from '../../../../libs/typography/typography'
+import GradientText from '../gradient/gradient_text'
 
 type COMPONENT_TYPE = {
     text?: string

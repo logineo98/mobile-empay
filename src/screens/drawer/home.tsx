@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions, } from 'react-native'
+import { Image, Modal, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions, } from 'react-native'
 import React, { FC, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 // my importations
@@ -99,7 +99,8 @@ const styles = StyleSheet.create({
     historique_see_more_container: { backgroundColor: colors.profil_bg_color, borderRadius: 7, },
     historique_see_more_text: { color: colors.black, fontSize: 12, fontFamily: roboto.regular, paddingHorizontal: 5, },
 
-    historique_card: { marginTop: 15, }
+    historique_card: { marginTop: 15, },
+
 })
 
 export default Home

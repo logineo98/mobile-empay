@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { StyleSheet, Text } from 'react-native'
 // my importations
-import { colors, roboto } from '../../libs/typography/typography'
+import { colors, roboto } from '../../../../libs/typography/typography'
 
 type COMPONENT_TYPE = {
     message?: string
