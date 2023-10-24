@@ -1,6 +1,7 @@
-import { Image, Modal, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions, } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions, } from 'react-native'
 import React, { FC, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
+import { useSelector } from 'react-redux'
 // my importations
 import ScreenContainer1 from '../../components/common/drawer/container/screen_container1'
 import GradientText from '../../components/common/drawer/gradient/gradient_text'
@@ -8,6 +9,7 @@ import { images } from '../../libs/constants/constants'
 import CustomLinearGradient from '../../components/common/drawer/gradient/custom_linear_gradient'
 import { colors, roboto } from '../../libs/typography/typography'
 import HistoriqueCard from '../../components/card/drawer/historique_card'
+import { RootState } from '../../libs/services/store'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
 
@@ -16,22 +18,27 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
 
     const { height, width } = useWindowDimensions()
 
+    const { host } = useSelector((state: RootState) => state?.user)
+
     const [verso, setVerso] = useState(false)
+    const [displayVisaCard, setDisplayVisaCard] = useState(true)
 
     return (
-        <ScreenContainer1 navigation={navigation}>
+        <ScreenContainer1 displayVisaCard={displayVisaCard} setDisplayVisaCard={setDisplayVisaCard} navigation={navigation}>
             <View style={styles.home_container}>
                 {/* carte visa */}
-                <View style={styles.visa_img_global_container}>
-                    <TouchableOpacity activeOpacity={0.5} style={styles.visa_img_container} onPress={() => setVerso(!verso)}>
-                        {!verso ? <Image source={images.visa_recto} style={[styles.visa_img, { objectFit: width < 400 ? 'cover' : 'contain', }]} /> : <Image source={images.visa_verso} style={[styles.visa_img, { objectFit: width < 400 ? 'cover' : 'contain', }]} />}
-                    </TouchableOpacity>
-                </View>
+                {displayVisaCard &&
+                    <View style={styles.visa_img_global_container}>
+                        <TouchableOpacity activeOpacity={0.5} style={styles.visa_img_container} onPress={() => setVerso(!verso)}>
+                            {!verso ? <Image source={images.visa_recto} style={[styles.visa_img, { objectFit: width < 400 ? 'cover' : 'contain', }]} /> : <Image source={images.visa_verso} style={[styles.visa_img, { objectFit: width < 400 ? 'cover' : 'contain', }]} />}
+                        </TouchableOpacity>
+                    </View>
+                }
                 {/* mon solde */}
                 <View style={styles.solde_name_amount_container}>
                     <GradientText text='Mon solde :' style={styles.solde_name} />
                     <CustomLinearGradient style={[styles.solde_gradient_amount_container, { width: width - 180 }]}>
-                        <Text style={styles.solde_gradient_amount}>567.000 FCFA</Text>
+                        <Text style={styles.solde_gradient_amount}>{host?.totalAmount} FCFA</Text>
                     </CustomLinearGradient>
                 </View>
                 {/* menu ika wari taa, facture, recharge */}

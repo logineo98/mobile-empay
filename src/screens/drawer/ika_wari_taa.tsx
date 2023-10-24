@@ -32,7 +32,7 @@ const IkaWariTaa: FC<COMPONENT_TYPE> = (props) => {
     const [granted, setGranted] = useState(false)
 
     const handleShowQrCode = () => {
-        if (host?.montant && host?.coordinates?.la && host?.coordinates?.lo) {
+        if (host?.AmountToExchange && host?.coordinates?.la && host?.coordinates?.lo) {
             setShowQrCode(true)
             setScanQrCode(false)
             dispatch(getQrCode(host?.id as string))

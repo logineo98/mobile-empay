@@ -23,6 +23,7 @@ const Partenaire: FC<COMPONENT_TYPE> = (props) => {
     const dispatch = useDispatch<any>()
 
     const [refreshing, setRefreshing] = useState(false)
+    const [fois, setFois] = useState(0)
 
     // quand on tire l'ecran vers le bas pour rafraichir
     const onRefresh = useCallback(() => {
@@ -34,7 +35,12 @@ const Partenaire: FC<COMPONENT_TYPE> = (props) => {
     }, [loadingPartner])
 
     useEffect(() => {
-        if (screenName === 'partenaire') dispatch(getAllPartnersWithoutLoading())
+        if (screenName === 'partenaire') {
+            if (fois === 0) {
+                dispatch(getAllPartners())
+                setFois(1)
+            } else dispatch(getAllPartnersWithoutLoading())
+        }
     }, [screenName])
 
     return (

@@ -1,4 +1,4 @@
-import { user_errors, user_forgot_success, get_all_users, user_loading, user_login_success, user_logout_success, user_register_success, user_reset_success, user_verify_success, user_status_geo_montant, get_qr_code, scan_qr_code, user_resent_success } from './user.constant';
+import { user_errors, user_forgot_success, get_all_users, user_loading, user_login_success, user_logout_success, user_register_success, user_reset_success, user_verify_success, user_status_geo_montant, get_qr_code, scan_qr_code, user_resent_success, get_all_users_without_loading, recharge_compte } from './user.constant';
 import { userStore } from './user.model'
 
 const initial: userStore = { user_loading: false, user_errors: null, user: null, allUsers: [], host: null, user_tmp: false, user_info: null }
@@ -25,6 +25,9 @@ const userReducer = (state = initial, action: IAction): userStore => {
         case get_all_users:
             return { ...state, user_errors: false, user_loading: false, allUsers: action.payload, }
 
+        case get_all_users_without_loading:
+            return { ...state, user_errors: false, user_loading: false, allUsers: action.payload, }
+
         case user_status_geo_montant:
             return { ...state, user_errors: false, user_loading: false, host: action.payload.usr, }
 
@@ -33,6 +36,9 @@ const userReducer = (state = initial, action: IAction): userStore => {
 
         case scan_qr_code:
             return { ...state, user_errors: false, user_loading: false, scan_response: action.payload.info, scan_response_status: action.payload.status }
+
+        case recharge_compte:
+            return { ...state, user_errors: false, user_loading: false, recharge_response: action.payload }
 
         case 'reset_user_tmp': return { ...state, user_tmp: false }
         case 'reset_user_info': return { ...state, user_info: null }

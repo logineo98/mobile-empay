@@ -37,6 +37,9 @@ export const _end_point = {
         remove: `${_API_BASE}/customers/`,
         get_qr_code: `${_API_BASE}/customers/qr-code`,   //get 
         scanner_traitement: `${_API_BASE}/customers/scanner-traitement`, //post
+
+        // for recharge
+        recharge: `${_API_BASE}/recharges/customer-account`,
     },
     partenaire: {
         register: `${_API_BASE}/partenaires/register`,  //post

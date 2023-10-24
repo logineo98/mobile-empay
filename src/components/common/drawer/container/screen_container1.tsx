@@ -13,17 +13,18 @@ import ModalServiceClient from '../modal/modal_service_client'
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers
     children: JSX.Element | JSX.Element[]
+    displayVisaCard: boolean
+    setDisplayVisaCard: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
-    const { navigation, children } = props
+    const { children, displayVisaCard, navigation, setDisplayVisaCard } = props
 
     const { height, width } = useWindowDimensions()
 
     const { host } = useSelector((state: RootState) => state.user)
 
     const [show, setShow] = useState(false)
-    const [isSwitchActive, setIsSwitchActive] = useState(false)
     const [isKeyboardActive, setIsKeyboardActive] = useState(false)
     const [visibleServiceClientModal, setVisibleServiceClientModal] = useState(false)
 
@@ -56,7 +57,7 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
                         <Text numberOfLines={1} style={styles.info_email}> {host?.email} </Text>
                     </View>
                 </TouchableOpacity>
-                <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={isSwitchActive ? colors.success : colors.error} value={isSwitchActive} onValueChange={setIsSwitchActive} />
+                <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={displayVisaCard ? colors.success : colors.error} value={displayVisaCard} onValueChange={setDisplayVisaCard} />
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>

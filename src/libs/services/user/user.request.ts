@@ -80,18 +80,19 @@ export const inscription_inputs_request = (type: string, toStore: userModel, set
     }
 }
 
-/****************************STATUT GEOLOCALISATION*********************************** */
-export const status_geo_montant_validation = (montant: string) => {
+/****************************STATUT GEOLOCALISATION VALIDATION*********************************** */
+export const status_geo_montant_validation = (montant: string, montant_total: number) => {
     const initialError = { montant: '' }
     let error = initialError
 
     if (!montant || montant.trim() === '') error = { ...error, montant: 'Veuillez renseigner le montant.' }
+    else if (montant_total < parseInt(montant, 10)) error = { ...error, montant: `Votre montant disponible est insuffisant.` }
     else if (parseInt(montant, 10) < 500) error = { ...error, montant: `Montant doit être d'au moins 500 FCFA.` }
 
     return { error, initialError }
 }
 
-/****************************VITEPAY VALIDATION DATA*********************************** */
+/****************************RECHARGE VITEPAY VALIDATION DATA*********************************** */
 export const vitepay_data_validation = (data: { phone: string, montant: string }) => {
     const { phone, montant } = data
     const phone_regex = /^[789][0-9]{7}$/

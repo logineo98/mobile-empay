@@ -3,9 +3,9 @@ import Toast from 'react-native-toast-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 // my importations
-import { scanModel, STATUS_TYPE, userModel } from './user.model'
+import { RECHARGE_TYPE, scanModel, STATUS_TYPE, userModel } from './user.model'
 import { _end_point, get_credentials } from '../endpoints'
-import { get_all_users, get_qr_code, scan_qr_code, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
+import { get_all_users, get_all_users_without_loading, get_qr_code, recharge_compte, scan_qr_code, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
 import { Expired, debug } from '../../constants/utils'
 import { connexion_request, forgot_request, reset_request, verify_request } from './user.request'
 
@@ -169,7 +169,19 @@ export const getAllusers = () => async (dispatch: any) => {
     } catch (error: any) {
         debug('GET ALL USERS', error?.response?.data || error.message)
         dispatch(user_error(error?.response?.data || error.message))
-        // dispatch({ type: user_errors, payload: error?.response?.data })
+    }
+}
+
+export const getAllusersWithoutLoading = () => async (dispatch: any) => {
+    try {
+        let token = await get_credentials('accessToken')
+
+        const response = await axios.get(`${_end_point.customer.find}`, { headers: { Authorization: `Bearer ${token}` } })
+
+        dispatch({ type: get_all_users_without_loading, payload: response.data })
+    } catch (error: any) {
+        debug('GET ALL USERS WITHOUT LOADING', error?.response?.data || error.message)
+        dispatch(user_error(error?.response?.data || error.message))
     }
 }
 
@@ -188,7 +200,6 @@ export const send_status_geo_montant = (data: STATUS_TYPE) => async (dispatch: a
     } catch (error: any) {
         debug('SEND STATUS GEO MONTANT', error?.response?.data || error.message)
         dispatch(user_error(error?.response?.data || error.message))
-        // dispatch({ type: user_errors, payload: error?.response?.data })
     }
 }
 
@@ -204,7 +215,6 @@ export const getQrCode = (id: string) => async (dispatch: any) => {
     } catch (error: any) {
         debug('GET QR CODE', error?.response?.data || error.message)
         dispatch(user_error(error?.response?.data || error.message))
-        // dispatch({ type: user_errors, payload: error?.response?.data })
     }
 }
 
@@ -223,19 +233,22 @@ export const _scanQrCode = (data: scanModel, navigation: DrawerNavigationHelpers
         debug('SCAN QR CODE', error?.response?.data || error.message)
         // Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
         dispatch(user_error(error?.response?.data || error.message))
-        // dispatch({ type: user_errors, payload: error?.response?.data })
     }
 }
 
-// { uri: sign, type: 'image/png', name: 'signature.png' } 
-
-export const test_image = (data: any) => async (dispatch: any) => {
+export const recharge = (data: RECHARGE_TYPE) => async (dispatch: any) => {
     try {
-        const config = { headers: { 'Content-Type': 'multipart/form-data' } }
-        const res = await axios.post('http://192.168.50.82:8000/test-image', data, config)
-    } catch (error) {
-        console.log(error)
+        dispatch({ type: user_loading })
+
+        let token = await get_credentials('accessToken')
+
+        const response = await axios.post(`${_end_point.customer.recharge}`, data, { headers: { Authorization: `Bearer ${token}` } })
+
+        dispatch({ type: recharge_compte, payload: response.data })
+
+    } catch (error: any) {
+        debug('RECHARGE COMPTE', error?.response?.data || error.message)
+        // Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        dispatch(user_error(error?.response?.data || error.message))
     }
 }
-
-

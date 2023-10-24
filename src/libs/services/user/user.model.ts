@@ -7,7 +7,7 @@ export type STATUS_TYPE = {
     id?: string
     la: string
     lo: string
-    montant: string
+    AmountToExchange: string
     disable?: boolean
 }
 
@@ -26,9 +26,10 @@ export type userModel = {
     confirm?: string
     birthday?: string
     signature?: any
-    montant?: string
-    coordinates?: COORDINATE_TYPE,
-    isChecked?: boolean,
+    totalAmount?: number
+    AmountToExchange?: number
+    coordinates?: COORDINATE_TYPE
+    isChecked?: boolean
     age?: Date
 }
 
@@ -44,6 +45,7 @@ export type userStore = {
     qr_code?: string
     scan_response?: string
     scan_response_status?: boolean
+    recharge_response?: string
 }
 
 export type scanModel = {
@@ -51,4 +53,10 @@ export type scanModel = {
     titulaireID: string
     titulairePhone: string
     montantBeneficiaire: string
+}
+
+export type RECHARGE_TYPE = {
+    customerId: string
+    amount: number
+    phone: string
 }

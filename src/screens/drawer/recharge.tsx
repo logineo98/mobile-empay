@@ -1,27 +1,50 @@
 import { Image, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { FC, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
+import { useDispatch, useSelector } from 'react-redux'
 // my importations
 import ScreenContainer2 from '../../components/common/drawer/container/screen_container2'
 import GradientText from '../../components/common/drawer/gradient/gradient_text'
 import { colors, roboto } from '../../libs/typography/typography'
 import CustomLinearGradient from '../../components/common/drawer/gradient/custom_linear_gradient'
+import { vitepay_data_validation } from '../../libs/services/user/user.request'
+import { images } from '../../libs/constants/constants'
+import { RootState } from '../../libs/services/store'
 // my icons
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { images } from '../../libs/constants/constants'
+import { recharge } from '../../libs/services/user/user.action'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
 
 const Recharge: FC<COMPONENT_TYPE> = (props) => {
     const { navigation } = props
 
+    const data = { phone: '', montant: '' }
+
+    const { host, recharge_response, user_loading } = useSelector((state: RootState) => state?.user)
+    const dispatch = useDispatch<any>()
+
+    console.log(host)
+
     const { height, width } = useWindowDimensions()
 
     const [visible, setVisible] = useState(false)
+    const [vitepayData, setVitepayData] = useState(data)
+    const [err, setErr] = useState<{ phone: string, montant: string }>()
 
-    const handleVisible = () => {
+    const handleSubmit = () => {
+        const { error, initialError } = vitepay_data_validation(vitepayData)
 
+        if (error.phone !== initialError.phone || error.montant !== initialError.montant) {
+            setErr(error)
+        } else {
+            setErr(initialError)
+
+            dispatch(recharge({ customerId: host?.id as string, amount: parseInt(vitepayData.montant, 10), phone: vitepayData.phone }))
+        }
     }
+
+    console.log('recharge_response', recharge_response)
 
     return (
         <ScreenContainer2 title='Recharge' scroll navigation={navigation}>
@@ -45,7 +68,7 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
                                     <Image source={images.vitepay} style={styles.vitepay_logo} />
                                 </View>
                                 <View />
-                                <TouchableOpacity activeOpacity={0.5} style={styles.header_close_icon_container} onPress={() => setVisible(false)}>
+                                <TouchableOpacity activeOpacity={0.5} style={styles.header_close_icon_container} onPress={() => { setVisible(false); setVitepayData(data); setErr(data) }}>
                                     <AntDesign name='closecircle' color={colors.black} size={35} style={styles.header_close_icon} />
                                 </TouchableOpacity>
                             </View>
@@ -53,18 +76,18 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
                             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ padding: 20, }} keyboardShouldPersistTaps='handled'>
                                 <View style={styles.input_container}>
                                     <Text style={styles.input_title}>Téléphone</Text>
-                                    <TextInput keyboardType='numeric' maxLength={8} style={styles.input} placeholderTextColor={`rgba(0,0,0,0.5)`} placeholder={'Numéro orange (sans l\'indicatif)'} />
-                                    <Text style={styles.input_error}> Numéro de Téléphone incorrect </Text>
+                                    <TextInput keyboardType='numeric' maxLength={8} style={styles.input} placeholderTextColor={`rgba(0,0,0,0.5)`} placeholder={'Numéro orange (sans l\'indicatif)'} value={vitepayData.phone} onChangeText={text => setVitepayData({ ...vitepayData, phone: text })} />
+                                    {err?.phone && <Text style={styles.input_error}> {err?.phone} </Text>}
                                 </View>
 
                                 <View style={styles.input_container}>
                                     <Text style={styles.input_title}>Montant (FCFA)</Text>
-                                    <TextInput keyboardType='numeric' style={styles.input} placeholderTextColor={`rgba(0,0,0,0.5)`} placeholder={'Montant de la recharge'} />
-                                    <Text style={styles.input_error}> Montant invalide </Text>
+                                    <TextInput keyboardType='numeric' style={styles.input} placeholderTextColor={`rgba(0,0,0,0.5)`} placeholder={'Montant de la recharge'} value={vitepayData.montant} onChangeText={text => setVitepayData({ ...vitepayData, montant: text })} />
+                                    {err?.montant && <Text style={styles.input_error}> {err?.montant} </Text>}
                                 </View>
 
                                 <View style={styles.btn_container}>
-                                    <TouchableOpacity activeOpacity={0.5} style={styles.btn} >
+                                    <TouchableOpacity activeOpacity={0.5} style={styles.btn} onPress={handleSubmit}>
                                         <Text style={styles.btn_name}>Recharger</Text>
                                     </TouchableOpacity>
                                 </View>

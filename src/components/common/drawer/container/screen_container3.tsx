@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Switch, Text, View, useWindowDimensions } from 'react-native'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 import { useSelector } from 'react-redux'
 // my importations
@@ -45,7 +45,7 @@ const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
                 {/* montant actuel */}
                 <View style={styles.actual_amount_title_container}>
                     <GradientText text='Montant disponible' style={styles.actual_amount_title} />
-                    <GradientText text='375.000 FCFA' style={styles.actual_amount} />
+                    <GradientText text={`${host?.totalAmount} FCFA`} style={styles.actual_amount} />
                 </View>
 
                 {children}

@@ -11,6 +11,8 @@ export const user_resent_success = 'user_resent_success'
 export const user_reset_success = 'user_reset_success'
 
 export const get_all_users = 'get_all_users'
+export const get_all_users_without_loading = 'get_all_users_without_loading'
 export const user_status_geo_montant = 'user_status_geo_montant'
 export const get_qr_code = 'get_qr_code'
 export const scan_qr_code = 'scan_qr_code'
+export const recharge_compte = 'recharge_compte'

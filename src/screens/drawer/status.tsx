@@ -1,11 +1,10 @@
-import { PermissionsAndroid, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { PermissionsAndroid, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 import Geolocation from '@react-native-community/geolocation'
 // my importations
 import ScreenContainer3 from '../../components/common/drawer/container/screen_container3'
-import CustomLinearGradient from '../../components/common/drawer/gradient/custom_linear_gradient'
 import { colors, roboto } from '../../libs/typography/typography'
 import { RootState } from '../../libs/services/store'
 import NoPermissionCard from '../../components/card/drawer/no_permission_card'
@@ -22,7 +21,7 @@ type COMPONENT_TYPE = {
 const Status: FC<COMPONENT_TYPE> = (props) => {
     const { navigation, screenName } = props
 
-    const data: STATUS_TYPE = { id: '', la: '', lo: '', montant: '' }
+    const data: STATUS_TYPE = { id: '', la: '', lo: '', AmountToExchange: '' }
 
     const { host, user_loading } = useSelector((state: RootState) => state?.user)
     const dispatch = useDispatch<any>()
@@ -33,7 +32,7 @@ const Status: FC<COMPONENT_TYPE> = (props) => {
     const [err, setErr] = useState<{ montant: string }>()
 
     const handleSwitchBtn = (value: boolean) => {
-        const { error, initialError } = status_geo_montant_validation(dataToSend.montant)
+        const { error, initialError } = status_geo_montant_validation(dataToSend.AmountToExchange, host?.totalAmount as number)
 
         if (error.montant !== initialError.montant) {
             setErr(error)
@@ -44,8 +43,8 @@ const Status: FC<COMPONENT_TYPE> = (props) => {
 
             if (value) dispatch(send_status_geo_montant(dataToSend))
             else {
-                dispatch(send_status_geo_montant({ id: host?.id, la: '', lo: '', montant: '', disable: true }))
-                setDataToSend({ ...dataToSend, montant: '' })
+                dispatch(send_status_geo_montant({ id: host?.id, la: '', lo: '', AmountToExchange: '0', disable: true }))
+                setDataToSend({ ...dataToSend, AmountToExchange: '' })
             }
         }
     }
@@ -58,12 +57,12 @@ const Status: FC<COMPONENT_TYPE> = (props) => {
 
                 if (granted) {
                     Geolocation.getCurrentPosition(info => {
-                        if (host?.montant && parseInt(host?.montant, 10) > 0 && host?.coordinates?.la && host?.coordinates?.lo) {
+                        if (host?.AmountToExchange && host?.AmountToExchange > 0 && host?.coordinates?.la && host?.coordinates?.lo) {
                             setIsSwitchActive(true)
                             if (host?.coordinates?.la !== info.coords.latitude.toString() || host?.coordinates?.lo !== info.coords.longitude.toString())
-                                setDataToSend({ id: host?.id, montant: host?.montant as string, la: info.coords.latitude.toString(), lo: info.coords.longitude.toString() })
-                            else setDataToSend({ id: host?.id, montant: host?.montant as string, la: host?.coordinates.la, lo: host?.coordinates.lo })
-                        } else setDataToSend({ id: host?.id, montant: '', la: info.coords.latitude.toString(), lo: info.coords.longitude.toString() })
+                                setDataToSend({ id: host?.id, AmountToExchange: host?.AmountToExchange.toString(), la: info.coords.latitude.toString(), lo: info.coords.longitude.toString() })
+                            else setDataToSend({ id: host?.id, AmountToExchange: host?.AmountToExchange.toString(), la: host?.coordinates.la, lo: host?.coordinates.lo })
+                        } else setDataToSend({ id: host?.id, AmountToExchange: '', la: info.coords.latitude.toString(), lo: info.coords.longitude.toString() })
                     })
                 }
             })()
@@ -71,6 +70,8 @@ const Status: FC<COMPONENT_TYPE> = (props) => {
             dispatch(checking())
         }
     }, [screenName, granted])
+
+    console.log(host)
 
     return (
         <ScreenContainer3 title='Statut/Disponibilité' isSwitchActive={isSwitchActive} handleSwitchBtn={handleSwitchBtn} navigation={navigation}>
@@ -81,7 +82,7 @@ const Status: FC<COMPONENT_TYPE> = (props) => {
                         {/* montant à retirer */}
                         <View style={styles.amount_to_retirer_title_container}>
                             <Text style={styles.amount_to_retirer_title}>Inscrire le montant à retirer</Text>
-                            <TextInput keyboardType='numeric' placeholder='0' placeholderTextColor={colors.white} editable={!isSwitchActive} value={dataToSend?.montant} onChangeText={text => setDataToSend({ ...dataToSend, montant: text })} style={[styles.amount_input, { backgroundColor: isSwitchActive ? colors.profil_bg_color : 'transparent', color: isSwitchActive ? colors.black : colors.white, }]} />
+                            <TextInput keyboardType='numeric' placeholder='0' placeholderTextColor={colors.white} editable={!isSwitchActive} value={dataToSend?.AmountToExchange} onChangeText={text => setDataToSend({ ...dataToSend, AmountToExchange: text })} style={[styles.amount_input, { backgroundColor: isSwitchActive ? colors.profil_bg_color : 'transparent', color: isSwitchActive ? colors.black : colors.white, }]} />
                             <Text style={[styles.fcfa, { bottom: err?.montant ? 27 : 12, }]}>FCFA</Text>
                             {err?.montant && <Text style={styles.error}> {err?.montant} </Text>}
                         </View>

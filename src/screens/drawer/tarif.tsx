@@ -26,6 +26,7 @@ const Tarif: FC<COMPONENT_TYPE> = (props) => {
     const dispatch = useDispatch<any>()
 
     const [refreshing, setRefreshing] = useState(false)
+    const [fois, setFois] = useState(0)
 
     // quand on tire l'ecran vers le bas pour rafraichir
     const onRefresh = useCallback(() => {
@@ -37,7 +38,12 @@ const Tarif: FC<COMPONENT_TYPE> = (props) => {
     }, [loadingTarif])
 
     useEffect(() => {
-        if (screenName === 'tarif') dispatch(getAllTarifsWithoutLoading())
+        if (screenName === 'tarif') {
+            if (fois === 0) {
+                dispatch(getAllTarifs())
+                setFois(1)
+            } else dispatch(getAllTarifsWithoutLoading())
+        }
     }, [screenName])
 
     return (
