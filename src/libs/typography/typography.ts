@@ -31,7 +31,8 @@ export const colors = {
     gray: "gray",
 
     // tz
-    gradient_color: ['#B9B1E2', '#CDA0C4', '#E48DA0'],
+    // gradient_color: ['#B9B1E2', '#CDA0C4', '#E48DA0'],
+    gradient_color: ['#B3B6EB', '#E98A98'],
     drawer_bg_color: '#0B0B0B',
     drawer_icon_color: '#CDA0C4',
     profil_bg_color: '#AAAAAA',

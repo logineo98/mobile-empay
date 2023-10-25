@@ -1,4 +1,4 @@
-import { PermissionsAndroid, StyleSheet, View } from 'react-native'
+import { PermissionsAndroid, StyleSheet, Text, View } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import MapView, { Marker } from 'react-native-maps'
@@ -58,11 +58,12 @@ const Geolocalisation: FC<COMPONENT_TYPE> = (props) => {
                     <View style={styles.geolocalisation_container}>
                         <MapView style={{ width: '100%', height: '100%' }} initialRegion={initialRegion}>
                             {allUsers?.map((user) => (
-                                user?.AmountToExchange && user?.coordinates?.la && user?.coordinates?.lo &&
-                                <Marker key={user?.id}
-                                    coordinate={{ latitude: parseInt(user?.coordinates?.la, 10), longitude: parseInt(user?.coordinates?.lo, 10) }}
-                                    title={user?.name} description={`${user?.AmountToExchange} FCFA`}
-                                />
+                                (user?.AmountToExchange && user?.coordinates?.la && user?.coordinates?.lo) ?
+                                    <Marker key={user?.id}
+                                        coordinate={{ latitude: parseInt(user?.coordinates?.la, 10), longitude: parseInt(user?.coordinates?.lo, 10) }}
+                                        title={user?.name} description={`${user?.AmountToExchange} FCFA`}
+                                    /> :
+                                    <View key={user?.id} />
                             ))}
                         </MapView>
                     </View>}

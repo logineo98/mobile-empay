@@ -5,7 +5,7 @@ import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript
 // my importations
 import { RECHARGE_TYPE, scanModel, STATUS_TYPE, userModel } from './user.model'
 import { _end_point, get_credentials } from '../endpoints'
-import { get_all_users, get_all_users_without_loading, get_qr_code, recharge_compte, reset_qr_code, scan_qr_code, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
+import { get_all_users, get_all_users_without_loading, get_qr_code, receive_scan_notification, recharge_compte, reset_qr_code, scan_qr_code, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
 import { Expired, debug } from '../../constants/utils'
 import { connexion_request, forgot_request, reset_request, verify_request } from './user.request'
 
@@ -21,9 +21,9 @@ export const checking = () => async (dispatch: any) => {
     const expiresIn = await get_credentials('expiresIn')
     let token = await get_credentials('accessToken');
 
-    if ((!expiresIn || expiresIn === '') && (!token || token === '')) {
-        dispatch(logout()); return;
-    }
+    // if ((!expiresIn || expiresIn === '') && (!token || token === '')) {
+    //     dispatch(logout()); return;
+    // }
 
     if (expiresIn !== '' && token !== '') {
         if (!Expired(parseInt(expiresIn))) {
@@ -72,10 +72,10 @@ export const logout = () => async (dispatch: any) => {
         let token = await get_credentials('accessToken')
         let notificationToken = await get_credentials('notificationToken')
 
-        const res = await axios.post(_end_point.customer.logout, { notificationToken }, { headers: { Authorization: `Bearer ${token}` } })
-        await AsyncStorage.removeItem('credentials')
+        console.log(notificationToken)
 
-        console.log(res.data)
+        await axios.post(_end_point.customer.logout, { notificationToken }, { headers: { Authorization: `Bearer ${token}` } })
+        await AsyncStorage.removeItem('credentials')
 
         dispatch({ type: user_logout_success })
     } catch (error: any) {
@@ -201,10 +201,11 @@ export const send_status_geo_montant = (data: STATUS_TYPE) => async (dispatch: a
 
         let token = await get_credentials('accessToken')
         let expiresIn = await get_credentials('expiresIn')
+        let notificationToken = await get_credentials('notificationToken')
 
         const response = await axios.post(`${_end_point.customer.localisation}`, data, { headers: { Authorization: `Bearer ${token}` } })
 
-        await AsyncStorage.setItem('credentials', JSON.stringify({ usr: response.data, accessToken: token, expiresIn }))
+        await AsyncStorage.setItem('credentials', JSON.stringify({ usr: response.data, accessToken: token, expiresIn, notificationToken }))
 
         dispatch({ type: user_status_geo_montant, payload: { usr: response.data, } })
     } catch (error: any) {
@@ -250,9 +251,28 @@ export const _scanQrCode = (data: scanModel, navigation: DrawerNavigationHelpers
         await AsyncStorage.setItem('credentials', JSON.stringify({ usr: response.data?.usr, accessToken: token, expiresIn }))
 
         dispatch({ type: scan_qr_code, payload: response.data })
-        console.log(response.data)
 
         navigation.navigate('ika_wari_taa_status', { status: response.data.status })
+    } catch (error: any) {
+        debug('SCAN QR CODE', error?.response?.data || error.message)
+        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
+        dispatch(user_error(error?.response?.data || error.message))
+    }
+}
+
+export const receiveScanNotification = (usr: userModel) => async (dispatch: any) => {
+    try {
+        dispatch({ type: user_loading })
+
+        console.log('receiveScanNotification', usr)
+
+        let token = await get_credentials('accessToken')
+        let expiresIn = await get_credentials('expiresIn')
+        let notificationToken = await get_credentials('notificationToken')
+
+        await AsyncStorage.setItem('credentials', JSON.stringify({ usr: usr, accessToken: token, expiresIn, notificationToken }))
+
+        dispatch({ type: receive_scan_notification, payload: usr })
     } catch (error: any) {
         debug('SCAN QR CODE', error?.response?.data || error.message)
         Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })

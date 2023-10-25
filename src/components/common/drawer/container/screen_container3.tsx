@@ -25,6 +25,8 @@ const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
 
     const { host } = useSelector((state: RootState) => state.user)
 
+    console.log(host?.totalAmount)
+
     return (
         <ScreenContainer2 title={title} scroll navigation={navigation}>
             <View style={styles.screen_container_3}>
@@ -45,7 +47,8 @@ const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
                 {/* montant actuel */}
                 <View style={styles.actual_amount_title_container}>
                     <GradientText text='Montant disponible' style={styles.actual_amount_title} />
-                    <GradientText text={`${host?.totalAmount} FCFA`} style={styles.actual_amount} />
+                    {/* <GradientText text={`${host?.totalAmount} FCFA`} style={styles.actual_amount} /> */}
+                    <Text style={styles.actual_amount}> {`${host?.totalAmount} FCFA`} </Text>
                 </View>
 
                 {children}
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
     // montant actuel
     actual_amount_title_container: { alignItems: 'center', },
     actual_amount_title: { fontSize: 15, },
-    actual_amount: { fontSize: 25, },
+    actual_amount: { fontSize: 25, color: colors.white, },
 
 })
 
