@@ -11,7 +11,7 @@ import { colors, roboto } from '../../libs/typography/typography'
 import CustomLinearGradient from '../../components/common/drawer/gradient/custom_linear_gradient'
 import NoPermissionCard from '../../components/card/drawer/no_permission_card'
 import { RootState } from '../../libs/services/store'
-import { _scanQrCode, getQrCode } from '../../libs/services/user/user.action'
+import { _scanQrCode, getQrCode, resetQrCode } from '../../libs/services/user/user.action'
 import Loading from '../../components/common/drawer/others/loading'
 
 type COMPONENT_TYPE = {
@@ -30,6 +30,7 @@ const IkaWariTaa: FC<COMPONENT_TYPE> = (props) => {
     const [showQrCode, setShowQrCode] = useState(false)
     const [scanQrCode, setScanQrCode] = useState(false)
     const [granted, setGranted] = useState(false)
+    const [err, setErr] = useState<{ montant: string }>()
 
     const handleShowQrCode = () => {
         if (host?.AmountToExchange && host?.coordinates?.la && host?.coordinates?.lo) {
@@ -60,7 +61,8 @@ const IkaWariTaa: FC<COMPONENT_TYPE> = (props) => {
         if (screenName === 'ika_wari_taa') {
             setAmount('')
             setScanQrCode(false)
-            setShowQrCode(false);
+            setShowQrCode(false)
+            dispatch(resetQrCode());
 
             (async () => {
                 const cameraPermission = await Camera.requestCameraPermission()
@@ -68,6 +70,8 @@ const IkaWariTaa: FC<COMPONENT_TYPE> = (props) => {
             })()
         }
     }, [screenName])
+
+    console.log(qr_code)
 
     if (!device) return <View></View>
     return (
@@ -83,7 +87,8 @@ const IkaWariTaa: FC<COMPONENT_TYPE> = (props) => {
                                 <View style={styles.amount_to_retirer_title_container}>
                                     <Text style={styles.amount_to_retirer_title}>Inscrire le montant à retirer</Text>
                                     <TextInput onChangeText={setAmount} keyboardType='numeric' placeholder='0' placeholderTextColor={colors.white} value={amount} style={styles.amount_input} />
-                                    <Text style={styles.fcfa}>FCFA</Text>
+                                    <Text style={[styles.fcfa, { bottom: err?.montant ? 27 : 12, }]}>FCFA</Text>
+                                    {err?.montant && <Text style={styles.error}> {err?.montant} </Text>}
                                 </View>
                             }
 
@@ -92,11 +97,11 @@ const IkaWariTaa: FC<COMPONENT_TYPE> = (props) => {
                                 <Text style={styles.afficher_scanner_qrcode_title}>QR Code</Text>
                                 <View style={styles.afficher_scanner_qrcode}>
 
-                                    {showQrCode ? <QRCode value={qr_code} size={150} color={colors.white} backgroundColor={colors.black} /> :
+                                    {(showQrCode && qr_code !== 'reset') ? <QRCode value={qr_code} size={150} color={colors.white} backgroundColor={colors.black} /> :
+                                        showQrCode ? <Text style={styles.choose_afficher_scanner_qrcode_text}>Erreur survenue lors de la génération du QR CODE</Text> :
 
-                                        (scanQrCode && amount?.trim() !== '') ? <Camera device={device} isActive style={StyleSheet.absoluteFill} codeScanner={codeScanner} /> :
-
-                                            scanQrCode && <Text style={styles.choose_afficher_scanner_qrcode_text}>Inscrire le montant à retirer</Text>
+                                            (scanQrCode && amount?.trim() !== '') ? <Camera device={device} isActive style={StyleSheet.absoluteFill} codeScanner={codeScanner} /> :
+                                                scanQrCode && <Text style={styles.choose_afficher_scanner_qrcode_text}>Inscrire le montant à retirer</Text>
                                     }
 
                                     {(!scanQrCode && !showQrCode) && <Text style={styles.choose_afficher_scanner_qrcode_text}>Scanner ou afficher QR CODE</Text>}
@@ -128,16 +133,17 @@ const styles = StyleSheet.create({
     ika_wari_taa_container: {},
 
     // montant à retirer
-    amount_to_retirer_title_container: { alignItems: 'center', marginVertical: 10, position: 'relative', },
-    amount_to_retirer_title: { color: colors.white, fontSize: 15, fontFamily: roboto.regular, marginBottom: 10, },
+    amount_to_retirer_title_container: { marginVertical: 10, position: 'relative', },
+    amount_to_retirer_title: { color: colors.white, fontSize: 15, fontFamily: roboto.regular, textAlign: 'center', marginBottom: 10, },
     amount_input: { width: '100%', paddingLeft: 30, paddingRight: 75, borderWidth: 2, borderColor: colors.profil_bg_color, borderRadius: 30, color: colors.white, fontFamily: roboto.regular, },
     fcfa: { position: 'absolute', bottom: 12, right: 15, color: colors.white, fontSize: 20, fontFamily: roboto.regular, },
+    error: { color: colors.fond1, fontFamily: roboto.italic, fontSize: 10, textAlign: 'left', },
 
     // afficher ou scanner qrcode
     afficher_scanner_qrcode_title_container: { alignItems: 'center', marginBottom: 25, },
     afficher_scanner_qrcode_title: { color: colors.white, fontSize: 18, fontFamily: roboto.regular, marginBottom: 10 },
     afficher_scanner_qrcode: { height: 200, width: '100%', overflow: 'hidden', marginBottom: 10, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.profil_bg_color, borderRadius: 30, },
-    choose_afficher_scanner_qrcode_text: { color: colors.white, fontFamily: roboto.regular, textTransform: 'uppercase', },
+    choose_afficher_scanner_qrcode_text: { color: colors.white, fontFamily: roboto.regular, textTransform: 'uppercase', textAlign: 'center', },
     qr_message: { color: colors.white, fontFamily: roboto.black, textAlign: 'center', },
 
     // bouton montrer et scanner qr code

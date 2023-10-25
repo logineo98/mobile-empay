@@ -71,8 +71,6 @@ const Status: FC<COMPONENT_TYPE> = (props) => {
         }
     }, [screenName, granted])
 
-    console.log(host)
-
     return (
         <ScreenContainer3 title='Statut/Disponibilité' isSwitchActive={isSwitchActive} handleSwitchBtn={handleSwitchBtn} navigation={navigation}>
             {/* quand la permission n'est pas donnée a la géolocalisation */}
@@ -81,7 +79,7 @@ const Status: FC<COMPONENT_TYPE> = (props) => {
                     <View style={styles.status_container}>
                         {/* montant à retirer */}
                         <View style={styles.amount_to_retirer_title_container}>
-                            <Text style={styles.amount_to_retirer_title}>Inscrire le montant à retirer</Text>
+                            <Text style={styles.amount_to_retirer_title}>Inscrire le montant à échanger</Text>
                             <TextInput keyboardType='numeric' placeholder='0' placeholderTextColor={colors.white} editable={!isSwitchActive} value={dataToSend?.AmountToExchange} onChangeText={text => setDataToSend({ ...dataToSend, AmountToExchange: text })} style={[styles.amount_input, { backgroundColor: isSwitchActive ? colors.profil_bg_color : 'transparent', color: isSwitchActive ? colors.black : colors.white, }]} />
                             <Text style={[styles.fcfa, { bottom: err?.montant ? 27 : 12, }]}>FCFA</Text>
                             {err?.montant && <Text style={styles.error}> {err?.montant} </Text>}
@@ -112,7 +110,7 @@ const styles = StyleSheet.create({
 
     // montant à retirer
     amount_to_retirer_title_container: { marginVertical: 60, position: 'relative', },
-    amount_to_retirer_title: { color: colors.white, fontFamily: roboto.regular, marginBottom: 10, },
+    amount_to_retirer_title: { color: colors.white, fontFamily: roboto.regular, textAlign: 'center', marginBottom: 10, },
     amount_input: { width: '100%', paddingLeft: 30, paddingRight: 75, borderWidth: 2, borderColor: colors.profil_bg_color, borderRadius: 30, fontFamily: roboto.regular, },
     fcfa: { position: 'absolute', right: 15, color: colors.white, fontSize: 20, fontFamily: roboto.regular, },
     error: { color: colors.fond1, fontFamily: roboto.italic, fontSize: 10, textAlign: 'left', },

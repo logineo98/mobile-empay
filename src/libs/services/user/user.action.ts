@@ -5,13 +5,12 @@ import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript
 // my importations
 import { RECHARGE_TYPE, scanModel, STATUS_TYPE, userModel } from './user.model'
 import { _end_point, get_credentials } from '../endpoints'
-import { get_all_users, get_all_users_without_loading, get_qr_code, recharge_compte, scan_qr_code, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
+import { get_all_users, get_all_users_without_loading, get_qr_code, recharge_compte, reset_qr_code, scan_qr_code, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
 import { Expired, debug } from '../../constants/utils'
 import { connexion_request, forgot_request, reset_request, verify_request } from './user.request'
 
 
 const user_error = (error: any) => (dispatch: any) => {
-    console.log(error)
     if (error === "Network Error") dispatch({ type: user_errors, payload: "Erreur lors de la connexion au serveur" })
     else dispatch({ type: user_errors, payload: error })
 }
@@ -214,6 +213,16 @@ export const getQrCode = (id: string) => async (dispatch: any) => {
         dispatch({ type: get_qr_code, payload: response.data })
     } catch (error: any) {
         debug('GET QR CODE', error?.response?.data || error.message)
+        dispatch({ type: reset_qr_code, payload: 'reset' })
+        dispatch(user_error(error?.response?.data || error.message))
+    }
+}
+
+export const resetQrCode = () => async (dispatch: any) => {
+    try {
+        dispatch({ type: reset_qr_code, payload: 'reset' })
+    } catch (error: any) {
+        debug('RESET QR CODE', error?.response?.data || error.message)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -223,15 +232,18 @@ export const _scanQrCode = (data: scanModel, navigation: DrawerNavigationHelpers
         dispatch({ type: user_loading })
 
         let token = await get_credentials('accessToken')
+        let expiresIn = await get_credentials('expiresIn')
 
         const response = await axios.post(`${_end_point.customer.scanner_traitement}`, data, { headers: { Authorization: `Bearer ${token}` } })
 
-        dispatch({ type: scan_qr_code, payload: response.data })
+        await AsyncStorage.setItem('credentials', JSON.stringify({ usr: response.data?.usr, accessToken: token, expiresIn }))
 
+        dispatch({ type: scan_qr_code, payload: response.data })
+        console.log(response.data)
         navigation.navigate('ika_wari_taa_status', { status: response.data.status })
     } catch (error: any) {
         debug('SCAN QR CODE', error?.response?.data || error.message)
-        // Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
         dispatch(user_error(error?.response?.data || error.message))
     }
 }

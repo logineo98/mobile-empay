@@ -1,12 +1,13 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 import { ParamListBase, RouteProp } from '@react-navigation/native'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 // my importations
 import { RootState } from '../../libs/services/store'
 import ScreenContainer2 from '../../components/common/drawer/container/screen_container2'
 import { colors, roboto } from '../../libs/typography/typography'
+import { checking } from '../../libs/services/user/user.action'
 // my icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -14,14 +15,21 @@ import Entypo from 'react-native-vector-icons/Entypo'
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers
     route: RouteProp<ParamListBase, 'ika_wari_taa_status'>
+    screenName: string
 }
 
 const IkaWariTaaStatus: FC<COMPONENT_TYPE> = (props) => {
-    const { navigation, route } = props
+    const { navigation, route, screenName } = props
 
     const { } = useSelector((state: RootState) => state?.user)
+    const dispatch = useDispatch<any>()
 
     const status = (route.params as any).status
+
+    useEffect(() => {
+        if (screenName === 'ika_wari_taa_status') dispatch(checking())
+    }, [screenName])
+
 
     return (
         <ScreenContainer2 title={`Statut de l'échange`} scroll navigation={navigation}>

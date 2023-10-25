@@ -41,7 +41,7 @@ const DrawerStack: FC<COMPONENT_TYPE> = ({ route }) => {
             <drawer.Screen name='a_propos' component={APropos} />
             <drawer.Screen name='geolocalisation' children={({ navigation }) => <Geolocalisation navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='historique' component={Historique} />
-            <drawer.Screen name='ika_wari_taa_status' component={IkaWariTaaStatus} />
+            <drawer.Screen name='ika_wari_taa_status' children={({ navigation, route }) => <IkaWariTaaStatus navigation={navigation} route={route} screenName={screenName} />} />
             <drawer.Screen name='ika_wari_taa' children={({ navigation }) => <IkaWariTaa navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='partenaire' children={({ navigation }) => <Partenaire navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='recharge' component={Recharge} />
