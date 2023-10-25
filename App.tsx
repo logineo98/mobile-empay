@@ -26,7 +26,7 @@ const App = () => {
         const msg = notification?.message?.toString();
         msg !== undefined && Alert.alert("Notifications", msg, [{ text: "D'accord" }])
       },
-    });
+    })
 
     messaging().setBackgroundMessageHandler(async remoteMessage => {
       const notifs = remoteMessage.notification;
@@ -35,12 +35,11 @@ const App = () => {
       PushNotification.localNotification({
         title: notifs?.title || 'Notification Title',
         message: notifs?.body || 'Notification Body',
-      });
+      })
     })
 
     return unsubscribe
   }, [])
-
 
 
   return (

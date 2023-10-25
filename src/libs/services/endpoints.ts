@@ -24,6 +24,7 @@ export const _end_point = {
     customer: {
         // without id
         login: `${_API_BASE}/customers/login`,
+        logout: `${_API_BASE}/customers/logout`,
         register: `${_API_BASE}/customers/register`,
         forgot: `${_API_BASE}/customers/forgot`,
         verify: `${_API_BASE}/customers/verify-code`,

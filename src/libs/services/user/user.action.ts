@@ -62,7 +62,6 @@ export const login = (data: userModel, setError: any) => async (dispatch: any) =
     } catch (error: any) {
         debug('USER LOGIN ACTION', error?.response?.data || error.message)
         dispatch(user_error(error?.response?.data || error.message))
-        // dispatch({ type: user_errors, payload: error?.response?.data })
     }
 }
 
@@ -70,12 +69,18 @@ export const logout = () => async (dispatch: any) => {
     try {
         dispatch({ type: user_loading })
 
+        let token = await get_credentials('accessToken')
+        let notificationToken = await get_credentials('notificationToken')
+
+        const res = await axios.post(_end_point.customer.logout, { notificationToken }, { headers: { Authorization: `Bearer ${token}` } })
         await AsyncStorage.removeItem('credentials')
-        dispatch({ type: user_logout_success });
+
+        console.log(res.data)
+
+        dispatch({ type: user_logout_success })
     } catch (error: any) {
         debug('USER LOGOUT ACTION', error?.response?.data || error.message)
         dispatch(user_error(error?.response?.data || error.message))
-        // dispatch({ type: user_errors, payload: error.message || error })
     }
 }
 
@@ -89,7 +94,6 @@ export const forgot_password = (data: userModel, setError: any) => async (dispat
     } catch (error: any) {
         debug('USER FORGOT PASSWORD ACTION', error?.response?.data || error.message)
         dispatch(user_error(error?.response?.data || error.message))
-        // dispatch({ type: user_errors, payload: error?.response?.data })
     }
 }
 
@@ -104,7 +108,6 @@ export const forgot_verify = (data: userModel, setError: any) => async (dispatch
     } catch (error: any) {
         debug('USER FORGOT CODE VERIFY ACTION', error?.response?.data || error.message)
         dispatch(user_error(error?.response?.data || error.message))
-        // dispatch({ type: user_errors, payload: error?.response?.data })
     }
 }
 
@@ -120,7 +123,6 @@ export const resent_code = (data: userModel, setError: any) => async (dispatch: 
     } catch (error: any) {
         debug('USER RESENT CODE PASSWORD ACTION', error?.response?.data || error.message)
         dispatch(user_error(error?.response?.data || error.message))
-        // dispatch({ type: user_errors, payload: error?.response?.data })
     }
 }
 
@@ -140,7 +142,6 @@ export const reset_password = (data: userModel, setError: any) => async (dispatc
     } catch (error: any) {
         debug('USER RESET PASSWORD ACTION', error?.response?.data || error.message)
         dispatch(user_error(error?.response?.data || error.message))
-        // dispatch({ type: user_errors, payload: error?.response?.data })
     }
 }
 
@@ -163,7 +164,6 @@ export const inscription_service = (data: FormData, notificationToken: string) =
     } catch (error: any) {
         debug('USER REGISTER ACTION', error?.response?.data || error.message)
         dispatch(user_error(error?.response?.data || error.message))
-        // dispatch({ type: user_errors, payload: error?.response?.data })
     }
 }
 
@@ -251,6 +251,7 @@ export const _scanQrCode = (data: scanModel, navigation: DrawerNavigationHelpers
 
         dispatch({ type: scan_qr_code, payload: response.data })
         console.log(response.data)
+
         navigation.navigate('ika_wari_taa_status', { status: response.data.status })
     } catch (error: any) {
         debug('SCAN QR CODE', error?.response?.data || error.message)

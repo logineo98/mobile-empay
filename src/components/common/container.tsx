@@ -13,7 +13,7 @@ const Container = ({ children, position, scoll, style }: props) => {
 
   return (
     scoll ?
-      (<ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scrollview}>
+      (<ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scrollview} showsVerticalScrollIndicator={false}>
         <View style={[styles.content, style]}>
           {children}
         </View>
