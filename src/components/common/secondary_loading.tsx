@@ -9,7 +9,7 @@ const SecondaryLoading: FC<any> = ({ children, text, op }) => {
 
     return (
         <View style={{ position: "absolute", alignItems: "center", justifyContent: "center", zIndex: 10, width, height, backgroundColor: `rgba(0,0,0,${op || 0.9})`, }}>
-            <ActivityIndicator size="large" color={"black"} style={{ zIndex: 10 }} />
+            <ActivityIndicator size="large" color={"white"} style={{ zIndex: 10 }} />
             {text && <Text style={{ color: "black" }}>{text}</Text>}
             {children}
         </View>

@@ -6,6 +6,7 @@ import Spacer from '../../../components/common/spacer'
 import Container from '../../../components/common/container'
 import { allInputsFilled, handleChangeMobile, images } from '../../../libs/constants/constants'
 import { useNavigation } from '@react-navigation/native'
+import messaging from '@react-native-firebase/messaging'
 import Toast from 'react-native-toast-message'
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSpring } from 'react-native-reanimated'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -58,27 +59,32 @@ const Secure = () => {
 
     //traitement of login
     const handle_validate = async () => {
-        const validation: userModel = { password: inputs?.password, confirm: inputs?.confirm }
-        if (inscription_inputs_request("finalisation", validation, setError)) return;
+        try {
+            const validation: userModel = { password: inputs?.password, confirm: inputs?.confirm }
+            if (inscription_inputs_request("finalisation", validation, setError)) return;
 
-        store.password = inputs.password;
+            store.password = inputs.password;
+            const notificationToken = await messaging().getToken()
 
+            const blob = new FormData()
+            blob.append("name", (store as any).name)
+            blob.append("firstname", (store as any).firstname)
+            blob.append("phone", (store as any).phone)
+            blob.append("email", store.email)
+            blob.append("address", store.address)
+            blob.append("accountUBA", store.account)
+            blob.append("photo", (store as any).profil)
+            blob.append("document", (store as any).document)
+            blob.append("birthday", `${(store as any).birthday}`)
+            blob.append("signature", (store as any).signature)
+            blob.append("password", (store as any).password)
+            blob.append("notificationToken", notificationToken)
 
-        const blob = new FormData()
-        blob.append("name", (store as any).name)
-        blob.append("firstname", (store as any).firstname)
-        blob.append("phone", (store as any).phone)
-        blob.append("email", store.email)
-        blob.append("address", store.address)
-        blob.append("accountUBA", store.account)
-        blob.append("photo", (store as any).profil)
-        blob.append("document", (store as any).document)
-        blob.append("birthday", `${(store as any).birthday}`)
-        blob.append("signature", (store as any).signature)
-        blob.append("password", (store as any).password)
+            dispatch(inscription_service(blob, notificationToken))
+            setClick(true)
+        } catch (error) {
 
-        dispatch(inscription_service(blob))
-        setClick(true)
+        }
     }
 
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });

@@ -10,6 +10,7 @@ import { useAnimatedStyle, useSharedValue, withRepeat, withSpring } from 'react-
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
+import messaging from '@react-native-firebase/messaging'
 import { RootState } from '../../../libs/services/store'
 import { checking, reset_password } from '../../../libs/services/user/user.action'
 import SecondaryLoading from '../../../components/common/secondary_loading'
@@ -45,10 +46,18 @@ const Reset = () => {
 
 
     //traitement of login
-    const handle_reset = () => {
-        (inputs as any).id = routes?.data?.id;
-        dispatch(reset_password(inputs, setError))
-        setClick(true)
+    const handle_reset = async () => {
+
+        try {
+            const notificationToken = await messaging().getToken();
+            (inputs as any).notificationToken = notificationToken;
+            (inputs as any).id = routes?.data?.id;
+
+            dispatch(reset_password(inputs, setError))
+            setClick(true)
+        } catch (error) {
+            console.log("notificationToken error")
+        }
     }
 
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });

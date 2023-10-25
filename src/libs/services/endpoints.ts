@@ -6,10 +6,12 @@ export const get_credentials = async (type: string) => {
         const cred = JSON.parse(t)
         const accessToken = cred.accessToken
         const expiresIn = cred.expiresIn
+        const notificationToken = cred.notificationToken
         const usr = cred.usr
 
         if (type === 'accessToken') return accessToken;
-        else if (type === 'expiresIn') parseInt(expiresIn);
+        else if (type === 'expiresIn') return parseInt(expiresIn);
+        else if (type === 'notificationToken') return notificationToken;
         else if (type === 'usr') return usr;
     }
 }

@@ -9,6 +9,7 @@ import { checking, login } from '../../../libs/services/user/user.action'
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSpring } from 'react-native-reanimated'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../libs/services/store'
+import messaging from '@react-native-firebase/messaging'
 import Toast from 'react-native-toast-message'
 import { useNavigation } from '@react-navigation/native'
 import ToastContainer from '../../../components/common/toast'
@@ -18,10 +19,8 @@ const Login = () => {
     let scale = useSharedValue(1);
     const dispatch = useDispatch<any>()
     const navigation = useNavigation<any>()
-    const { width, height } = useWindowDimensions()
     const [error, setError] = useState("");
     const [click, setClick] = useState(false);
-    const [indicatif, setIndicatif] = useState("+223");
     const [inputs, setInputs] = useState({ phone: "", password: "" });
 
     const { user_tmp, user_info, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
@@ -45,15 +44,18 @@ const Login = () => {
 
 
     //traitement of login
-    const handle_login = () => {
+    const handle_login = async () => {
+        try {
+            const notificationToken = await messaging().getToken();
+            (inputs as any).notificationToken = notificationToken;
 
-        // if (!inputs.phone.includes(indicatif))
-        //     inputs.phone = indicatif + inputs.phone
+            dispatch(login(inputs, setError))
+            setClick(true)
 
-        dispatch(login(inputs, setError))
-        setClick(true)
+        } catch (error) {
+            console.log("notificationToken error")
+        }
     }
-
 
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });
 

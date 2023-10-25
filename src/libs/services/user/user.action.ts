@@ -54,6 +54,7 @@ export const login = (data: userModel, setError: any) => async (dispatch: any) =
         const res = await axios.post(_end_point.customer.login, data)
 
         res.data.expiresIn = new Date().getTime() + parseInt(res.data.expiresIn)
+        res.data.notificationToken = data?.notificationToken
 
         await AsyncStorage.setItem('credentials', JSON.stringify(res.data))
 
@@ -131,6 +132,8 @@ export const reset_password = (data: userModel, setError: any) => async (dispatc
         const res = await axios.post(_end_point.customer.reset, data)
 
         res.data.expiresIn = new Date().getTime() + parseInt(res.data.expiresIn)
+        res.data.notificationToken = data?.notificationToken
+
         await AsyncStorage.setItem('credentials', JSON.stringify(res.data))
 
         dispatch({ type: user_reset_success, payload: res.data })
@@ -141,12 +144,20 @@ export const reset_password = (data: userModel, setError: any) => async (dispatc
     }
 }
 
-export const inscription_service = (data: FormData) => async (dispatch: any) => {
+export const inscription_service = (data: FormData, notificationToken: string) => async (dispatch: any) => {
     try {
         dispatch({ type: user_loading })
 
+        let token = await get_credentials('accessToken')
+        let expiresIn = await get_credentials('expiresIn')
+
         const config = { headers: { 'Content-Type': 'multipart/form-data' } }
         const res = await axios.post(_end_point.customer.register, data, config)
+
+
+
+        await AsyncStorage.setItem('credentials', JSON.stringify({ accessToken: token, expiresIn, notificationToken: notificationToken }))
+
 
         dispatch({ type: user_register_success, payload: res.data })
     } catch (error: any) {

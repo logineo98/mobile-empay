@@ -30,6 +30,7 @@ export type userModel = {
     AmountToExchange?: number
     coordinates?: COORDINATE_TYPE
     isChecked?: boolean
+    notificationToken?: string
     age?: Date
 }
 
