@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleSheet, Text, View, useWindowDimensions } from 'react-native'
+import { ActivityIndicator, StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle, useWindowDimensions } from 'react-native'
 import React, { FC } from 'react'
 // my importations
 import { colors, roboto } from '../../../../libs/typography/typography'
@@ -7,17 +7,20 @@ import GradientText from '../gradient/gradient_text'
 type COMPONENT_TYPE = {
     text?: string
     color?: string
+    no_gradient?: boolean
+    style_container?: StyleProp<ViewStyle>
+    style_text_container?: StyleProp<TextStyle>
 }
 
 const Loading: FC<COMPONENT_TYPE> = (props) => {
-    const { text, color } = props
+    const { color, no_gradient, style_container, style_text_container, text } = props
 
     const { width } = useWindowDimensions()
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, style_container]}>
             <ActivityIndicator size='large' color={color || colors.white} />
-            <GradientText text={text || 'Chargement en cours...'} style={styles.text} />
+            {!no_gradient ? <GradientText text={text || 'Chargement en cours...'} style={[styles.text, style_text_container]} /> : <Text style={[styles.text, style_text_container, { color: colors.black, }]}> {text || 'Chargement en cours...'} </Text>}
         </View>
     )
 }

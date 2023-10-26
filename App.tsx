@@ -4,10 +4,11 @@ import { Provider } from 'react-redux'
 import messaging from '@react-native-firebase/messaging'
 import PushNotification from 'react-native-push-notification'
 import 'react-native-gesture-handler'
+// my importations
 import Store from './src/libs/services/store'
 import RootNavigation from './src/libs/navigations/root_navigation'
 import { requestUserPermission } from './src/libs/constants/utils'
-import { receiveScanNotification } from './src/libs/services/user/user.action'
+import { receiveRechargeNotificationCanceled, receiveRechargeNotificationSuccess, receiveScanNotification } from './src/libs/services/user/user.action'
 
 const App = () => {
 
@@ -15,16 +16,14 @@ const App = () => {
     requestUserPermission()
 
     const unsubscribe = messaging().onMessage(remoteMessage => {
-      const notif: any = remoteMessage.notification
-      const usr: any = JSON.parse(remoteMessage.data?.usr as string)
+      let usr
+      const notif: any = remoteMessage?.notification
+      if (remoteMessage?.data?.usr) usr = JSON.parse(remoteMessage?.data?.usr as string)
+      const recharge_status: any = JSON.parse(remoteMessage?.data?.recharge as string)
 
-      console.log('usr', usr)
-      console.log('notif', notif)
-
-      if (notif?.title === 'Demande de retrait') {
-        console.log('title', notif?.title);
-        Store.dispatch<any>(receiveScanNotification(usr))
-      } else console.log('non')
+      if (notif?.title === 'Demande de retrait') Store.dispatch<any>(receiveScanNotification(usr))
+      if (notif?.title === 'Paiement reussi') Store.dispatch<any>(receiveRechargeNotificationSuccess(usr, recharge_status))
+      if (notif?.title === 'Paiement échoué') Store.dispatch<any>(receiveRechargeNotificationCanceled(recharge_status))
 
       Alert.alert(notif?.title || "Notifications", notif?.body, [{ text: "D'accord" }])
     })
@@ -37,12 +36,19 @@ const App = () => {
     })
 
     messaging().setBackgroundMessageHandler(async remoteMessage => {
-      const notifs = remoteMessage.notification;
+      let usr
+      const notif: any = remoteMessage?.notification
+      if (remoteMessage?.data?.usr) usr = JSON.parse(remoteMessage?.data?.usr as string)
+      const recharge_status: any = JSON.parse(remoteMessage?.data?.recharge as string)
+
+      if (notif?.title === 'Demande de retrait') Store.dispatch<any>(receiveScanNotification(usr))
+      if (notif?.title === 'Paiement reussi') Store.dispatch<any>(receiveRechargeNotificationSuccess(usr, recharge_status))
+      if (notif?.title === 'Paiement échoué') Store.dispatch<any>(receiveRechargeNotificationCanceled(recharge_status))
 
       // Show a local notification
       PushNotification.localNotification({
-        title: notifs?.title || 'Notification Title',
-        message: notifs?.body || 'Notification Body',
+        title: notif?.title || 'Notification Title',
+        message: notif?.body || 'Notification Body',
       })
     })
 

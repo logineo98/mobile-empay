@@ -5,7 +5,7 @@ import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript
 // my importations
 import { RECHARGE_TYPE, scanModel, STATUS_TYPE, userModel } from './user.model'
 import { _end_point, get_credentials } from '../endpoints'
-import { get_all_users, get_all_users_without_loading, get_qr_code, receive_scan_notification, recharge_compte, reset_qr_code, scan_qr_code, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
+import { get_all_users, get_all_users_without_loading, get_qr_code, receive_recharge_notification_canceled, receive_recharge_notification_success, receive_scan_notification, recharge_compte, reset_qr_code, scan_qr_code, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
 import { Expired, debug } from '../../constants/utils'
 import { connexion_request, forgot_request, reset_request, verify_request } from './user.request'
 
@@ -71,8 +71,6 @@ export const logout = () => async (dispatch: any) => {
 
         let token = await get_credentials('accessToken')
         let notificationToken = await get_credentials('notificationToken')
-
-        console.log(notificationToken)
 
         await axios.post(_end_point.customer.logout, { notificationToken }, { headers: { Authorization: `Bearer ${token}` } })
         await AsyncStorage.removeItem('credentials')
@@ -264,8 +262,6 @@ export const receiveScanNotification = (usr: userModel) => async (dispatch: any)
     try {
         dispatch({ type: user_loading })
 
-        console.log('receiveScanNotification', usr)
-
         let token = await get_credentials('accessToken')
         let expiresIn = await get_credentials('expiresIn')
         let notificationToken = await get_credentials('notificationToken')
@@ -274,7 +270,7 @@ export const receiveScanNotification = (usr: userModel) => async (dispatch: any)
 
         dispatch({ type: receive_scan_notification, payload: usr })
     } catch (error: any) {
-        debug('SCAN QR CODE', error?.response?.data || error.message)
+        debug('RECEIVE SCAN QR CODE NOTIFICATION', error?.response?.data || error.message)
         Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
         dispatch(user_error(error?.response?.data || error.message))
     }
@@ -288,11 +284,61 @@ export const recharge = (data: RECHARGE_TYPE) => async (dispatch: any) => {
 
         const response = await axios.post(`${_end_point.customer.recharge}`, data, { headers: { Authorization: `Bearer ${token}` } })
 
-        dispatch({ type: recharge_compte, payload: response.data })
+        await AsyncStorage.setItem('recharge_status', response.data.paymentStatus)
 
+        dispatch({ type: recharge_compte, payload: response.data.paymentStatus })
     } catch (error: any) {
         debug('RECHARGE COMPTE', error?.response?.data || error.message)
-        // Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        dispatch(user_error(error?.response?.data || error.message))
+    }
+}
+
+export const receiveRechargeNotificationSuccess = (usr: userModel, recharge_status: { paymentStatus: string }) => async (dispatch: any) => {
+    try {
+        dispatch({ type: user_loading })
+
+        let token = await get_credentials('accessToken')
+        let expiresIn = await get_credentials('expiresIn')
+        let notificationToken = await get_credentials('notificationToken')
+
+        await AsyncStorage.setItem('credentials', JSON.stringify({ usr: usr, accessToken: token, expiresIn, notificationToken }))
+        await AsyncStorage.setItem('recharge_status', recharge_status.paymentStatus)
+
+        dispatch({ type: receive_recharge_notification_success, payload: { usr, recharge_status: recharge_status.paymentStatus } })
+    } catch (error: any) {
+        debug('RECEIVE RECHARGE NOTIFICATION SUCCESS', error?.response?.data || error.message)
+        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
+        dispatch(user_error(error?.response?.data || error.message))
+    }
+}
+
+export const receiveRechargeNotificationCanceled = (recharge_status: { paymentStatus: string }) => async (dispatch: any) => {
+    try {
+        dispatch({ type: user_loading })
+
+        await AsyncStorage.setItem('recharge_status', recharge_status.paymentStatus)
+
+        dispatch({ type: receive_recharge_notification_canceled, payload: recharge_status.paymentStatus })
+    } catch (error: any) {
+        debug('RECEIVE RECHARGE NOTIFICATION CANCELED', error?.response?.data || error.message)
+        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
+        dispatch(user_error(error?.response?.data || error.message))
+    }
+}
+
+export const verifyRechargeStatus = () => async (dispatch: any) => {
+    try {
+        dispatch({ type: user_loading })
+
+        let recharge_status = await AsyncStorage.getItem('recharge_status')
+
+        await AsyncStorage.setItem('recharge_status', recharge_status || '')
+
+        dispatch({ type: recharge_compte, payload: recharge_status || '' })
+    } catch (error: any) {
+        debug('RECHARGE COMPTE', error?.response?.data || error.message)
+        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
         dispatch(user_error(error?.response?.data || error.message))
     }
 }

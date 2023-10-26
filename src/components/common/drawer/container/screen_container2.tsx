@@ -6,6 +6,7 @@ import { StackNavigationHelpers } from '@react-navigation/stack/lib/typescript/s
 import { colors, roboto } from '../../../../libs/typography/typography'
 import { images } from '../../../../libs/constants/constants'
 import CustomLinearGradient from '../gradient/custom_linear_gradient'
+import Toast from 'react-native-toast-message'
 
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers | StackNavigationHelpers
@@ -41,37 +42,40 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
     }, [])
 
     return (
-        <View style={styles.screen_container_2}>
+        <>
+            <View style={{ zIndex: 100 }}><Toast /></View>
+            <View style={styles.screen_container_2}>
 
-            <View style={styles.header_container}>
-                <TouchableOpacity activeOpacity={0.5} style={styles.arrow_left_icon_container} onPress={() => navigation.goBack()}>
-                    <Image source={images.arrow_left} style={styles.arrow_left_icon} tintColor={colors.white} />
-                </TouchableOpacity>
-                <Text numberOfLines={1} style={styles.screen_name}> {title} </Text>
-                <View />
-            </View>
+                <View style={styles.header_container}>
+                    <TouchableOpacity activeOpacity={0.5} style={styles.arrow_left_icon_container} onPress={() => navigation.goBack()}>
+                        <Image source={images.arrow_left} style={styles.arrow_left_icon} tintColor={colors.white} />
+                    </TouchableOpacity>
+                    <Text numberOfLines={1} style={styles.screen_name}> {title} </Text>
+                    <View />
+                </View>
 
-            {scroll ?
-                <ScrollView contentContainerStyle={{ flexGrow: 1, }} keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false}>
-                    {children}
-                </ScrollView> :
-                reload ?
-                    <ScrollView contentContainerStyle={{ flexGrow: 1, }} keyboardShouldPersistTaps='handled' refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} showsVerticalScrollIndicator={false}>
+                {scroll ?
+                    <ScrollView contentContainerStyle={{ flexGrow: 1, }} keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false}>
                         {children}
                     </ScrollView> :
-                    children
-            }
+                    reload ?
+                        <ScrollView contentContainerStyle={{ flexGrow: 1, }} keyboardShouldPersistTaps='handled' refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} showsVerticalScrollIndicator={false}>
+                            {children}
+                        </ScrollView> :
+                        children
+                }
 
-            {!isKeyboardActive &&
-                <View style={styles.bottom_tab_container}>
-                    <CustomLinearGradient colors_={colors.home_icon_gradient} style={styles.gradient}>
-                        <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => payment ? navigation.navigate('facture') : navigation.navigate('home')}>
-                            <Image source={images.home} style={styles.bottom_item} tintColor={colors.black} />
-                        </TouchableOpacity>
-                    </CustomLinearGradient>
-                </View>
-            }
-        </View>
+                {!isKeyboardActive &&
+                    <View style={styles.bottom_tab_container}>
+                        <CustomLinearGradient colors_={colors.home_icon_gradient} style={styles.gradient}>
+                            <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => payment ? navigation.navigate('facture') : navigation.navigate('home')}>
+                                <Image source={images.home} style={styles.bottom_item} tintColor={colors.black} />
+                            </TouchableOpacity>
+                        </CustomLinearGradient>
+                    </View>
+                }
+            </View>
+        </>
     )
 }
 

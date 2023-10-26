@@ -71,61 +71,56 @@ const IkaWariTaa: FC<COMPONENT_TYPE> = (props) => {
         }
     }, [screenName])
 
-    console.log(qr_code)
-
     if (!device) return <View></View>
     return (
-        <>
-            <View style={{ zIndex: 100 }}><Toast /></View>
-            <ScreenContainer3 title='Ika Wari Taa' hide_switch navigation={navigation}>
-                {/* quand la permission n'est pas accordée à la caméra */}
-                {!granted ? <NoPermissionCard permission_type='à la caméra' /> :
-                    user_loading ? <Loading /> :
-                        <View style={styles.ika_wari_taa_container}>
-                            {/* montant à retirer */}
-                            {(!showQrCode && scanQrCode) &&
-                                <View style={styles.amount_to_retirer_title_container}>
-                                    <Text style={styles.amount_to_retirer_title}>Inscrire le montant à retirer</Text>
-                                    <TextInput onChangeText={setAmount} keyboardType='numeric' placeholder='0' placeholderTextColor={colors.white} value={amount} style={styles.amount_input} />
-                                    <Text style={[styles.fcfa, { bottom: err?.montant ? 27 : 12, }]}>FCFA</Text>
-                                    {err?.montant && <Text style={styles.error}> {err?.montant} </Text>}
-                                </View>
-                            }
-
-                            {/* afficher ou scanner qrcode */}
-                            <View style={[styles.afficher_scanner_qrcode_title_container, { marginTop: !scanQrCode ? 30 : 0, }]}>
-                                <Text style={styles.afficher_scanner_qrcode_title}>QR Code</Text>
-                                <View style={styles.afficher_scanner_qrcode}>
-
-                                    {(showQrCode && qr_code !== 'reset') ? <QRCode value={qr_code} size={150} color={colors.white} backgroundColor={colors.black} /> :
-                                        showQrCode ? <Text style={styles.choose_afficher_scanner_qrcode_text}>Erreur survenue lors de la génération du QR CODE</Text> :
-
-                                            (scanQrCode && amount?.trim() !== '') ? <Camera device={device} isActive style={StyleSheet.absoluteFill} codeScanner={codeScanner} /> :
-                                                scanQrCode && <Text style={styles.choose_afficher_scanner_qrcode_text}>Inscrire le montant à retirer</Text>
-                                    }
-
-                                    {(!scanQrCode && !showQrCode) && <Text style={styles.choose_afficher_scanner_qrcode_text}>Scanner ou afficher QR CODE</Text>}
-                                </View>
-                                <Text style={styles.qr_message}>Retrait du (Montant saisi) est en cours de traitement.</Text>
+        <ScreenContainer3 title='Ika Wari Taa' hide_switch navigation={navigation}>
+            {/* quand la permission n'est pas accordée à la caméra */}
+            {!granted ? <NoPermissionCard permission_type='à la caméra' /> :
+                user_loading ? <Loading /> :
+                    <View style={styles.ika_wari_taa_container}>
+                        {/* montant à retirer */}
+                        {(!showQrCode && scanQrCode) &&
+                            <View style={styles.amount_to_retirer_title_container}>
+                                <Text style={styles.amount_to_retirer_title}>Inscrire le montant à retirer</Text>
+                                <TextInput onChangeText={setAmount} keyboardType='numeric' placeholder='0' placeholderTextColor={colors.white} value={amount} style={styles.amount_input} />
+                                <Text style={[styles.fcfa, { bottom: err?.montant ? 27 : 12, }]}>FCFA</Text>
+                                {err?.montant && <Text style={styles.error}> {err?.montant} </Text>}
                             </View>
+                        }
 
-                            {/* bouton montrer et scanner qr code */}
-                            <View style={styles.btn_afficher_scanner_qrcode_container}>
-                                <TouchableOpacity activeOpacity={0.5} style={styles.btn_afficher_scanner_qrcode} onPress={handleShowQrCode}>
-                                    <CustomLinearGradient style={styles.btn_afficher_scanner_qrcode_gradient}>
-                                        <Text style={styles.btn_afficher_scanner_qrcode_name}>Montrer le QR code</Text>
-                                    </CustomLinearGradient>
-                                </TouchableOpacity>
-                                <TouchableOpacity activeOpacity={0.5} style={styles.btn_afficher_scanner_qrcode} onPress={() => { setShowQrCode(false); setScanQrCode(true); }}>
-                                    <CustomLinearGradient style={styles.btn_afficher_scanner_qrcode_gradient}>
-                                        <Text style={styles.btn_afficher_scanner_qrcode_name}>Scanner le QR code</Text>
-                                    </CustomLinearGradient>
-                                </TouchableOpacity>
+                        {/* afficher ou scanner qrcode */}
+                        <View style={[styles.afficher_scanner_qrcode_title_container, { marginTop: !scanQrCode ? 30 : 0, }]}>
+                            <Text style={styles.afficher_scanner_qrcode_title}>QR Code</Text>
+                            <View style={styles.afficher_scanner_qrcode}>
+
+                                {(showQrCode && qr_code !== 'reset') ? <QRCode value={qr_code} size={150} color={colors.white} backgroundColor={colors.black} /> :
+                                    showQrCode ? <Text style={styles.choose_afficher_scanner_qrcode_text}>Erreur survenue lors de la génération du QR CODE</Text> :
+
+                                        (scanQrCode && amount?.trim() !== '') ? <Camera device={device} isActive style={StyleSheet.absoluteFill} codeScanner={codeScanner} /> :
+                                            scanQrCode && <Text style={styles.choose_afficher_scanner_qrcode_text}>Inscrire le montant à retirer</Text>
+                                }
+
+                                {(!scanQrCode && !showQrCode) && <Text style={styles.choose_afficher_scanner_qrcode_text}>Scanner ou afficher QR CODE</Text>}
                             </View>
+                            <Text style={styles.qr_message}>Retrait du (Montant saisi) est en cours de traitement.</Text>
                         </View>
-                }
-            </ScreenContainer3>
-        </>
+
+                        {/* bouton montrer et scanner qr code */}
+                        <View style={styles.btn_afficher_scanner_qrcode_container}>
+                            <TouchableOpacity activeOpacity={0.5} style={styles.btn_afficher_scanner_qrcode} onPress={handleShowQrCode}>
+                                <CustomLinearGradient style={styles.btn_afficher_scanner_qrcode_gradient}>
+                                    <Text style={styles.btn_afficher_scanner_qrcode_name}>Montrer le QR code</Text>
+                                </CustomLinearGradient>
+                            </TouchableOpacity>
+                            <TouchableOpacity activeOpacity={0.5} style={styles.btn_afficher_scanner_qrcode} onPress={() => { setShowQrCode(false); setScanQrCode(true); }}>
+                                <CustomLinearGradient style={styles.btn_afficher_scanner_qrcode_gradient}>
+                                    <Text style={styles.btn_afficher_scanner_qrcode_name}>Scanner le QR code</Text>
+                                </CustomLinearGradient>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+            }
+        </ScreenContainer3>
     )
 }
 

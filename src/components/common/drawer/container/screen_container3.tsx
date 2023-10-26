@@ -25,8 +25,6 @@ const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
 
     const { host } = useSelector((state: RootState) => state.user)
 
-    console.log(host?.totalAmount)
-
     return (
         <ScreenContainer2 title={title} scroll navigation={navigation}>
             <View style={styles.screen_container_3}>
@@ -72,7 +70,7 @@ const styles = StyleSheet.create({
     // montant actuel
     actual_amount_title_container: { alignItems: 'center', },
     actual_amount_title: { fontSize: 15, },
-    actual_amount: { fontSize: 25, color: colors.white, },
+    actual_amount: { color: colors.drawer_icon_color, fontSize: 25, fontFamily: roboto.black, },
 
 })
 

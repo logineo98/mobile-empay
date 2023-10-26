@@ -65,7 +65,7 @@ export async function requestUserPermission(subject?: any) {
                 if (i === 0) {
                     i = i + 1
                     messaging().subscribeToTopic('empay_mobile')
-                        .then(() => console.log('Subscribed to topic: Ticket_bus'));
+                        .then(() => console.log('Subscribed to topic: EMPAY'));
                 }
             }
         }
