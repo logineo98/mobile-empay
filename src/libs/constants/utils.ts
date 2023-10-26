@@ -1,3 +1,5 @@
+import messaging from '@react-native-firebase/messaging'
+
 export const format_date = (timestamp: string) => {
     const dateObj = new Date(timestamp);
 
@@ -46,3 +48,42 @@ export const inputSeparatorMille = (v: string, fieldName: string, setInputs: any
 export const formatNumberWithSpaces = (data: string) => data?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
 
 export const deleteSeparator = (input: string) => { return input.replace(/\D/g, '') }
+
+export const isPair = (value: number) => value % 2 === 0
+
+
+export async function requestUserPermission(subject?: any) {
+    const authStatus = await messaging().requestPermission()
+    const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL
+
+    if (!subject || subject === '' || subject?.length <= 0) {
+        if (enabled) {
+            if (enabled) {
+                let i = 0
+                if (i === 0) {
+                    i = i + 1
+                    messaging().subscribeToTopic('empay_mobile')
+                        .then(() => console.log('Subscribed to topic: EMPAY'));
+                }
+            }
+        }
+    }
+
+    //custom subscribe 
+    if (subject && (subject !== undefined || subject?.length > 0)) {
+        if (enabled) {
+            let i = 0
+            if (i === 0) {
+                i = i + 1
+
+                subject?.forEach((sub: any) => {
+                    messaging().subscribeToTopic(`${sub}`)
+                        .then(() => console.log(`Subscribed to topic: ${sub}`)).catch(err => console.log(err));
+                })
+            }
+        }
+    }
+
+}

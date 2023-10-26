@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1010858286871",
+    "project_id": "empay-1d721",
+    "storage_bucket": "empay-1d721.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010858286871:android:9023fbce2f2900a65c6152",
+        "android_client_info": {
+          "package_name": "com.emploietmoi.empay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1010858286871-9v2lireto5agc2c6kf950negub2pmd10.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX9TeC0L6mev1OfAehOwV45cwNOyU9PFA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1010858286871-9v2lireto5agc2c6kf950negub2pmd10.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

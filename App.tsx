@@ -1,12 +1,61 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Alert, StyleSheet, } from 'react-native'
+import React, { useEffect } from 'react'
 import { Provider } from 'react-redux'
-import Store from './src/libs/services/store'
-
+import messaging from '@react-native-firebase/messaging'
+import PushNotification from 'react-native-push-notification'
 import 'react-native-gesture-handler'
+// my importations
+import Store from './src/libs/services/store'
 import RootNavigation from './src/libs/navigations/root_navigation'
+import { requestUserPermission } from './src/libs/constants/utils'
+import { receiveRechargeNotificationCanceled, receiveRechargeNotificationSuccess, receiveScanNotification } from './src/libs/services/user/user.action'
 
 const App = () => {
+
+  useEffect(() => {
+    requestUserPermission()
+
+    const unsubscribe = messaging().onMessage(remoteMessage => {
+      let usr
+      const notif: any = remoteMessage?.notification
+      if (remoteMessage?.data?.usr) usr = JSON.parse(remoteMessage?.data?.usr as string)
+      const recharge_status: any = JSON.parse(remoteMessage?.data?.recharge as string)
+
+      if (notif?.title === 'Demande de retrait') Store.dispatch<any>(receiveScanNotification(usr))
+      if (notif?.title === 'Paiement reussi') Store.dispatch<any>(receiveRechargeNotificationSuccess(usr, recharge_status))
+      if (notif?.title === 'Paiement échoué') Store.dispatch<any>(receiveRechargeNotificationCanceled(recharge_status))
+
+      Alert.alert(notif?.title || "Notifications", notif?.body, [{ text: "D'accord" }])
+    })
+
+    PushNotification.configure({
+      onNotification: function (notification) {
+        const msg = notification?.message?.toString();
+        msg !== undefined && Alert.alert("Notifications", msg, [{ text: "D'accord" }])
+      },
+    })
+
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      let usr
+      const notif: any = remoteMessage?.notification
+      if (remoteMessage?.data?.usr) usr = JSON.parse(remoteMessage?.data?.usr as string)
+      const recharge_status: any = JSON.parse(remoteMessage?.data?.recharge as string)
+
+      if (notif?.title === 'Demande de retrait') Store.dispatch<any>(receiveScanNotification(usr))
+      if (notif?.title === 'Paiement reussi') Store.dispatch<any>(receiveRechargeNotificationSuccess(usr, recharge_status))
+      if (notif?.title === 'Paiement échoué') Store.dispatch<any>(receiveRechargeNotificationCanceled(recharge_status))
+
+      // Show a local notification
+      PushNotification.localNotification({
+        title: notif?.title || 'Notification Title',
+        message: notif?.body || 'Notification Body',
+      })
+    })
+
+    return unsubscribe
+  }, [])
+
+
   return (
     <Provider store={Store}>
       <RootNavigation />
