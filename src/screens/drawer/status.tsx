@@ -66,10 +66,12 @@ const Status: FC<COMPONENT_TYPE> = (props) => {
                     })
                 }
             })()
-
-            dispatch(checking())
         }
     }, [screenName, granted])
+
+    useEffect(() => {
+        if (screenName === 'status') dispatch(checking())
+    }, [screenName])
 
     return (
         <ScreenContainer3 title='Statut/Disponibilité' isSwitchActive={isSwitchActive} handleSwitchBtn={handleSwitchBtn} navigation={navigation}>
