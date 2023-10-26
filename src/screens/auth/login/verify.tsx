@@ -26,21 +26,15 @@ const Verify = () => {
     const [click, setClick] = useState(false);
     const [inputs, setInputs] = useState({ code: "" });
     const [debugCode, setDebugCode] = useState("");
-    const [value, setValue] = useState('');
 
-    useEffect(() => { setInputs({ ...inputs, code: value }) }, [value]);
-
-
-    const { user_tmp, user_info, user_data, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
-
-    console.log(user_data)
+    const { user_log_tmp, user_info, user_data, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
 
     //setup debug code
     useEffect(() => {
         AsyncStorage.getItem("code")
             .then((res: any) => {
                 if (user_data) setDebugCode(user_data?.code);
-                if (routes?.confirmationCode) setDebugCode(routes?.confirmationCode)
+                else if (routes?.data?.code) setDebugCode(routes?.data?.code)
                 else if (res) setDebugCode(res);
             })
     }, [routes, user_data]);
@@ -59,12 +53,8 @@ const Verify = () => {
     //animate login button
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
 
-
-
-
-
     //result of traitement
-    useEffect(() => { if (user_tmp && user_data) { navigation.navigate("reset", { data: user_data }); dispatch({ type: "reset_user_tmp" }); dispatch({ type: "reset_user_data" }); setClick(false) } }, [user_tmp, user_data, dispatch]);
+    useEffect(() => { if (user_log_tmp && user_data) { navigation.navigate("reset", { data: user_data }); dispatch({ type: "reset_user_log_tmp" }); dispatch({ type: "reset_user_data" }); setClick(false) } }, [user_log_tmp, user_data, dispatch]);
 
 
 
@@ -88,7 +78,7 @@ const Verify = () => {
 
 
     return (
-        <Wrapper image imageData={images.auth_bg} overlay={"#074769C5"}  >
+        <Wrapper image imageData={images.register_finalisation_bg_img}   >
             <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View style={{ width: "100%", alignItems: "center" }}>
@@ -105,7 +95,7 @@ const Verify = () => {
                     <Spacer />
 
                     <View style={styles.forms}>
-                        <TextInput value={inputs?.code} onChangeText={text => handleChangeMobile("phone", text, setInputs)} keyboardType="phone-pad" placeholder='Numéro de téléphone' placeholderTextColor={colors.gray} style={styles.input} />
+                        <TextInput value={inputs?.code} onChangeText={text => handleChangeMobile("code", text, setInputs)} keyboardType="phone-pad" placeholder='Numéro de téléphone' placeholderTextColor={colors.gray} style={styles.input} />
 
                         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
                             <Text style={{ color: colors.white }}>Vous n'avez pas encore reçu de code? </Text>

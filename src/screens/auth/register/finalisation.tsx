@@ -12,8 +12,10 @@ const Finalisation = () => {
     const navigation = useNavigation<any>()
 
     return (
-        <Wrapper image imageData={images.auth_bg} overlay={"#202123E3"}  >
+        <Wrapper image imageData={images.register_finalisation_bg_img}   >
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
+                <View />
+
                 <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
                     <Spacer />
                     <Spacer />
@@ -30,11 +32,11 @@ const Finalisation = () => {
                     <Spacer />
                     <Spacer />
                     <View style={{ flexDirection: "row", gap: 4 }}>
-                        <Octicons name="dot-fill" size={24} color={colors.white} />
-                        <Octicons name="dot-fill" size={24} color={colors.gray} />
-                        <Octicons name="dot-fill" size={24} color={colors.gray} />
-                        <Octicons name="dot-fill" size={24} color={colors.gray} />
-                        <Octicons name="dot-fill" size={24} color={"#B4B4B4"} />
+                        <Octicons name="dot-fill" size={22} color={colors.white} />
+                        <Octicons name="dot-fill" size={22} color={colors.gray} />
+                        <Octicons name="dot-fill" size={22} color={colors.gray} />
+                        <Octicons name="dot-fill" size={22} color={colors.gray} />
+                        <Octicons name="dot-fill" size={22} color={"#B4B4B4"} />
                     </View>
                     <Spacer />
                 </View>

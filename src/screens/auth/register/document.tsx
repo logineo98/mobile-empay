@@ -37,7 +37,7 @@ const Document = () => {
 
 
 
-    const { user_info, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
+    const { user_info, user_errors } = useSelector((state: RootState) => state?.user)
 
 
     //alert for info
@@ -126,7 +126,7 @@ const Document = () => {
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });
 
     return (
-        <Wrapper image imageData={images.auth_bg} overlay={"#074769C5"}  >
+        <Wrapper image imageData={images.register_document_bg_img}   >
             <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>

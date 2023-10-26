@@ -41,6 +41,7 @@ export type userStore = {
     allUsers?: userModel[]
     host?: userModel | null
     user_tmp?: boolean
+    user_log_tmp?: boolean
     user_info?: string | null
     user_data?: any
     qr_code?: string

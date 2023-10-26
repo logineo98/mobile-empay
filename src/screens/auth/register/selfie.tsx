@@ -14,6 +14,7 @@ import fs from 'react-native-fs';
 import Toast from 'react-native-toast-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { inscription_inputs_request } from '../../../libs/services/user/user.request'
+import ToastContainer from '../../../components/common/toast'
 
 const Selfie = () => {
     const cameraRef = useRef<any>(null);
@@ -92,7 +93,8 @@ const Selfie = () => {
 
 
     return (
-        <Wrapper image imageData={images.auth_bg} overlay={"#202123E3"}  >
+        <Wrapper image imageData={images.register_selfie_bg_img} overlay={"#131722E5"}   >
+            <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
                     <Spacer />

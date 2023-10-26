@@ -12,6 +12,15 @@ export const images = {
     noimage: require('../assets/images/no_img.png'),
     auth_action: require('../assets/images/btn.png'),
 
+    welcome_bg_img: require("../assets/images/IMAGE2.jpg"),
+    connexion_bg_img: require("../assets/images/IMAGE3.jpg"),
+    register_bg_img: require("../assets/images/IMAGE4.jpg"),
+    register_document_bg_img: require("../assets/images/IMAGE5.jpg"),
+    register_selfie_bg_img: require("../assets/images/IMAGE7.jpg"),
+    register_signature_bg_img: require("../assets/images/IMAGE9.jpg"),
+    register_secure_bg_img: require("../assets/images/IMAGE8.jpg"),
+    register_finalisation_bg_img: require("../assets/images/IMAGE10.jpg"),
+
 
     // tz
     logo_white: require('../assets/images/logo_white.png'),

@@ -23,7 +23,7 @@ const Welcome = () => {
 
 
     return (
-        <Wrapper image imageData={images.auth_bg} overlay={"#B61560B4"}  >
+        <Wrapper image imageData={images.welcome_bg_img}   >
             <Container scoll position={"around"} style={{ alignItems: "center" }}>
                 <Spacer />
                 <View><Image source={images.logo_png} style={styles.logo} /></View>

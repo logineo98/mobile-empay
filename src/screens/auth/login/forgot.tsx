@@ -22,7 +22,7 @@ const Forgot = () => {
     const [click, setClick] = useState(false);
     const [inputs, setInputs] = useState({ phone: "" });
 
-    const { user_tmp, user_info, user_data, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
+    const { user_log_tmp, user_info, user_data, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
 
 
     //alert for info
@@ -39,7 +39,7 @@ const Forgot = () => {
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
 
     //result of traitement
-    useEffect(() => { if (user_tmp && user_data && !user_info) { navigation.navigate("verify", { data: user_data }); dispatch({ type: "reset_user_tmp" }); dispatch({ type: "reset_user_data" }); setClick(false) } }, [user_tmp, user_data, dispatch]);
+    useEffect(() => { if (user_log_tmp && user_data && !user_info) { navigation.navigate("verify", { data: user_data }); dispatch({ type: "reset_user_log_tmp" }); dispatch({ type: "reset_user_data" }); setClick(false) } }, [user_log_tmp, user_data, dispatch]);
 
 
     //traitement of forgot
@@ -53,7 +53,7 @@ const Forgot = () => {
 
 
     return (
-        <Wrapper image imageData={images.auth_bg} overlay={"#074769C5"}  >
+        <Wrapper image imageData={images.register_secure_bg_img}   >
             <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View style={{ width: "100%", alignItems: "center" }}>

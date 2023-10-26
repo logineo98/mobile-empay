@@ -71,7 +71,7 @@ const Infos = () => {
 
 
     return (
-        <Wrapper image imageData={images.auth_bg} overlay={"#991352C4"}  >
+        <Wrapper image imageData={images.register_bg_img}  >
             <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center", }}>
                 <>

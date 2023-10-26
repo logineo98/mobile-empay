@@ -94,9 +94,11 @@ const Signature = () => {
 
 
     return (
-        <Wrapper image imageData={images.auth_bg} overlay={"#2E427DE5"}  >
+        <Wrapper image imageData={images.register_signature_bg_img}   >
             <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
+                <View />
+
                 <View style={{ width: "100%", alignItems: "center" }}>
                     <Spacer />
                     <Spacer />

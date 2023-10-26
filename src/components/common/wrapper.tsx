@@ -17,7 +17,7 @@ const Wrapper = ({ children, style, image, imageData, imageStyle, overlay }: pro
             <View style={[styles.container, style]}>
                 {children}
             </View> :
-            (<ImageBackground source={imageData} style={[styles.containerImg, imageStyle,]}>
+            (<ImageBackground source={imageData} style={[styles.containerImg, imageStyle, {}]}>
                 {overlay && <View style={{ ...StyleSheet.absoluteFillObject, backgroundColor: overlay }} />}
                 {children}
             </ImageBackground>)

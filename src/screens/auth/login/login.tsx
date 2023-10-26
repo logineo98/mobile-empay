@@ -23,8 +23,9 @@ const Login = () => {
     const [click, setClick] = useState(false);
     const [inputs, setInputs] = useState({ phone: "", password: "" });
 
-    const { user_tmp, user_info, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
+    const { user_tmp, host, user_info, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
 
+    console.log(user_tmp)
 
     //alert for info
     useEffect(() => { if (user_info && user_info !== null) { Toast.show({ type: 'info', text1: 'Informations', text2: user_info, }); dispatch({ type: 'reset_user_info' }) }; }, [user_info, dispatch]);
@@ -40,7 +41,7 @@ const Login = () => {
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
 
     //result of traitement
-    useEffect(() => { if (user_tmp) dispatch(checking()); dispatch({ type: "reset_user_tmp" }); setClick(false) }, [user_tmp, dispatch]);
+    useEffect(() => { if (user_tmp && host) dispatch(checking()); dispatch({ type: "reset_user_tmp" }); setClick(false) }, [user_tmp, host, dispatch]);
 
 
     //traitement of login
@@ -61,7 +62,7 @@ const Login = () => {
 
 
     return (
-        <Wrapper image imageData={images.auth_bg} overlay={"#074769C5"}  >
+        <Wrapper image imageData={images.connexion_bg_img}   >
             <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View style={{ width: "100%", alignItems: "center" }}>

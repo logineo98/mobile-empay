@@ -92,7 +92,7 @@ const Secure = () => {
 
     // #2E427D
     return (
-        <Wrapper image imageData={images.auth_bg} overlay={"#074769C5"}  >
+        <Wrapper image imageData={images.register_secure_bg_img}   >
             <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
@@ -128,7 +128,7 @@ const Secure = () => {
 export default Secure
 
 const styles = StyleSheet.create({
-    logo: { width: 95, height: 95, tintColor: colors.white },
+    logo: { width: 120, height: 120, tintColor: colors.white },
     forms: { gap: 15, width: "90%", alignItems: "center" },
     input: { paddingLeft: 15, color: colors.black, padding: 5, backgroundColor: colors.white, width: "100%", borderRadius: 15, alignItems: "center", fontFamily: roboto.medium },
     btnText: { fontFamily: roboto.medium, color: colors.black, fontSize: 17 },
