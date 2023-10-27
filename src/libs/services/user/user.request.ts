@@ -43,38 +43,39 @@ export const inscription_inputs_request = (type: string, toStore: userModel, set
             else if (!toStore.name || toStore.name === "") { setError(inscription_screen.infos.name); error_info = true }
             else if (!toStore.firstname || toStore.firstname === "") { setError(inscription_screen.infos.firstname); error_info = true }
             else if (!toStore.birthday || toStore.birthday === null) { setError(inscription_screen.infos.birth); error_info = true }
-            if (error_info) return true; else return false;
+            else if (toStore.age && new Date(toStore.age).getTime() > new Date().getTime()) { setError(inscription_screen.infos.errors.birthday_error); error_info = true }
+            if (error_info) return true; else { setError(""); return false; }
 
         case "account":
             let error_account = false;
             if (!toStore.address || toStore.address === "") { setError(inscription_screen.account.errors.address_field_empty); error_account = true }
             else if (!toStore.email || toStore.email === "") { setError(inscription_screen.account.errors.email_field_empty); error_account = true }
-            if (error_account) return true; else return false;
+            if (error_account) return true; else { setError(""); return false; }
 
         case "document":
             let error_document = false;
             if (!toStore.document || toStore.document === "") { setError(inscription_screen.document.errors.choice); error_document = true }
-            if (error_document) return true; else return false;
+            if (error_document) return true; else { setError(""); return false; }
 
 
         case "selfie":
             let error_profile = false;
             if (!toStore.profil || toStore.profil === "") { setError(inscription_screen.identity.selfie.errors.photo); error_profile = true }
-            if (error_profile) return true; else return false;
+            if (error_profile) return true; else { setError(""); return false; }
 
 
         case "signature":
             let error_signature = false;
             if (!toStore.signature || toStore.signature === "") { setError(inscription_screen.identity.signature.errors.signature); error_signature = true }
             else if (!(toStore as any)?.isChecked) { setError(inscription_screen.identity.signature.errors.authorize); error_signature = true }
-            if (error_signature) return true; else return false;
+            if (error_signature) return true; else { setError(""); return false; }
 
         case "finalisation":
             let error_reset = false;
             if (!toStore.password || toStore.password === "") { setError("Un mot de passe est obligatoire"); error_reset = true }
             else if (!toStore.confirm || toStore.confirm === "") { setError("Les mot de passe ne correspondent pas."); error_reset = true }
             else if (toStore.password && toStore.password.length < 6) { setError("Taille du mot de passe trop court"); error_reset = true }
-            if (error_reset) return true; else return false;
+            if (error_reset) return true; else { setError(""); return false; }
 
         default: return false
     }

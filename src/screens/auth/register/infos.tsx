@@ -26,29 +26,21 @@ const Infos = () => {
     const [selectDate, setSelectDate] = useState(false);
     const [error, setError] = useState("");
     const [haveAccount, setHaveAccount] = useState(false);
-    const [click, setClick] = useState(false);
     const [next, setNext] = useState(false);
     const initial: userModel = { phone: "", name: "", firstname: "", birthday: "", address: "", email: "", age: new Date(new Date().getTime()) }
     const [inputs, setInputs] = useState(initial);
     const [store, setStore] = useState<userModel>();
 
-    const { user_info, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
 
-    //alert for info
-    useEffect(() => { if (user_info && user_info !== null) { Toast.show({ type: 'info', text1: 'Informations', text2: user_info, }); dispatch({ type: 'reset_user_info' }) }; }, [user_info, dispatch]);
 
     //alert for errors form this app
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
-
-    //alert for errors from api
-    useEffect(() => { if (user_errors && user_errors !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: user_errors, }); dispatch({ type: 'reset_user_errors' }) }; }, [user_errors, dispatch]);
-
 
     //animate login button
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
 
     //result of traitement
-    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("document"); setNext(false); setClick(false) } }, [next, store]);
+    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("document"); setNext(false); } }, [next, store]);
 
     useEffect(() => { if (selectDate) setInputs(old => { return { ...old, birthday: `${inputs?.age}` } }) }, [selectDate]);
 
@@ -63,7 +55,6 @@ const Infos = () => {
 
         setStore(inputs)
         setNext(true)
-        setClick(true)
     }
 
 
@@ -76,7 +67,7 @@ const Infos = () => {
             <Container scoll position={"between"} style={{ alignItems: "center", }}>
                 <>
                     <Spacer />
-                    <View><Image source={images.logo_png} style={styles.logo} /></View>
+                    <View><Image source={images.logo_white} style={styles.logo} /></View>
 
                     <Spacer />
 

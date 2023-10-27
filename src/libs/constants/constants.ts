@@ -1,5 +1,4 @@
 export const images = {
-    logo_png: require('../assets/images/logo_png.png'),
     canal_plus: require('../assets/images/canal_plus.png'),
     edm: require('../assets/images/edm.png'),
     somagep: require('../assets/images/somagep.png'),
@@ -20,6 +19,7 @@ export const images = {
     register_signature_bg_img: require("../assets/images/IMAGE9.jpg"),
     register_secure_bg_img: require("../assets/images/IMAGE8.jpg"),
     register_finalisation_bg_img: require("../assets/images/IMAGE10.jpg"),
+    auth_action_btn_img: require("../assets/images/SKIP_ICON.png"),
 
 
     // tz

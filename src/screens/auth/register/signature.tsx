@@ -24,9 +24,8 @@ const Signature = () => {
     let scale = useSharedValue(1);
     const dispatch = useDispatch<any>()
     const [error, setError] = useState("");
-    const [click, setClick] = useState(false);
     const [next, setNext] = useState(false);
-    const initial: userModel = { address: "", email: "" }
+    const initial: userModel = { signature: null }
     const [inputs, setInputs] = useState(initial);
     const [store, setStore] = useState<userModel>();
     const signatureRef = useRef<any>();
@@ -35,21 +34,14 @@ const Signature = () => {
     const [isChecked, setIsChecked] = useState(false);
 
 
-    const { user_info, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
+    console.log(inputs)
 
-
-    //alert for info
-    useEffect(() => { if (user_info && user_info !== null) { Toast.show({ type: 'info', text1: 'Informations', text2: user_info, }); dispatch({ type: 'reset_user_info' }) }; }, [user_info, dispatch]);
 
     //alert for errors form this app
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
 
-    //alert for errors from api
-    useEffect(() => { if (user_errors && user_errors !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: user_errors, }); dispatch({ type: 'reset_user_errors' }) }; }, [user_errors, dispatch]);
-
-
     //animate login button
-    useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
+    useEffect(() => { if (inputs?.signature !== null && isChecked) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [inputs?.signature, isChecked]);
 
     //setup signature
     useEffect(() => {
@@ -72,10 +64,10 @@ const Signature = () => {
 
 
     //result of traitement
-    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("secure"); setNext(false); setClick(false) } }, [next, store]);
+    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("secure"); setNext(false); } }, [next, store]);
 
 
-    const resetSign = () => { signatureRef.current.resetImage(); setInputs({ ...inputs, signature: '' }) };
+    const resetSign = () => { signatureRef.current.resetImage(); setInputs({ ...inputs, signature: null }) };
     const _onSaveEvent = (result: any) => { setSign(result?.pathName); setOk(!ok) };
     const _onDragEvent = () => { signatureRef.current.saveImage() };
 
@@ -86,7 +78,6 @@ const Signature = () => {
         setStore({ ...store, signature: inputs?.signature })
 
         setNext(true)
-        setClick(true)
     }
 
 

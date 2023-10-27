@@ -9,7 +9,7 @@ import CustomLinearGradient from '../../../components/common/drawer/gradient/cus
 import { useNavigation } from '@react-navigation/native'
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSpring } from 'react-native-reanimated'
 import { userModel } from '../../../libs/services/user/user.model'
-import { Camera, useCameraDevice, useCameraDevices } from 'react-native-vision-camera';
+import { Camera, useCameraDevice } from 'react-native-vision-camera';
 import fs from 'react-native-fs';
 import Toast from 'react-native-toast-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -22,7 +22,6 @@ const Selfie = () => {
     let scale = useSharedValue(1);
     const [inputs, setInputs] = useState<userModel>({ profil: "" });
     const [error, setError] = useState("");
-    const [click, setClick] = useState(false);
     const [next, setNext] = useState(false);
     const [store, setStore] = useState<userModel>();
     const device = useCameraDevice("front")
@@ -45,7 +44,7 @@ const Selfie = () => {
     useEffect(() => { AsyncStorage.getItem("inputs").then((res: any) => { const _inpt = JSON.parse(res); setStore({ ..._inpt }) }) }, []);
 
     //result of traitement
-    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("signature"); setNext(false); setClick(false) } }, [next, store]);
+    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("signature"); setNext(false); } }, [next, store]);
 
 
     const takePhoto = async () => {
@@ -83,7 +82,6 @@ const Selfie = () => {
         setStore({ ...store, profil: inputs?.profil })
 
         setNext(true)
-        setClick(true)
     }
 
 

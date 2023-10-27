@@ -65,7 +65,7 @@ const Login = () => {
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View style={{ width: "100%", alignItems: "center" }}>
                     <Spacer />
-                    <View><Image source={images.logo_png} style={styles.logo} /></View>
+                    <View><Image source={images.logo_white} style={styles.logo} /></View>
 
                     <Spacer />
 

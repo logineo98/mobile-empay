@@ -22,16 +22,12 @@ const Secure = () => {
     let scale = useSharedValue(1);
     const dispatch = useDispatch<any>()
     const navigation = useNavigation<any>()
-    const { width, height } = useWindowDimensions()
-    const [modalVisible, setModalVisible] = useState(false)
 
     const [error, setError] = useState("");
-    const [click, setClick] = useState(false);
     const [next, setNext] = useState(false);
     const initial: userModel = { password: "", confirm: "" }
     const [inputs, setInputs] = useState(initial);
     const [store, setStore] = useState<userModel | any>();
-    const [selectedValue, setSelectedValue] = useState(false);
 
 
     const { user_info, user_log_tmp, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
@@ -56,9 +52,9 @@ const Secure = () => {
     //result of traitement
     useEffect(() => { if (next) { navigation.navigate("finalisation"); setNext(false) } }, []);
 
-    useEffect(() => { if (user_log_tmp) { navigation.navigate("finalisation"); dispatch({ type: "reset_user_log_tmp" }); setClick(false) } }, [user_log_tmp, dispatch]);
+    useEffect(() => { if (user_log_tmp) { navigation.navigate("finalisation"); dispatch({ type: "reset_user_log_tmp" }); } }, [user_log_tmp, dispatch]);
 
-    //traitement of login
+    //traitement of register
     const handle_validate = async () => {
         try {
             const validation: userModel = { password: inputs?.password, confirm: inputs?.confirm }
@@ -81,10 +77,10 @@ const Secure = () => {
             blob.append("password", (store as any).password)
             blob.append("notificationToken", notificationToken)
 
-            dispatch(inscription_service(blob, notificationToken))
-            setClick(true)
-        } catch (error) {
 
+            dispatch(inscription_service(blob, notificationToken))
+        } catch (error) {
+            console.log("notif token error: ", error)
         }
     }
 
@@ -99,13 +95,11 @@ const Secure = () => {
                 <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
                     <Spacer />
                     <Spacer />
-                    <View><Image source={images.logo_png} style={styles.logo} /></View>
+                    <View><Image source={images.logo_white} style={styles.logo} /></View>
 
                     <Spacer />
 
-                    <View style={styles.descriptionbox}>
-                        <Text style={styles.title}>Créer votre mot de passe:</Text>
-                    </View>
+                    <View style={styles.descriptionbox}><Text style={styles.title}>Créer votre mot de passe:</Text></View>
 
                     <Spacer />
 
@@ -122,7 +116,7 @@ const Secure = () => {
                 </Animated.View>
                 {/* <TouchableOpacity onPress={handle_validate} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity> */}
             </Container>
-            {click && user_loading && <SecondaryLoading text={"Veuillez patienter pendant la création de compte..."} />}
+            {user_loading && <SecondaryLoading text={"Veuillez patienter pendant la création de compte..."} />}
         </Wrapper>
     )
 }

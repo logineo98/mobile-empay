@@ -28,7 +28,7 @@ const Welcome = () => {
         <Wrapper image imageData={images.welcome_bg_img}   >
             <Container scoll position={"around"} style={{ alignItems: "center" }}>
                 <Spacer />
-                <View><Image source={images.logo_png} style={styles.logo} /></View>
+                <View><Image source={images.logo_white} style={styles.logo} /></View>
 
                 <Spacer />
 
