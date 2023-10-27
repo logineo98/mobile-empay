@@ -16,6 +16,7 @@ import { inscription_service } from '../../../libs/services/user/user.action'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../libs/services/store'
 import ToastContainer from '../../../components/common/toast'
+import SecondaryLoading from '../../../components/common/secondary_loading'
 
 const Secure = () => {
     let scale = useSharedValue(1);
@@ -33,7 +34,7 @@ const Secure = () => {
     const [selectedValue, setSelectedValue] = useState(false);
 
 
-    const { user_info, user_tmp, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
+    const { user_info, user_log_tmp, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
 
 
     //alert for info
@@ -55,7 +56,7 @@ const Secure = () => {
     //result of traitement
     useEffect(() => { if (next) { navigation.navigate("finalisation"); setNext(false) } }, []);
 
-    useEffect(() => { if (user_tmp) { navigation.navigate("finalisation"); dispatch({ type: "reset_user_tmp" }); setClick(false) } }, [user_tmp, dispatch]);
+    useEffect(() => { if (user_log_tmp) { navigation.navigate("finalisation"); dispatch({ type: "reset_user_log_tmp" }); setClick(false) } }, [user_log_tmp, dispatch]);
 
     //traitement of login
     const handle_validate = async () => {
@@ -121,6 +122,7 @@ const Secure = () => {
                 </Animated.View>
                 {/* <TouchableOpacity onPress={handle_validate} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity> */}
             </Container>
+            {click && user_loading && <SecondaryLoading text={"Veuillez patienter pendant la création de compte..."} />}
         </Wrapper>
     )
 }

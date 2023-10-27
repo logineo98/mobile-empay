@@ -9,6 +9,7 @@ import CustomLinearGradient from './gradient/custom_linear_gradient'
 import { RootState } from '../../../libs/services/store'
 import { logout } from '../../../libs/services/user/user.action'
 import ModalServiceClient from './modal/modal_service_client'
+import SecondaryLoading from '../secondary_loading'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
 
@@ -17,7 +18,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
 
     const { height, width } = useWindowDimensions()
 
-    const { host } = useSelector((state: RootState) => state.user)
+    const { host, user_loading } = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch<any>()
 
     const [visibleLogoutModal, setVisibleLogoutModal] = useState(false)
@@ -113,6 +114,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
                     </View>
                 </View>
             </Modal>
+            {user_loading && <SecondaryLoading text={'Déconnexion en cours...'} />}
 
             {/* modal service client */}
             <ModalServiceClient visibleServiceClientModal={visibleServiceClientModal} setVisibleServiceClientModal={setVisibleServiceClientModal} />

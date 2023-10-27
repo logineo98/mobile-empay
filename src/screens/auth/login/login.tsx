@@ -25,8 +25,6 @@ const Login = () => {
 
     const { user_tmp, host, user_info, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
 
-    console.log(user_tmp)
-
     //alert for info
     useEffect(() => { if (user_info && user_info !== null) { Toast.show({ type: 'info', text1: 'Informations', text2: user_info, }); dispatch({ type: 'reset_user_info' }) }; }, [user_info, dispatch]);
 

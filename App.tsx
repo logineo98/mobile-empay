@@ -17,9 +17,10 @@ const App = () => {
 
     const unsubscribe = messaging().onMessage(remoteMessage => {
       let usr
+      let recharge_status
       const notif: any = remoteMessage?.notification
       if (remoteMessage?.data?.usr) usr = JSON.parse(remoteMessage?.data?.usr as string)
-      const recharge_status: any = JSON.parse(remoteMessage?.data?.recharge as string)
+      if (remoteMessage?.data?.recharge) recharge_status = JSON.parse(remoteMessage?.data?.recharge as string)
 
       if (notif?.title === 'Demande de retrait') Store.dispatch<any>(receiveScanNotification(usr))
       if (notif?.title === 'Paiement reussi') Store.dispatch<any>(receiveRechargeNotificationSuccess(usr, recharge_status))
@@ -37,9 +38,10 @@ const App = () => {
 
     messaging().setBackgroundMessageHandler(async remoteMessage => {
       let usr
+      let recharge_status
       const notif: any = remoteMessage?.notification
       if (remoteMessage?.data?.usr) usr = JSON.parse(remoteMessage?.data?.usr as string)
-      const recharge_status: any = JSON.parse(remoteMessage?.data?.recharge as string)
+      if (remoteMessage?.data?.recharge) recharge_status = JSON.parse(remoteMessage?.data?.recharge as string)
 
       if (notif?.title === 'Demande de retrait') Store.dispatch<any>(receiveScanNotification(usr))
       if (notif?.title === 'Paiement reussi') Store.dispatch<any>(receiveRechargeNotificationSuccess(usr, recharge_status))

@@ -16,7 +16,7 @@ const user_error = (error: any) => (dispatch: any) => {
 }
 
 export const checking = () => async (dispatch: any) => {
-    // dispatch({ type: 'user_loading' })
+    dispatch({ type: 'user_loading' })
 
     const expiresIn = await get_credentials('expiresIn')
     let token = await get_credentials('accessToken');
