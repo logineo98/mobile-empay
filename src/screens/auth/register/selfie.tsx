@@ -6,7 +6,7 @@ import { allInputsFilled, images } from '../../../libs/constants/constants'
 import Container from '../../../components/common/container'
 import { colors, roboto } from '../../../libs/typography/typography'
 import CustomLinearGradient from '../../../components/common/drawer/gradient/custom_linear_gradient'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSpring } from 'react-native-reanimated'
 import { userModel } from '../../../libs/services/user/user.model'
 import { Camera, useCameraDevice, useCameraDevices } from 'react-native-vision-camera';
@@ -27,19 +27,17 @@ const Selfie = () => {
     const [store, setStore] = useState<userModel>();
     const [granted, setGranted] = useState(false)
     const device = useCameraDevice("front");
-
-
+    const isFocused = useIsFocused()
 
     const [imageSource, setImageSource] = useState('');
 
-
     //get camera permission
     useEffect(() => {
-        if (device) device.sensorOrientation = "portrait";
+        if (device) device.sensorOrientation = "portrait-upside-down";
         (async () => {
             const cameraPermission = await Camera.requestCameraPermission(); setGranted(cameraPermission === 'granted');
         })()
-    }, []);
+    }, [device]);
 
     //alert for errors form this app
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error]);
@@ -54,8 +52,8 @@ const Selfie = () => {
     useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("signature"); setNext(false); } }, [next, store]);
 
 
-
     const takePhoto = async () => {
+
         if (cameraRef.current !== null) {
             try {
                 const photo = await cameraRef.current.takePhoto({ orientation: "portrait" })
@@ -88,10 +86,8 @@ const Selfie = () => {
     const handle_validate = () => {
         if (inscription_inputs_request("selfie", inputs, setError)) return;
         setStore({ ...store, profil: inputs?.profil })
-
         setNext(true)
     }
-
 
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });
 
@@ -115,8 +111,8 @@ const Selfie = () => {
 
                         <View style={styles.uploadedbox}>
                             {imageSource ?
-                                <Image source={{ uri: imageSource }} style={[styles.uploadedImg]} /> :
-                                <Camera device={device} ref={cameraRef} style={[StyleSheet.absoluteFill]} photo isActive />}
+                                <Image source={{ uri: imageSource }} style={[styles.uploadedImg, StyleSheet.absoluteFill]} /> :
+                                <Camera orientation="portrait" device={device} ref={cameraRef} style={[StyleSheet.absoluteFill]} photo={true} isActive={isFocused} />}
                         </View>
                         <Spacer />
                         <Spacer />
@@ -146,9 +142,8 @@ const styles = StyleSheet.create({
     descriptionbox: { width: "80%", alignItems: "center", justifyContent: "center", gap: 8 },
     title: { fontSize: 24, color: colors.white, fontFamily: roboto.bold, textTransform: "uppercase" },
 
-    uploadedbox: { width: "90%", height: 320, borderRadius: 90, backgroundColor: colors.gray, borderWidth: 2, borderColor: colors.white, overflow: "hidden" },
-    uploadedImg: { width: "100%", height: "100%", marginBottom: 20, transform: [{ rotate: "90deg" }] },
-
+    uploadedbox: { width: "80%", height: 315, borderRadius: 90, backgroundColor: colors.gray, borderWidth: 2, borderColor: colors.white, overflow: "hidden", },
+    uploadedImg: { transform: [{ rotate: "90deg" }], resizeMode: "cover" },
 
     description: { fontSize: 13, textAlign: "center", color: colors.white, fontFamily: roboto.regular },
     registerBtn: { marginTop: 2, backgroundColor: colors.ika_wari_taa_bg_color, width: "35%", borderRadius: 15, alignItems: "center", padding: 2 },
