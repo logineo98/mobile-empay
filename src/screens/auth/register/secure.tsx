@@ -17,6 +17,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../libs/services/store'
 import ToastContainer from '../../../components/common/toast'
 import SecondaryLoading from '../../../components/common/secondary_loading'
+import { getUniqueId } from 'react-native-device-info';
+
+
 
 const Secure = () => {
     let scale = useSharedValue(1);
@@ -61,7 +64,11 @@ const Secure = () => {
             if (inscription_inputs_request("finalisation", validation, setError)) return;
 
             store.password = inputs.password;
-            const notificationToken = await messaging().getToken()
+            const notificationToken = await messaging().getToken();
+
+            const deviceID = await getUniqueId();
+            (inputs as any).notificationToken = `${deviceID}|${notificationToken}`;
+
 
             const blob = new FormData()
             blob.append("name", (store as any).name)

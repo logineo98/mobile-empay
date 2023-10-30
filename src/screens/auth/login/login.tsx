@@ -14,6 +14,8 @@ import Toast from 'react-native-toast-message'
 import { useNavigation } from '@react-navigation/native'
 import ToastContainer from '../../../components/common/toast'
 import SecondaryLoading from '../../../components/common/secondary_loading'
+import { getUniqueId } from 'react-native-device-info';
+
 
 const Login = () => {
     let scale = useSharedValue(1);
@@ -46,7 +48,8 @@ const Login = () => {
     const handle_login = async () => {
         try {
             const notificationToken = await messaging().getToken();
-            (inputs as any).notificationToken = notificationToken;
+            const deviceID = await getUniqueId();
+            (inputs as any).notificationToken = `${deviceID}|${notificationToken}`;
 
             dispatch(login(inputs, setError))
             setClick(true)

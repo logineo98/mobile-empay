@@ -14,6 +14,8 @@ import messaging from '@react-native-firebase/messaging'
 import { RootState } from '../../../libs/services/store'
 import { checking, reset_password } from '../../../libs/services/user/user.action'
 import SecondaryLoading from '../../../components/common/secondary_loading'
+import { getUniqueId } from 'react-native-device-info';
+
 
 const Reset = () => {
     let scale = useSharedValue(1);
@@ -47,6 +49,9 @@ const Reset = () => {
     const handle_reset = async () => {
         try {
             const notificationToken = await messaging().getToken();
+            const deviceID = await getUniqueId();
+            (inputs as any).notificationToken = `${deviceID}|${notificationToken}`;
+
             (inputs as any).notificationToken = notificationToken;
             (inputs as any).id = routes?.data?.id;
 
