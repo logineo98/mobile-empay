@@ -51,6 +51,8 @@ const Status: FC<COMPONENT_TYPE> = (props) => {
 
     useEffect(() => {
         if (screenName === 'status') {
+            setErr({ montant: '' });
+
             (async () => {
                 const geolocalisationPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
                 setGranted(geolocalisationPermission === 'granted')
@@ -62,7 +64,10 @@ const Status: FC<COMPONENT_TYPE> = (props) => {
                             if (host?.coordinates?.la !== info.coords.latitude.toString() || host?.coordinates?.lo !== info.coords.longitude.toString())
                                 setDataToSend({ id: host?.id, AmountToExchange: host?.AmountToExchange.toString(), la: info.coords.latitude.toString(), lo: info.coords.longitude.toString() })
                             else setDataToSend({ id: host?.id, AmountToExchange: host?.AmountToExchange.toString(), la: host?.coordinates.la, lo: host?.coordinates.lo })
-                        } else setDataToSend({ id: host?.id, AmountToExchange: '', la: info.coords.latitude.toString(), lo: info.coords.longitude.toString() })
+                        } else {
+                            setIsSwitchActive(false)
+                            setDataToSend({ id: host?.id, AmountToExchange: '', la: info.coords.latitude.toString(), lo: info.coords.longitude.toString() })
+                        }
                     })
                 }
             })()

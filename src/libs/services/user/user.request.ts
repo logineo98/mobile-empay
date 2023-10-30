@@ -88,7 +88,7 @@ export const status_geo_montant_validation = (montant: string, montant_total: nu
 
     if (!montant || montant.trim() === '') error = { ...error, montant: 'Veuillez renseigner le montant.' }
     else if (montant_total < parseInt(montant, 10)) error = { ...error, montant: `Votre montant disponible est insuffisant.` }
-    else if (parseInt(montant, 10) < 500) error = { ...error, montant: `Montant doit être d'au moins 500 FCFA.` }
+    else if (parseInt(montant, 10) < 1) error = { ...error, montant: `Montant doit être d'au moins 1 FCFA.` }
 
     return { error, initialError }
 }

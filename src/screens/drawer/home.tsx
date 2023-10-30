@@ -23,8 +23,6 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
     const [verso, setVerso] = useState(false)
     const [displayVisaCard, setDisplayVisaCard] = useState(true)
 
-    console.log('home', user_loading)
-
     return (
         <ScreenContainer1 displayVisaCard={displayVisaCard} setDisplayVisaCard={setDisplayVisaCard} navigation={navigation}>
             <View style={styles.home_container}>
