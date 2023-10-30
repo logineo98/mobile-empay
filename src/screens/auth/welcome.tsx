@@ -18,7 +18,6 @@ const Welcome = () => {
 
     useEffect(() => { dispatch(checking()) }, [dispatch]);
 
-    console.log('user_loading', user_loading)
 
     if (user_loading)
         return <PrincipalLoader text='Veuillez patienter pendant le chargement des données.' />
