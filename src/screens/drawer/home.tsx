@@ -18,7 +18,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
 
     const { height, width } = useWindowDimensions()
 
-    const { host } = useSelector((state: RootState) => state?.user)
+    const { host, user_loading } = useSelector((state: RootState) => state?.user)
 
     const [verso, setVerso] = useState(false)
     const [displayVisaCard, setDisplayVisaCard] = useState(true)

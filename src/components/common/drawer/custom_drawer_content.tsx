@@ -9,6 +9,7 @@ import CustomLinearGradient from './gradient/custom_linear_gradient'
 import { RootState } from '../../../libs/services/store'
 import { logout } from '../../../libs/services/user/user.action'
 import ModalServiceClient from './modal/modal_service_client'
+import SecondaryLoading from '../secondary_loading'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
 
@@ -17,11 +18,12 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
 
     const { height, width } = useWindowDimensions()
 
-    const { host } = useSelector((state: RootState) => state.user)
+    const { host, user_loading } = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch<any>()
 
     const [visibleLogoutModal, setVisibleLogoutModal] = useState(false)
     const [visibleServiceClientModal, setVisibleServiceClientModal] = useState(false)
+    const [click, setClick] = useState(false);
 
     const onShare = async () => {
         try { await Share.share({ message: 'Veuillez, télécharger l\'application EM-PAY', }) }
@@ -104,7 +106,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
                             <TouchableOpacity activeOpacity={0.5} style={[styles.back_validate, { padding: 10, }]} onPress={() => setVisibleLogoutModal(false)}>
                                 <Text style={styles.back_validate_name}>Annuler</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity activeOpacity={0.5} style={styles.back_validate} onPress={() => dispatch(logout())}>
+                            <TouchableOpacity activeOpacity={0.5} style={styles.back_validate} onPress={() => { dispatch(logout()); setClick(true) }}>
                                 <CustomLinearGradient style={styles.validate_gradient}>
                                     <Text style={[styles.back_validate_name, { color: colors.black, }]}>Se déconnecter</Text>
                                 </CustomLinearGradient>
@@ -113,6 +115,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
                     </View>
                 </View>
             </Modal>
+            {click && user_loading && <SecondaryLoading text={'Déconnexion en cours...'} />}
 
             {/* modal service client */}
             <ModalServiceClient visibleServiceClientModal={visibleServiceClientModal} setVisibleServiceClientModal={setVisibleServiceClientModal} />

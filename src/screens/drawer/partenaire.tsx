@@ -36,10 +36,11 @@ const Partenaire: FC<COMPONENT_TYPE> = (props) => {
 
     useEffect(() => {
         if (screenName === 'partenaire') {
-            if (fois === 0) {
-                dispatch(getAllPartners())
-                setFois(1)
-            } else dispatch(getAllPartnersWithoutLoading())
+            dispatch(getAllPartners())
+            // if (fois === 0) {
+            //     dispatch(getAllPartners())
+            //     setFois(1)
+            // } else dispatch(getAllPartnersWithoutLoading())
         }
     }, [screenName])
 

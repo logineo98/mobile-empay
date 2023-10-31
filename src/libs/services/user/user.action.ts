@@ -153,8 +153,6 @@ export const inscription_service = (data: FormData, notificationToken: string) =
         const config = { headers: { 'Content-Type': 'multipart/form-data' } }
         const res = await axios.post(_end_point.customer.register, data, config)
 
-
-
         await AsyncStorage.setItem('credentials', JSON.stringify({ accessToken: token, expiresIn, notificationToken: notificationToken }))
 
 

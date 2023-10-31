@@ -1,4 +1,4 @@
-import { Image, PermissionsAndroid, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Image, PermissionsAndroid, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colors, roboto } from '../../../libs/typography/typography'
 import Modal from "react-native-modal";
@@ -12,9 +12,8 @@ import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSpring } fr
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Image as CompressImg } from 'react-native-compressor';
 import ImageCropPicker from 'react-native-image-crop-picker'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { userModel } from '../../../libs/services/user/user.model'
-import { RootState } from '../../../libs/services/store'
 import Toast from 'react-native-toast-message'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ToastContainer from '../../../components/common/toast';
@@ -24,10 +23,8 @@ const Document = () => {
     let scale = useSharedValue(1);
     const dispatch = useDispatch<any>()
     const navigation = useNavigation<any>()
-    const { width, height } = useWindowDimensions()
-
+    const { height } = useWindowDimensions()
     const [error, setError] = useState("");
-    const [click, setClick] = useState(false);
     const [next, setNext] = useState(false);
     const initial: userModel = { document: "" }
     const [inputs, setInputs] = useState(initial);
@@ -35,20 +32,8 @@ const Document = () => {
     const [img, setImg] = useState<any>();
     const [store, setStore] = useState<userModel>();
 
-
-
-    const { user_info, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
-
-
-    //alert for info
-    useEffect(() => { if (user_info && user_info !== null) { Toast.show({ type: 'info', text1: 'Informations', text2: user_info, }); dispatch({ type: 'reset_user_info' }) }; }, [user_info, dispatch]);
-
     //alert for errors form this app
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
-
-    //alert for errors from api
-    useEffect(() => { if (user_errors && user_errors !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: user_errors, }); dispatch({ type: 'reset_user_errors' }) }; }, [user_errors, dispatch]);
-
 
     //animate login button
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
@@ -58,7 +43,7 @@ const Document = () => {
 
 
     //result of traitement
-    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("selfie"); setNext(false); setClick(false) } }, [next, store]);
+    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("selfie"); setNext(false); } }, [next, store]);
 
     const openModal = () => { setVisible(!visible) }
 
@@ -80,9 +65,9 @@ const Document = () => {
                                     }).catch((err: any) => { console.log(err) });
                             }
                         })
-                        .catch((error) => { setError(error) });
+                        .catch((error) => { console.log("select pic error: ", error) });
                 }
-            }).catch((err: any) => { setError(err) })
+            }).catch((error: any) => { console.log("select pic error: ", error) })
 
         setVisible(false)
     };
@@ -101,10 +86,10 @@ const Document = () => {
 
                 setInputs({ ...inputs, document: { uri: img, type: 'image/jpeg', name: filename + '-image.jpg' } });
             } else {
-                setError('Permission refusée pour accéder à la caméra');
+                console.log('Permission refusée pour accéder à la caméra');
             }
         } catch (error: any) {
-            setError(error);
+            console.log("take pic error: ", error)
         }
         setVisible(false)
     };
@@ -118,7 +103,6 @@ const Document = () => {
         setStore({ ...store, ...inputs })
 
         setNext(true)
-        setClick(true)
     }
 
 
@@ -126,13 +110,13 @@ const Document = () => {
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });
 
     return (
-        <Wrapper image imageData={images.auth_bg} overlay={"#074769C5"}  >
+        <Wrapper image imageData={images.register_document_bg_img}   >
             <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
                     <Spacer />
                     <Spacer />
-                    <View><Image source={images.logo_png} style={styles.logo} /></View>
+                    <View><Image source={images.logo_white} style={styles.logo} /></View>
 
                     <Spacer />
 

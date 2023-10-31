@@ -39,10 +39,11 @@ const Tarif: FC<COMPONENT_TYPE> = (props) => {
 
     useEffect(() => {
         if (screenName === 'tarif') {
-            if (fois === 0) {
-                dispatch(getAllTarifs())
-                setFois(1)
-            } else dispatch(getAllTarifsWithoutLoading())
+            dispatch(getAllTarifs())
+            // if (fois === 0) {
+            //     dispatch(getAllTarifs())
+            //     setFois(1)
+            // } else dispatch(getAllTarifsWithoutLoading())
         }
     }, [screenName])
 

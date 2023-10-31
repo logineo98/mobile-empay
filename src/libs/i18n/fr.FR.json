@@ -32,7 +32,8 @@
                 "name_field_empty": "Un nom est requis.",
                 "firstname": "Un prenom est requis.",
                 "password_field_empty": "Un mot de passe est requis.",
-                "phone_incorrect": "Format numéro de téléphone incorrect."
+                "phone_incorrect": "Format numéro de téléphone incorrect.",
+                "birthday_error": "Choisissez une date inférieur à la date d'aujourd'hui."
             }
         },
         "account": {

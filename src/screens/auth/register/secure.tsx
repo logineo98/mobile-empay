@@ -16,24 +16,24 @@ import { inscription_service } from '../../../libs/services/user/user.action'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../libs/services/store'
 import ToastContainer from '../../../components/common/toast'
+import SecondaryLoading from '../../../components/common/secondary_loading'
+import { getUniqueId } from 'react-native-device-info';
+
+
 
 const Secure = () => {
     let scale = useSharedValue(1);
     const dispatch = useDispatch<any>()
     const navigation = useNavigation<any>()
-    const { width, height } = useWindowDimensions()
-    const [modalVisible, setModalVisible] = useState(false)
 
     const [error, setError] = useState("");
-    const [click, setClick] = useState(false);
     const [next, setNext] = useState(false);
     const initial: userModel = { password: "", confirm: "" }
     const [inputs, setInputs] = useState(initial);
     const [store, setStore] = useState<userModel | any>();
-    const [selectedValue, setSelectedValue] = useState(false);
 
 
-    const { user_info, user_tmp, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
+    const { user_info, user_log_tmp, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
 
 
     //alert for info
@@ -55,16 +55,20 @@ const Secure = () => {
     //result of traitement
     useEffect(() => { if (next) { navigation.navigate("finalisation"); setNext(false) } }, []);
 
-    useEffect(() => { if (user_tmp) { navigation.navigate("finalisation"); dispatch({ type: "reset_user_tmp" }); setClick(false) } }, [user_tmp, dispatch]);
+    useEffect(() => { if (user_log_tmp) { navigation.navigate("finalisation"); dispatch({ type: "reset_user_log_tmp" }); } }, [user_log_tmp, dispatch]);
 
-    //traitement of login
+    //traitement of register
     const handle_validate = async () => {
         try {
             const validation: userModel = { password: inputs?.password, confirm: inputs?.confirm }
             if (inscription_inputs_request("finalisation", validation, setError)) return;
 
             store.password = inputs.password;
-            const notificationToken = await messaging().getToken()
+            const notificationToken = await messaging().getToken();
+
+            const deviceID = await getUniqueId();
+            (inputs as any).notificationToken = `${deviceID}|${notificationToken}`;
+
 
             const blob = new FormData()
             blob.append("name", (store as any).name)
@@ -80,10 +84,10 @@ const Secure = () => {
             blob.append("password", (store as any).password)
             blob.append("notificationToken", notificationToken)
 
-            dispatch(inscription_service(blob, notificationToken))
-            setClick(true)
-        } catch (error) {
 
+            dispatch(inscription_service(blob, notificationToken))
+        } catch (error) {
+            console.log("notif token error: ", error)
         }
     }
 
@@ -92,19 +96,17 @@ const Secure = () => {
 
     // #2E427D
     return (
-        <Wrapper image imageData={images.auth_bg} overlay={"#074769C5"}  >
+        <Wrapper image imageData={images.register_secure_bg_img}   >
             <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
                     <Spacer />
                     <Spacer />
-                    <View><Image source={images.logo_png} style={styles.logo} /></View>
+                    <View><Image source={images.logo_white} style={styles.logo} /></View>
 
                     <Spacer />
 
-                    <View style={styles.descriptionbox}>
-                        <Text style={styles.title}>Créer votre mot de passe:</Text>
-                    </View>
+                    <View style={styles.descriptionbox}><Text style={styles.title}>Créer votre mot de passe:</Text></View>
 
                     <Spacer />
 
@@ -121,6 +123,7 @@ const Secure = () => {
                 </Animated.View>
                 {/* <TouchableOpacity onPress={handle_validate} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity> */}
             </Container>
+            {user_loading && <SecondaryLoading text={"Veuillez patienter pendant la création de compte..."} />}
         </Wrapper>
     )
 }
@@ -128,7 +131,7 @@ const Secure = () => {
 export default Secure
 
 const styles = StyleSheet.create({
-    logo: { width: 95, height: 95, tintColor: colors.white },
+    logo: { width: 120, height: 120, tintColor: colors.white },
     forms: { gap: 15, width: "90%", alignItems: "center" },
     input: { paddingLeft: 15, color: colors.black, padding: 5, backgroundColor: colors.white, width: "100%", borderRadius: 15, alignItems: "center", fontFamily: roboto.medium },
     btnText: { fontFamily: roboto.medium, color: colors.black, fontSize: 17 },
