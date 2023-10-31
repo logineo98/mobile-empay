@@ -147,8 +147,6 @@ export const inscription_service = (data: FormData, notificationToken: string) =
     try {
         dispatch({ type: user_loading })
 
-        console.log(data)
-
         let token = await get_credentials('accessToken')
         let expiresIn = await get_credentials('expiresIn')
 

@@ -104,7 +104,14 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
                                 {user_loading ? <Loading text='Traitement en cours...' no_gradient color={colors.black} style_text_container={styles.loading_text} style_container={styles.loading} /> :
                                     recharge_response === 'PENDING' ?
                                         <View style={styles.recharge_status_container}>
-                                            <Loading no_gradient color={colors.black} text='Une ou votre recharge est en cours de validation. Voulez-vous en refaire une autre ?' style_text_container={styles.loading_text} style_container={styles.loading} />
+                                            <Loading no_gradient color={colors.black} text=' ' style_text_container={styles.loading_text} style_container={styles.loading} />
+
+                                            <Text style={{ marginVertical: 10, color: colors.black, fontSize: 15, fontFamily: roboto.regular, textAlign: 'center', }}>
+                                                Une ou votre recharge est en cours de validation. Pour valider et terminer votre transaction, veuillez suivre les instructions envoyées au <Text style={{ fontWeight: 'bold', color: colors.fond1 }}>{vitepayData.phone}</Text>. Vous pouvez également saisir directement <Text style={{ fontWeight: 'bold', color: colors.fond1 }}>#144#3*6#</Text> (code USSD) sur votre téléphone pour afficher le menu de confirmation de paiement.
+                                            </Text>
+
+                                            <Text style={{ color: colors.black, fontSize: 15, fontFamily: roboto.regular, textAlign: 'center', }}>Voulez-vous en refaire une autre ?</Text>
+
                                             <View style={styles.btn_container}>
                                                 <TouchableOpacity activeOpacity={0.5} style={styles.btn} onPress={refaireRecharge}>
                                                     <Text style={styles.btn_name}>Oui</Text>
@@ -188,7 +195,7 @@ const styles = StyleSheet.create({
     // recharge status
     recharge_status_container: { flex: 1, justifyContent: 'space-between', },
     loading: {},
-    loading_text: { fontSize: 17, textAlign: 'center', },
+    loading_text: { fontSize: 15, textAlign: 'center', },
 
     status_icon_container: { alignItems: 'center', },
     status_icon: {},

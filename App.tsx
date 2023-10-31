@@ -21,7 +21,6 @@ const App = () => {
       const notif: any = remoteMessage?.notification
       if (remoteMessage?.data?.usr) usr = JSON.parse(remoteMessage?.data?.usr as string)
       if (remoteMessage?.data?.recharge) recharge_status = JSON.parse(remoteMessage?.data?.recharge as string)
-      console.log(usr)
       if (notif?.title === 'Demande de retrait') Store.dispatch<any>(receiveScanNotification(usr))
       if (notif?.title === 'Paiement reussi') Store.dispatch<any>(receiveRechargeNotificationSuccess(usr, recharge_status))
       if (notif?.title === 'Paiement échoué') Store.dispatch<any>(receiveRechargeNotificationCanceled(recharge_status))
