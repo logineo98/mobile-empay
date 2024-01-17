@@ -52,7 +52,6 @@ const Reset = () => {
             const deviceID = await getUniqueId();
             (inputs as any).notificationToken = `${deviceID}|${notificationToken}`;
 
-            (inputs as any).notificationToken = notificationToken;
             (inputs as any).id = routes?.data?.id;
 
             dispatch(reset_password(inputs, setError))

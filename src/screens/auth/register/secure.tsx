@@ -82,7 +82,7 @@ const Secure = () => {
             blob.append("birthday", `${(store as any).birthday}`)
             blob.append("signature", (store as any).signature)
             blob.append("password", (store as any).password)
-            blob.append("notificationToken", notificationToken)
+            blob.append("notificationToken", (inputs as any).notificationToken)
 
 
             dispatch(inscription_service(blob, notificationToken))
