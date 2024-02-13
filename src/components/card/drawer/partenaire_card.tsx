@@ -5,9 +5,9 @@ import { PARTNER_TYPE } from '../../../libs/services/partner/partner.model'
 import { colors, roboto } from '../../../libs/typography/typography'
 import { isPair } from '../../../libs/constants/utils'
 import CustomLinearGradient from '../../common/drawer/gradient/custom_linear_gradient'
+import { _end_point } from '../../../libs/services/endpoints'
 // my icons
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { _end_point } from '../../../libs/services/endpoints'
 
 type COMPONENT_TYPE = {
     data: PARTNER_TYPE

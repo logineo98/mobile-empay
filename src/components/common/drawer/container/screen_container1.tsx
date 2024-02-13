@@ -5,10 +5,12 @@ import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript
 // my importations
 import { colors, roboto } from '../../../../libs/typography/typography'
 import { images } from '../../../../libs/constants/constants'
-// my icons
 import CustomLinearGradient from '../gradient/custom_linear_gradient'
 import { RootState } from '../../../../libs/services/store'
 import ModalServiceClient from '../modal/modal_service_client'
+import { _end_point } from '../../../../libs/services/endpoints'
+// my icons
+
 
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers
@@ -28,6 +30,10 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
     const [isKeyboardActive, setIsKeyboardActive] = useState(false)
     const [visibleServiceClientModal, setVisibleServiceClientModal] = useState(false)
 
+    const handleDisplayVisaCard = () => {
+        setDisplayVisaCard(!displayVisaCard)
+    }
+
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
             setIsKeyboardActive(true)
@@ -43,6 +49,8 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
         }
     }, [])
 
+    console.log('screen container 1: ', displayVisaCard)
+
     return (
         <View style={styles.screen_container_1}>
             <StatusBar backgroundColor={colors.screen_bg_color} />
@@ -50,14 +58,16 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
             <View style={styles.header_container}>
                 <TouchableOpacity activeOpacity={0.5} style={styles.profil_info_container} onPress={() => navigation.openDrawer()}>
                     <View style={styles.profil_img_container}>
-                        <Image source={images.avatar} style={styles.profil_img} />
+                        {host?.photo ? <Image source={{ uri: `${_end_point.api_img}/${host.photo}` }} style={styles.profil_img} /> :
+                            <Image source={images.avatar} style={styles.profil_img} />
+                        }
                     </View>
                     <View style={styles.info_container}>
-                        <Text numberOfLines={1} style={styles.info_name}> {host?.name} </Text>
-                        <Text numberOfLines={1} style={styles.info_email}> {host?.email} </Text>
+                        <Text numberOfLines={1} style={styles.info_name}>{host?.name}</Text>
+                        <Text numberOfLines={1} style={styles.info_email}>{host?.email}</Text>
                     </View>
                 </TouchableOpacity>
-                <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={displayVisaCard ? colors.success : colors.error} value={displayVisaCard} onValueChange={setDisplayVisaCard} />
+                <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={displayVisaCard ? colors.success : colors.error} value={displayVisaCard} onValueChange={handleDisplayVisaCard} />
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>

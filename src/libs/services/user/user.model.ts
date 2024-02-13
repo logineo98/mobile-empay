@@ -22,6 +22,7 @@ export type userModel = {
     account?: string
     profil?: any
     document?: any
+    photo?: any
     password?: string
     confirm?: string
     birthday?: string

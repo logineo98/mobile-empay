@@ -21,7 +21,6 @@ export const images = {
     register_finalisation_bg_img: require("../assets/images/IMAGE10.jpg"),
     auth_action_btn_img: require("../assets/images/SKIP_ICON.png"),
 
-
     // tz
     logo_white: require('../assets/images/logo_white.png'),
     avatar: require('../assets/images/avatar.png'),
@@ -55,6 +54,7 @@ export const images = {
     yara_oil: require('../assets/images/yara_oil.png'),
     brooklyn_burger: require('../assets/images/brooklyn_burger.png'),
     logineo: require('../assets/images/logineo.png'),
+    clock: require('../assets/images/clock.png'),
 }
 
 
