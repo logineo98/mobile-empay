@@ -15,6 +15,7 @@ import { RootState } from '../../../libs/services/store'
 import { checking, reset_password } from '../../../libs/services/user/user.action'
 import SecondaryLoading from '../../../components/common/secondary_loading'
 import { getUniqueId } from 'react-native-device-info';
+import SmallLabel from '../../../components/common/small_label'
 
 
 const Reset = () => {
@@ -82,8 +83,15 @@ const Reset = () => {
                     <Spacer />
 
                     <View style={styles.forms}>
-                        <TextInput value={inputs.password} onChangeText={text => handleChangeMobile("password", text, setInputs)} placeholder={"MoTDePasse10234"} placeholderTextColor={colors.gray} style={styles.input} />
-                        <TextInput value={inputs.confirm} onChangeText={text => handleChangeMobile("confirm", text, setInputs)} placeholder={"****************"} placeholderTextColor={colors.gray} style={styles.input} />
+                        <View style={styles.input_wrapper}>
+                            {inputs?.password && <SmallLabel text='Password' left={18} />}
+                            <TextInput value={inputs.password} onChangeText={text => handleChangeMobile("password", text, setInputs)} placeholder={"MoTDePasse10234"} placeholderTextColor={colors.gray} style={styles.input} />
+                        </View>
+
+                        <View style={styles.input_wrapper}>
+                            {inputs?.confirm && <SmallLabel text='Confirm' left={18} />}
+                            <TextInput value={inputs.confirm} onChangeText={text => handleChangeMobile("confirm", text, setInputs)} placeholder={"****************"} placeholderTextColor={colors.gray} style={styles.input} />
+                        </View>
                     </View>
                     <Spacer />
                 </View>
@@ -103,12 +111,14 @@ export default Reset
 const styles = StyleSheet.create({
     logo: { width: 95, height: 95, tintColor: colors.white },
     forms: { gap: 15, width: "90%", alignItems: "center" },
-    input: { paddingLeft: 15, color: colors.black, padding: 5, backgroundColor: colors.white, width: "100%", borderRadius: 15, alignItems: "center", fontFamily: roboto.medium },
+    // input: { paddingLeft: 15, color: colors.black, padding: 5, backgroundColor: colors.white, width: "100%", borderRadius: 15, alignItems: "center", fontFamily: roboto.medium },
     btnText: { fontFamily: roboto.medium, color: colors.black, fontSize: 17 },
     descriptionbox: { alignItems: "center", justifyContent: "center", gap: 8 },
     title: { fontSize: 24, color: colors.white, fontFamily: roboto.bold },
     description: { fontSize: 14, color: colors.white, fontFamily: roboto.regular },
     registerBtn: { marginTop: 2, backgroundColor: colors.ika_wari_taa_bg_color, width: "35%", borderRadius: 15, alignItems: "center", padding: 2 },
     actionBtn: { alignSelf: "flex-end", width: 50, height: 50, backgroundColor: colors.white, alignItems: "center", justifyContent: "center", padding: 5, borderRadius: 50 },
-    btnImage: { width: 80, height: 80, resizeMode: "contain" }
+    btnImage: { width: 80, height: 80, resizeMode: "contain" },
+    input_wrapper: { backgroundColor: colors.white, width: "100%", borderRadius: 15, overflow: "hidden", position: "relative" },
+    input: { paddingLeft: 15, color: colors.black, backgroundColor: colors.white, width: "100%", alignItems: "center", fontFamily: roboto.medium, fontSize: 13 },
 })
