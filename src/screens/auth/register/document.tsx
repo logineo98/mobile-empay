@@ -1,4 +1,4 @@
-import { Image, PermissionsAndroid, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Image, PermissionsAndroid, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, useWindowDimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colors, roboto } from '../../../libs/typography/typography'
 import Modal from "react-native-modal";
@@ -17,6 +17,9 @@ import { userModel } from '../../../libs/services/user/user.model'
 import Toast from 'react-native-toast-message'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ToastContainer from '../../../components/common/toast';
+import DatePicker from 'react-native-date-picker';
+import { format } from 'date-fns';
+import SmallLabel from '../../../components/common/small_label';
 
 
 const Document = () => {
@@ -26,7 +29,11 @@ const Document = () => {
     const { height } = useWindowDimensions()
     const [error, setError] = useState("");
     const [next, setNext] = useState(false);
-    const initial: userModel = { document: "" }
+    const [selectDate, setSelectDate] = useState(false);
+    const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
+    const [expireDate, setExpireDate] = useState<Date | null>(null);
+    const [typeModal, setTypeModal] = useState<"document" | "delivery" | "expire">("document");
+    const initial: userModel = { document: "", documentInfos: { documentDeliveryDate: "", documentExpirationDate: "", documentLicensingAuthority: "", documentNumber: "" } }
     const [inputs, setInputs] = useState(initial);
     const [visible, setVisible] = useState(false);
     const [img, setImg] = useState<any>();
@@ -45,7 +52,7 @@ const Document = () => {
     //result of traitement
     useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("selfie"); setNext(false); } }, [next, store]);
 
-    const openModal = () => { setVisible(!visible) }
+    const openModal = (type: "document" | "delivery" | "expire") => { setVisible(!visible); setTypeModal(type) }
 
 
     const selectImage = () => {
@@ -95,9 +102,18 @@ const Document = () => {
     };
 
 
+
     //traitement of login
     const handle_validate = () => {
-        const validate: any = { document: inputs.document }
+
+        inputs.documentInfos = {
+            ...inputs?.documentInfos,
+            documentDeliveryDate: deliveryDate ? `${deliveryDate}` : "",
+            documentExpirationDate: expireDate ? `${expireDate}` : "",
+        }
+
+        const validate: any = { document: inputs.document, documentInfos: inputs?.documentInfos }
+
 
         if (inscription_inputs_request("document", validate, setError)) return;
         setStore({ ...store, ...inputs })
@@ -111,6 +127,7 @@ const Document = () => {
 
     return (
         <Wrapper image imageData={images.register_document_bg_img}   >
+            <StatusBar backgroundColor={"#2E427D"} barStyle={"light-content"} />
             <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
@@ -133,11 +150,41 @@ const Document = () => {
                     }
 
                     <View style={styles.buttons}>
-                        <TouchableOpacity onPress={() => openModal()} style={styles.btn} activeOpacity={0.9}><Text style={{ color: colors.gray }}>Nina</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => openModal()} style={styles.btn} activeOpacity={0.9}><Text style={{ color: colors.gray }}>Passport</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => openModal()} style={styles.btn} activeOpacity={0.9}><Text style={{ color: colors.gray }}>CIN</Text></TouchableOpacity>
-
+                        <TouchableOpacity onPress={() => openModal("document")} style={styles.btn} activeOpacity={0.9}><Text style={{ color: colors.gray }}>Nina</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => openModal("document")} style={styles.btn} activeOpacity={0.9}><Text style={{ color: colors.gray }}>Passport</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => openModal("document")} style={styles.btn} activeOpacity={0.9}><Text style={{ color: colors.gray }}>CIN</Text></TouchableOpacity>
                     </View>
+                    <Spacer height={25} />
+                    <View style={styles.forms}>
+                        <Text style={{ textAlign: "left", ...styles.title }}>Informations sur le document</Text>
+
+                        <View style={styles.input_wrapper}>
+                            {inputs?.documentInfos?.documentNumber && <SmallLabel text='N° du document d’identité' left={18} />}
+                            <TextInput value={inputs?.documentInfos?.documentNumber} onChangeText={(text) => setInputs(old => { return { ...old, documentInfos: { ...inputs.documentInfos, documentNumber: text } } })} placeholder={"N° du document d’identité"} placeholderTextColor={colors.gray} style={styles.input} />
+                        </View>
+
+
+                        <TouchableWithoutFeedback onPress={() => { openModal("delivery"); setDeliveryDate(new Date()) }}>
+                            <View style={[styles.input_wrapper, { flex: 1, paddingVertical: 15, alignItems: "flex-start", paddingLeft: 15 }]}>
+                                {deliveryDate && <SmallLabel left={20} text='Date delivrance' />}
+                                <Text style={{ color: deliveryDate ? colors.black : colors.gray }}> {deliveryDate ? format(deliveryDate, 'dd/MM/yyyy') : "Date de délivrance"}</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
+
+                        <View style={styles.input_wrapper}>
+                            {inputs?.documentInfos?.documentLicensingAuthority && <SmallLabel text='Autorité de délivrance' left={18} />}
+                            <TextInput value={inputs?.documentInfos?.documentLicensingAuthority} onChangeText={(text) => setInputs(old => { return { ...old, documentInfos: { ...inputs.documentInfos, documentLicensingAuthority: text } } })} placeholder={"Autorité de délivrance"} placeholderTextColor={colors.gray} style={styles.input} />
+                        </View>
+
+
+                        <TouchableWithoutFeedback onPress={() => { openModal("expire"); setExpireDate(new Date()) }}>
+                            <View style={[styles.input_wrapper, { flex: 1, paddingVertical: 15, alignItems: "flex-start", paddingLeft: 15 }]}>
+                                {expireDate && <SmallLabel left={20} text="Date d'expiration" />}
+                                <Text style={{ color: expireDate ? colors.black : colors.gray }}> {expireDate ? format(expireDate, 'dd/MM/yyyy') : "Date d’expiration"}</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
+
                     <Spacer />
                 </View>
                 <Animated.View style={[animatedStyle, { alignSelf: "flex-end" }]}>
@@ -146,18 +193,55 @@ const Document = () => {
             </Container>
 
             <Modal isVisible={visible} animationIn={"slideInUp"} animationOut={"bounceOut"} animationInTiming={500} animationOutTiming={1500} onBackdropPress={() => setVisible(false)}>
-                <View style={{ backgroundColor: colors.white, width: '100%', height: height * 0.25, borderRadius: 5 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5, paddingVertical: 10 }}>
-                        <Text style={{ color: colors.black, fontSize: 20, fontFamily: roboto.bold }}>Options</Text>
-                        <TouchableOpacity onPress={() => setVisible(false)} activeOpacity={0.8}><FontAwesome name="close" style={{ color: colors.black, fontSize: 20, marginRight: 10 }} /></TouchableOpacity>
-                    </View>
+                {typeModal === "document" &&
+                    <View style={{ backgroundColor: colors.white, width: '100%', height: height * 0.25, borderRadius: 5 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5, paddingVertical: 10 }}>
+                            <Text style={{ color: colors.black, fontSize: 20, fontFamily: roboto.bold }}>Options</Text>
+                            <TouchableOpacity onPress={() => setVisible(false)} activeOpacity={0.8}><FontAwesome name="close" style={{ color: colors.black, fontSize: 20, marginRight: 10 }} /></TouchableOpacity>
+                        </View>
 
-                    <View style={{ gap: 5, flex: 1, alignContent: 'center', justifyContent: 'center', paddingHorizontal: 20 }}>
-                        <TouchableOpacity onPress={takePhoto} activeOpacity={0.8} style={{ backgroundColor: colors.black, padding: 13, borderRadius: 5, }}><Text style={{ color: colors.white, textAlign: 'center', fontFamily: roboto.light }}>Prendre une photo</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={selectImage} activeOpacity={0.8} style={{ backgroundColor: colors.black, padding: 13, borderRadius: 5, }}><Text style={{ color: colors.white, textAlign: 'center', fontFamily: roboto.light }}>Choisir une photo</Text></TouchableOpacity>
+                        <View style={{ gap: 5, flex: 1, alignContent: 'center', justifyContent: 'center', paddingHorizontal: 20 }}>
+                            <TouchableOpacity onPress={takePhoto} activeOpacity={0.8} style={{ backgroundColor: colors.black, padding: 13, borderRadius: 5, }}><Text style={{ color: colors.white, textAlign: 'center', fontFamily: roboto.light }}>Prendre une photo</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={selectImage} activeOpacity={0.8} style={{ backgroundColor: colors.black, padding: 13, borderRadius: 5, }}><Text style={{ color: colors.white, textAlign: 'center', fontFamily: roboto.light }}>Choisir une photo</Text></TouchableOpacity>
+                        </View>
                     </View>
-                </View>
+                }
+                {typeModal === "delivery" &&
+                    <TouchableWithoutFeedback onPress={() => setVisible(false)}>
+                        <View style={styles.date_modal}>
+                            <DatePicker
+                                date={deliveryDate as Date}
+                                onDateChange={(_date) => { setDeliveryDate(_date); setSelectDate(true) }}
+                                mode="date"
+                                style={{ backgroundColor: "white" }}
+                                textColor={colors.black}
+                            />
+                            <TouchableOpacity activeOpacity={0.8} onPress={() => openModal("delivery")} style={[styles.date_button, { width: "84%", }]}>
+                                <Text style={{ color: colors.white, letterSpacing: 1, fontSize: 14 }}>Selectionner</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </TouchableWithoutFeedback>
+                }
+
+                {typeModal === "expire" &&
+                    <TouchableWithoutFeedback onPress={() => setVisible(false)}>
+                        <View style={styles.date_modal}>
+                            <DatePicker
+                                date={expireDate as Date}
+                                onDateChange={(_date) => { setExpireDate(_date); setSelectDate(true) }}
+                                mode="date"
+                                style={{ backgroundColor: "white" }}
+                                textColor={colors.black}
+                            />
+                            <TouchableOpacity activeOpacity={0.8} onPress={() => openModal("delivery")} style={[styles.date_button, { width: "84%", }]}>
+                                <Text style={{ color: colors.white, letterSpacing: 1, fontSize: 14 }}>Selectionner</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </TouchableWithoutFeedback>
+                }
             </Modal>
+
+
         </Wrapper>
     )
 }
@@ -168,7 +252,7 @@ export default Document
 const styles = StyleSheet.create({
     logo: { width: 95, height: 95, tintColor: colors.white },
     buttons: { gap: 15, width: "90%", alignItems: "center" },
-    btn: { padding: 8, backgroundColor: colors.white, width: "100%", borderRadius: 15, alignItems: "center", textAlign: "center", fontFamily: roboto.medium, fontSize: 13 },
+    btn: { padding: 8, paddingVertical: 15, backgroundColor: colors.white, width: "100%", borderRadius: 15, alignItems: "center", textAlign: "center", fontFamily: roboto.medium, fontSize: 13 },
     btnText: { fontFamily: roboto.medium, color: colors.black, fontSize: 17 },
     descriptionbox: { alignItems: "center", justifyContent: "center", gap: 8 },
     title: { fontSize: 14, color: colors.white, fontFamily: roboto.bold },
@@ -177,5 +261,11 @@ const styles = StyleSheet.create({
     description: { fontSize: 14, color: colors.white, fontFamily: roboto.regular },
     registerBtn: { marginTop: 2, backgroundColor: colors.ika_wari_taa_bg_color, width: "35%", borderRadius: 15, alignItems: "center", padding: 2 },
     actionBtn: { alignSelf: "flex-end", width: 50, height: 50, backgroundColor: colors.white, alignItems: "center", justifyContent: "center", padding: 5, borderRadius: 50 },
-    btnImage: { width: 80, height: 80, resizeMode: "contain" }
+    btnImage: { width: 80, height: 80, resizeMode: "contain" },
+    input_wrapper: { backgroundColor: colors.white, width: "100%", borderRadius: 15, overflow: "hidden", position: "relative" },
+    input: { paddingLeft: 15, color: colors.black, backgroundColor: colors.white, width: "100%", alignItems: "center", fontFamily: roboto.medium, fontSize: 13 },
+    forms: { gap: 15, width: "90%", alignItems: "center" },
+    date_modal: { alignItems: "center", justifyContent: "center", height: "100%", },
+    date_button: { width: "100%", padding: 15, backgroundColor: colors.fond1, justifyContent: "center", alignItems: "center", marginVertical: 10 },
+
 })

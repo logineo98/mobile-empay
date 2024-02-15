@@ -32,7 +32,33 @@ export type userModel = {
     coordinates?: COORDINATE_TYPE
     isChecked?: boolean
     notificationToken?: string
-    age?: Date
+    // age?: Date
+
+    residenceCountry?: string  //added
+    nationality?: string //added
+    placeOfBirth?: string //added
+    city?: string //added
+    nameOnCard?: string //added
+    currentActivity?: string //added
+    fieldOfActivity?: string //added
+
+    documentInfos?: {
+        documentNumber?: string //added
+        documentDeliveryDate?: string //added
+        documentExpirationDate?: string //added
+        documentLicensingAuthority?: string //added
+    }
+
+    emergencyContact?: userEmergencyContact
+}
+
+export type userEmergencyContact = {
+    name?: string; //added
+    firstname?: string; //added
+    address?: string; //added
+    phone?: string; //added
+    email?: string; //added
+    relationship?: string; //added
 }
 
 export type userStore = {

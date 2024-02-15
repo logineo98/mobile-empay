@@ -1,5 +1,5 @@
-import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { ActivityIndicator, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import Wrapper from '../../../components/common/wrapper'
 import Spacer from '../../../components/common/spacer'
 import { allInputsFilled, images } from '../../../libs/constants/constants'
@@ -9,7 +9,7 @@ import CustomLinearGradient from '../../../components/common/drawer/gradient/cus
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSpring } from 'react-native-reanimated'
 import { userModel } from '../../../libs/services/user/user.model'
-import { Camera, useCameraDevice, useCameraDevices } from 'react-native-vision-camera';
+import { Camera, useCameraDevice } from 'react-native-vision-camera';
 import fs from 'react-native-fs';
 import Toast from 'react-native-toast-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -96,6 +96,7 @@ const Selfie = () => {
 
     return (
         <Wrapper image imageData={images.register_selfie_bg_img} overlay={"#131722E5"}   >
+            <StatusBar backgroundColor={"#131722E5"} barStyle={"light-content"} />
             <ToastContainer />
             {!granted ? <NoPermissionCard permission_type='à la caméra' /> :
                 <Container scoll position={"between"} style={{ alignItems: "center" }}>

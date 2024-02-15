@@ -12,6 +12,8 @@ import Infos from '../../../screens/auth/register/infos'
 import Selfie from '../../../screens/auth/register/selfie'
 import Finalisation from '../../../screens/auth/register/finalisation'
 import Signature from '../../../screens/auth/register/signature'
+import InfosSupp from '../../../screens/auth/register/infosSupp'
+import EmergencyContact from '../../../screens/auth/register/emergency_contact'
 
 const AuthStack = () => {
     const stack = createNativeStackNavigator()
@@ -23,8 +25,10 @@ const AuthStack = () => {
             <stack.Screen name='verify' component={Verify} />
             <stack.Screen name='reset' component={Reset} />
             <stack.Screen name='infos' component={Infos} />
+            <stack.Screen name='infosSupp' component={InfosSupp} />
             <stack.Screen name='document' component={Document} />
             <stack.Screen name='selfie' component={Selfie} />
+            <stack.Screen name='emergency_contact' component={EmergencyContact} />
             <stack.Screen name='secure' component={Secure} />
             <stack.Screen name='signature' component={Signature} />
             <stack.Screen name='finalisation' component={Finalisation} />

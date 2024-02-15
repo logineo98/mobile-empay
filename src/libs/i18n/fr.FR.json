@@ -36,6 +36,45 @@
                 "birthday_error": "Choisissez une date inférieur à la date d'aujourd'hui."
             }
         },
+        "emergency": {
+            "title": "Inscription",
+            "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum incidunt laborum",
+            "phone_field": "Numéro de téléphone",
+            "name": "Nom du contact",
+            "firstname": "Prénom du contact",
+            "address": "Adresse du contact",
+            "phone": "Téléphone portable du contact",
+            "email": "Email du contact",
+            "relationship": "Nature de relation",
+            "errors": {
+                "name_field_empty": "Le nom de votre contact à prevenir est necessaire.",
+                "firstname_field_empty": "Le prénom de votre contact à prevenir est necessaire.",
+                "address_field_empty": "L'adresse de votre contact à prevenir est necessaire.",
+                "phone_field_empty": "Le téléphone portable de votre contact à prevenir est necessaire.",
+                "email_field_empty": "L'email de votre contact à prevenir est necessaire.",
+                "relationship_field_empty": "La nature de relation de votre contact à prevenir est necessaire."
+            }
+        },
+        "infosSupp": {
+            "title": "Inscription",
+            "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum incidunt laborum",
+            "residenceCountry": "Pays de résidence",
+            "nationality": "Nationalité",
+            "placeOfBirth": "Lieu de naissance",
+            "city": "Ville",
+            "nameOnCard": "Nom exact que vous voulez voir apparaître sur la carte",
+            "currentActivity": "Emploi/ occupation actuelle",
+            "fieldOfActivity": "Domaine d'activité de l'employeur",
+            "errors": {
+                "residenceCountry_field_empty": "Le pays de résidence est neccessaire.",
+                "nationality_field_empty": "La nationalité est neccessaire.",
+                "placeOfBirth_field_empty": "Le lieu de naissance est necessaire.",
+                "city_field_empty": "La ville est neccessaire.",
+                "nameOnCard_field_empty": "Le nom exact à afficher sur la carte est neccessaire.",
+                "currentActivity_field_empty": "L'emploi/ occupation actuelle est neccessaire.",
+                "fieldOfActivity_field_empty": "Le domaine d'activité de l'employeur est neccessaire."
+            }
+        },
         "account": {
             "title": "Inscription",
             "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum incidunt laborum",
@@ -60,7 +99,11 @@
             "cin": "CIN",
             "photo_text": "Faire la photo de votre pièce d'identité",
             "errors": {
-                "choice": "Le choix d'un document est neccessaire."
+                "choice": "Le choix d'un document est neccessaire.",
+                "document_number_empty": "Le numéro de votre document est neccessaire",
+                "document_delivery_empty": "La date de delivrance de votre document est neccessaire.",
+                "document_autority_empty": "L'autorité de delivrance de votre document est neccessaire.",
+                "document_expiration_empty": "La date d'expiration de votre document est neccessaire."
             }
         },
         "identity": {

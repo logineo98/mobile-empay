@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import CheckBox from '@react-native-community/checkbox';
 import FontAwesome from "react-native-vector-icons/FontAwesome"
@@ -6,12 +6,11 @@ import { colors, roboto } from '../../../libs/typography/typography'
 import Wrapper from '../../../components/common/wrapper'
 import Container from '../../../components/common/container'
 import Spacer from '../../../components/common/spacer'
-import { allInputsFilled, images } from '../../../libs/constants/constants'
+import { images } from '../../../libs/constants/constants'
 import { useNavigation } from '@react-navigation/native'
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSpring } from 'react-native-reanimated';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, } from 'react-redux';
 import { userModel } from '../../../libs/services/user/user.model';
-import { RootState } from '../../../libs/services/store';
 import SignatureCapture from 'react-native-signature-capture'
 import Toast from 'react-native-toast-message';
 import { Image as CompressImg } from 'react-native-compressor';
@@ -33,8 +32,6 @@ const Signature = () => {
     const [ok, setOk] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
 
-
-    console.log(inputs)
 
 
     //alert for errors form this app
@@ -64,7 +61,7 @@ const Signature = () => {
 
 
     //result of traitement
-    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("secure"); setNext(false); } }, [next, store]);
+    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("emergency_contact"); setNext(false); } }, [next, store]);
 
 
     const resetSign = () => { signatureRef.current.resetImage(); setInputs({ ...inputs, signature: null }) };
@@ -86,6 +83,7 @@ const Signature = () => {
 
     return (
         <Wrapper image imageData={images.register_signature_bg_img}   >
+            <StatusBar backgroundColor={"#2E427D"} barStyle={"light-content"} />
             <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View />
