@@ -49,8 +49,6 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
         }
     }, [])
 
-    console.log('screen container 1: ', displayVisaCard)
-
     return (
         <View style={styles.screen_container_1}>
             <StatusBar backgroundColor={colors.screen_bg_color} />
@@ -58,7 +56,7 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
             <View style={styles.header_container}>
                 <TouchableOpacity activeOpacity={0.5} style={styles.profil_info_container} onPress={() => navigation.openDrawer()}>
                     <View style={styles.profil_img_container}>
-                        {host?.photo ? <Image source={{ uri: `${_end_point.api_img}/${host.photo}` }} style={styles.profil_img} /> :
+                        {host?.photo ? <Image source={{ uri: `${_end_point.api_img}/${host.photo}` }} style={[styles.profil_img, { transform: [{ rotate: '90deg' }] }]} /> :
                             <Image source={images.avatar} style={styles.profil_img} />
                         }
                     </View>

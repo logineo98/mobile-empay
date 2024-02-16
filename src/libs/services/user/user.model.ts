@@ -88,4 +88,5 @@ export type RECHARGE_TYPE = {
     customerId: string
     amount: number
     phone: string
+    transactionType: 'crediter' | 'debiter'
 }

@@ -46,7 +46,7 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
         } else {
             setErr(initialError)
 
-            dispatch(recharge({ customerId: host?.id as string, amount: parseInt(vitepayData.montant, 10), phone: vitepayData.phone }))
+            dispatch(recharge({ customerId: host?.id as string, amount: parseInt(vitepayData.montant, 10), phone: vitepayData.phone, transactionType: 'crediter' }))
         }
     }
 

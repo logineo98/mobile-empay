@@ -35,7 +35,9 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                 {displayVisaCard &&
                     <View style={styles.visa_img_global_container}>
                         <TouchableOpacity activeOpacity={0.5} style={styles.visa_img_container} onPress={() => setVerso(!verso)}>
-                            {!verso ? <Image source={images.visa_recto} style={[styles.visa_img, { objectFit: width < 400 ? 'cover' : 'contain', }]} /> : <Image source={images.visa_verso} style={[styles.visa_img, { objectFit: width < 400 ? 'cover' : 'contain', }]} />}
+                            {!verso ? <Image source={images.visa_recto} style={[styles.visa_img, { objectFit: width < 400 ? 'cover' : 'contain', }]} /> :
+                                <Image source={images.visa_verso} style={[styles.visa_img, { objectFit: width < 400 ? 'cover' : 'contain', }]} />
+                            }
                         </TouchableOpacity>
                     </View>
                 }
