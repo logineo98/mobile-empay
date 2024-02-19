@@ -1,7 +1,9 @@
-import { Image, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions, } from 'react-native'
-import React, { FC, useState } from 'react'
+import { Image, ImageBackground, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions, } from 'react-native'
+import React, { FC, useEffect, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 import { useSelector } from 'react-redux'
+import SmsAndroid from 'react-native-get-sms-android'
+import { PERMISSIONS, request } from 'react-native-permissions'
 // my importations
 import ScreenContainer1 from '../../components/common/drawer/container/screen_container1'
 import GradientText from '../../components/common/drawer/gradient/gradient_text'
@@ -25,18 +27,75 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
     const [verso, setVerso] = useState(false)
     const [displayVisaCard, setDisplayVisaCard] = useState(true)
     const [displayAmount, setDisplayAmount] = useState(false)
+    const [listSms, setListSms] = useState<any[]>([])
+    const targetContact = '75245731'
 
     const handleDisplayAmount = () => setDisplayAmount(prev => !prev)
+
+    /***POUR LES SMS****/
+    const requestPermissionAndFetchSMS = async () => {
+        try {
+            const permissionResult = await request(PERMISSIONS.ANDROID.READ_SMS)
+
+            if (permissionResult === 'granted') {
+                console.log('Permission accordée')
+                fetchSMS()
+            } else console.log('Permission refusée')
+        } catch (error) {
+            console.error('Erreur lors de la demande de permission:', error)
+        }
+    }
+
+    const fetchSMS = () => {
+        SmsAndroid.list(
+            JSON.stringify({
+                box: 'inbox', // 'inbox' pour les SMS reçus, 'sent' pour les SMS envoyés
+                // maxCount: 10, // Nombre maximal de SMS à récupérer
+            }),
+            (fail: any) => console.error('Erreur lors de la récupération des SMS :', fail),
+            (count: any, smsList: any) => {
+                // console.log('Liste des SMS récupérés :', smsList)
+                setListSms(JSON.parse(smsList).filter((sms: any) => sms.address.includes(targetContact)))
+            },
+        )
+    }
+    useEffect(() => {
+        requestPermissionAndFetchSMS()
+    }, [])
+
 
     return (
         <ScreenContainer1 displayVisaCard={displayVisaCard} setDisplayVisaCard={setDisplayVisaCard} navigation={navigation}>
             <View style={styles.home_container}>
                 {/* carte visa */}
                 {displayVisaCard &&
-                    <View style={styles.visa_img_global_container}>
+                    <View style={styles.visa_img_container_global}>
                         <TouchableOpacity activeOpacity={0.5} style={styles.visa_img_container} onPress={() => setVerso(!verso)}>
-                            {!verso ? <Image source={images.visa_recto} style={[styles.visa_img, { objectFit: width < 400 ? 'cover' : 'contain', }]} /> :
-                                <Image source={images.visa_verso} style={[styles.visa_img, { objectFit: width < 400 ? 'cover' : 'contain', }]} />
+                            {!verso ?
+                                <ImageBackground source={images.visa_recto} resizeMode={width <= 360 ? 'cover' : 'cover'} style={[styles.visa_img, {}]}>
+                                    {/* numero de la carte */}
+                                    <View style={styles.number_card_container}>
+                                        <Text numberOfLines={1} style={styles.number_card}>0000 1111 2222 3333</Text>
+                                    </View>
+                                    {/* expiration de la carte */}
+                                    <View style={styles.expiration_card_container}>
+                                        <View style={styles.expiration_card_text_container}>
+                                            <Text numberOfLines={1} style={styles.expiration_card_text}>EXPIRE</Text>
+                                            <Text numberOfLines={1} style={styles.expiration_card_text}>A FIN</Text>
+                                        </View>
+                                        <Text numberOfLines={1} style={styles.expiration_card_value}>10 / 2026</Text>
+                                    </View>
+                                    {/* nom de l'utilisateur sur la carte */}
+                                    <View style={styles.user_name_card_container}>
+                                        <Text numberOfLines={1} style={styles.user_name_card}>CHEICK OUMAR DIABATE</Text>
+                                    </View>
+                                </ImageBackground> :
+                                <ImageBackground source={images.visa_verso} resizeMode={width <= 360 ? 'cover' : 'contain'} style={[styles.visa_img, {}]}>
+                                    {/* cvc */}
+                                    <View style={styles.cvc_card_container}>
+                                        <Text numberOfLines={1} style={styles.cvc_card}>123</Text>
+                                    </View>
+                                </ImageBackground>
                             }
                         </TouchableOpacity>
                     </View>
@@ -98,9 +157,27 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
 const styles = StyleSheet.create({
     home_container: { paddingHorizontal: 20, },
 
-    visa_img_global_container: { alignItems: 'center', marginBottom: 15, },
-    visa_img_container: { height: 190, width: '100%', },
-    visa_img: { height: '100%', width: '100%', },
+    visa_img_container_global: { alignItems: 'center', marginBottom: 15, },
+    visa_img_container: { height: 190, width: 300, },
+    visa_img: { height: '100%', width: '100%', position: 'relative', },
+
+    // info carte recto
+    // numero de la carte
+    number_card_container: { width: '100%', alignItems: 'center', position: 'absolute', top: '51%', },
+    number_card: { color: colors.white, fontSize: 22, fontFamily: roboto.bold, textTransform: 'uppercase', },
+    // expiration de la carte
+    expiration_card_container: { width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', position: 'absolute', top: '68%', },
+    expiration_card_text_container: { marginRight: 5, alignItems: 'flex-end', },
+    expiration_card_text: { color: colors.white, fontSize: 8, fontFamily: roboto.regular, textTransform: 'uppercase', },
+    expiration_card_value: { color: colors.white, fontSize: 12, fontFamily: roboto.regular, textTransform: 'uppercase', },
+    // nom de l'utilisateur sur la carte
+    user_name_card_container: { width: 200, position: 'absolute', bottom: 13, left: 15, },
+    user_name_card: { color: colors.white, fontSize: 14, fontFamily: roboto.bold, textTransform: 'uppercase', },
+
+    // info carte verso
+    // cvc
+    cvc_card_container: { position: 'absolute', top: '41%', left: 188, },
+    cvc_card: { color: colors.blue, fontSize: 12, fontFamily: roboto.boldItalic, textTransform: 'uppercase', },
 
     solde_name_amount_container: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: colors.drawer_icon_color, borderRadius: 20, marginBottom: 15, },
     solde_name: { width: 120, fontSize: 16, textAlign: 'center', },
