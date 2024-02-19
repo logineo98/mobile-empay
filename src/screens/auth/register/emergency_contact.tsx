@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colors, roboto } from '../../../libs/typography/typography'
 import Container from '../../../components/common/container'
@@ -8,7 +8,7 @@ import { allInputsFilled, handleChangeMobile, images } from '../../../libs/const
 import { useNavigation } from '@react-navigation/native'
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSpring } from 'react-native-reanimated'
 import { useDispatch } from 'react-redux'
-import { userEmergencyContact, userModel } from '../../../libs/services/user/user.model'
+import { userModel } from '../../../libs/services/user/user.model'
 import Toast from 'react-native-toast-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { inscription_inputs_request } from '../../../libs/services/user/user.request'
@@ -21,7 +21,7 @@ const EmergencyContact = () => {
     const navigation = useNavigation<any>()
     const [error, setError] = useState("");
     const [next, setNext] = useState(false);
-    const initial: userEmergencyContact = { name: "", firstname: "", address: "", phone: "", email: "", relationship: "" }
+    const initial = { contactName: "", contactFirstname: "", contactAddress: "", contactPhone: "", contactEmail: "", contactRelationship: "" }
     const [inputs, setInputs] = useState(initial);
     const [store, setStore] = useState<userModel>();
 
@@ -46,7 +46,7 @@ const EmergencyContact = () => {
 
         if (inscription_inputs_request("emergency", inputs, setError)) return;
 
-        setStore({ ...store, emergencyContact: inputs })
+        setStore({ ...store, ...inputs })
         setNext(true)
     }
 
@@ -56,6 +56,7 @@ const EmergencyContact = () => {
 
     return (
         <Wrapper image imageData={images.register_bg_img}  >
+            <StatusBar backgroundColor={"#b41354"} barStyle={"light-content"} />
             <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center", }}>
                 <>
@@ -78,33 +79,33 @@ const EmergencyContact = () => {
                     <View style={styles.forms}>
 
                         <View style={styles.input_wrapper}>
-                            {inputs?.name && <SmallLabel text='Nom du contact' left={18} />}
-                            <TextInput value={inputs.name} onChangeText={(text) => handleChangeMobile("name", text, setInputs)} placeholder={"Nom du contact"} placeholderTextColor={colors.gray} style={styles.input} />
+                            {inputs?.contactName && <SmallLabel text='Nom du contact' left={18} />}
+                            <TextInput value={inputs.contactName} onChangeText={(text) => handleChangeMobile("contactName", text, setInputs)} placeholder={"Nom du contact"} placeholderTextColor={colors.gray} style={styles.input} />
                         </View>
 
                         <View style={styles.input_wrapper}>
-                            {inputs?.firstname && <SmallLabel text='Prénom du contact' left={18} />}
-                            <TextInput value={inputs.firstname} onChangeText={(text) => handleChangeMobile("firstname", text, setInputs)} placeholder={"Prénom du contact"} placeholderTextColor={colors.gray} style={styles.input} />
+                            {inputs?.contactFirstname && <SmallLabel text='Prénom du contact' left={18} />}
+                            <TextInput value={inputs.contactFirstname} onChangeText={(text) => handleChangeMobile("contactFirstname", text, setInputs)} placeholder={"Prénom du contact"} placeholderTextColor={colors.gray} style={styles.input} />
                         </View>
 
                         <View style={styles.input_wrapper}>
-                            {inputs?.address && <SmallLabel text="L'adresse du contact" left={18} />}
-                            <TextInput value={inputs.address} onChangeText={(text) => handleChangeMobile("address", text, setInputs)} placeholder={"L'adresse du contact"} placeholderTextColor={colors.gray} style={styles.input} />
+                            {inputs?.contactAddress && <SmallLabel text="L'adresse du contact" left={18} />}
+                            <TextInput value={inputs.contactAddress} onChangeText={(text) => handleChangeMobile("contactAddress", text, setInputs)} placeholder={"L'adresse du contact"} placeholderTextColor={colors.gray} style={styles.input} />
                         </View>
 
                         <View style={styles.input_wrapper}>
-                            {inputs?.phone && <SmallLabel text='Téléphone portable du contact' left={18} />}
-                            <TextInput value={inputs.phone} onChangeText={(text) => handleChangeMobile("phone", text, setInputs)} placeholder={"Téléphone portable du contact"} placeholderTextColor={colors.gray} style={styles.input} />
+                            {inputs?.contactPhone && <SmallLabel text='Téléphone portable du contact' left={18} />}
+                            <TextInput value={inputs.contactPhone} onChangeText={(text) => handleChangeMobile("contactPhone", text, setInputs)} placeholder={"Téléphone portable du contact"} placeholderTextColor={colors.gray} style={styles.input} />
                         </View>
 
                         <View style={styles.input_wrapper}>
-                            {inputs?.email && <SmallLabel text='Adresse email du contact' left={18} />}
-                            <TextInput value={inputs.email} onChangeText={(text) => handleChangeMobile("email", text, setInputs)} placeholder={"Adresse email du contact"} placeholderTextColor={colors.gray} style={styles.input} />
+                            {inputs?.contactEmail && <SmallLabel text='Adresse email du contact' left={18} />}
+                            <TextInput value={inputs.contactEmail} onChangeText={(text) => handleChangeMobile("contactEmail", text, setInputs)} placeholder={"Adresse email du contact"} placeholderTextColor={colors.gray} style={styles.input} />
                         </View>
 
                         <View style={styles.input_wrapper}>
-                            {inputs?.relationship && <SmallLabel text='Nature de la relation' left={18} />}
-                            <TextInput value={inputs.relationship} onChangeText={(text) => handleChangeMobile("relationship", text, setInputs)} placeholder={"Nature de la relation"} placeholderTextColor={colors.gray} style={styles.input} />
+                            {inputs?.contactRelationship && <SmallLabel text='Nature de la relation' left={18} />}
+                            <TextInput value={inputs.contactRelationship} onChangeText={(text) => handleChangeMobile("contactRelationship", text, setInputs)} placeholder={"Nature de la relation"} placeholderTextColor={colors.gray} style={styles.input} />
                         </View>
                     </View>
                     <Spacer />

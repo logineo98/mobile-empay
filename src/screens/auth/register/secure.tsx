@@ -31,7 +31,7 @@ const Secure = () => {
     const [next, setNext] = useState(false);
     const initial: userModel = { password: "", confirm: "" }
     const [inputs, setInputs] = useState(initial);
-    const initialStore: userModel = { account: "", password: "", confirm: "", address: "", birthday: "", city: "", currentActivity: "", document: null, documentInfos: { documentDeliveryDate: "", documentExpirationDate: "", documentLicensingAuthority: "", documentNumber: "" }, email: "", fieldOfActivity: "", firstname: "", emergencyContact: { address: "", email: "", firstname: "", name: "", phone: "", relationship: "" }, name: "", profil: null, phone: "", nationality: "", photo: "", placeOfBirth: "", residenceCountry: "", nameOnCard: "", signature: null, notificationToken: "", }
+    const initialStore: userModel = { account: "", password: "", confirm: "", address: "", birthday: "", city: "", currentActivity: "", document: null, documentDeliveryDate: "", documentExpirationDate: "", documentLicensingAuthority: "", documentNumber: "", email: "", fieldOfActivity: "", firstname: "", contactAddress: "", contactEmail: "", contactFirstname: "", contactName: "", contactPhone: "", contactRelationship: "", name: "", profil: null, phone: "", nationality: "", placeOfBirth: "", residenceCountry: "", nameOnCard: "", signature: null, notificationToken: "", accountUBA: "", }
     const [store, setStore] = useState<userModel>(initialStore);
 
 
@@ -58,10 +58,12 @@ const Secure = () => {
 
     useEffect(() => { if (user_log_tmp) { navigation.navigate("finalisation"); dispatch({ type: "reset_user_log_tmp" }); } }, [user_log_tmp, dispatch]);
 
+
     //traitement of register
     const handle_validate = async () => {
         try {
             const validation: userModel = { password: inputs?.password, confirm: inputs?.confirm }
+
             if (inscription_inputs_request("finalisation", validation, setError)) return;
 
             store.password = inputs.password;
@@ -71,27 +73,43 @@ const Secure = () => {
             const notificationToken = `${deviceID}|${token}`;
 
             const blob = new FormData()
-            blob.append("account", store.account)
-            blob.append("address", store.address)
-            blob.append("birthday", store.birthday)
-            blob.append("city", store.city)
-            blob.append("currentActivity", store.currentActivity)
-            blob.append("document", store.document)
-            blob.append("documentInfos", JSON.stringify(store.documentInfos))
-            blob.append("email", store.email)
-            blob.append("emergencyContact", JSON.stringify(store.emergencyContact))
-            blob.append("fieldOfActivity", store.fieldOfActivity)
-            blob.append("firstname", store.firstname)
-            blob.append("name", store.name)
-            blob.append("nameOnCard", store.nameOnCard)
-            blob.append("nationality", store.nationality)
-            blob.append("password", store.password)
+
             blob.append("phone", store.phone)
+            blob.append("name", store.name)
+            blob.append("firstname", store.firstname)
+            blob.append("birthday", store.birthday)
+            blob.append("email", store.email)
+            blob.append("password", store.password)
+            blob.append("nationality", store.nationality)
             blob.append("placeOfBirth", store.placeOfBirth)
+            blob.append("currentActivity", store.currentActivity)
+            blob.append("fieldOfActivity", store.fieldOfActivity)
             blob.append("photo", store.profil)
-            blob.append("residenceCountry", store.residenceCountry)
             blob.append("signature", store.signature)
             blob.append("notificationToken", notificationToken)
+
+            blob.append("document", store.document)
+            blob.append("documentNumber", store.documentNumber)
+            blob.append("documentDeliveryDate", store.documentDeliveryDate)
+            blob.append("documentExpirationDate", store.documentExpirationDate)
+            blob.append("documentLicensingAuthority", store.documentLicensingAuthority)
+
+            blob.append("contactName", store.contactName)
+            blob.append("contactFirstname", store.contactFirstname)
+            blob.append("contactAddress", store.contactAddress)
+            blob.append("contactPhone", store.contactPhone)
+            blob.append("contactEmail", store.contactEmail)
+            blob.append("contactRelationship", store.contactRelationship)
+
+            blob.append("accountUBA", store.account)
+
+            blob.append("nameOnCard", store.nameOnCard)
+
+            blob.append("residenceCountry", store.residenceCountry)
+            blob.append("address", store.address)
+            blob.append("city", store.city)
+
+
 
             dispatch(inscription_service(blob, notificationToken))
         } catch (error) {

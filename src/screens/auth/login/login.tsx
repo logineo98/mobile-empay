@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colors, roboto } from '../../../libs/typography/typography'
 import Wrapper from '../../../components/common/wrapper'
@@ -66,6 +66,7 @@ const Login = () => {
     return (
         <Wrapper image imageData={images.connexion_bg_img}   >
             <ToastContainer />
+            <StatusBar backgroundColor={"#2E427D"} barStyle={"light-content"} />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View style={{ width: "100%", alignItems: "center" }}>
                     <Spacer />
@@ -94,7 +95,7 @@ const Login = () => {
 
                     </View>
                     <Spacer height={10} />
-                    <TouchableOpacity onPress={() => navigation.navigate("infos")} activeOpacity={0.8} style={styles.registerBtn}><Text style={{ color: colors.white, fontFamily: roboto.regular, fontSize: 15 }}>S'inscrire</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate("infos")} activeOpacity={0.8} style={styles.registerBtn}><Text style={{ padding: 7, color: colors.white, fontFamily: roboto.regular, fontSize: 15 }}>S'inscrire</Text></TouchableOpacity>
                     <Spacer height={25} />
                     <TouchableOpacity onPress={() => navigation.navigate("forgot")} activeOpacity={0.8} style={{ alignItems: "center" }}><Text style={{ textAlign: "center", color: colors.ika_wari_taa_bg_color, textDecorationLine: "underline" }}>Mot de passe oublié ?</Text></TouchableOpacity>
                     <Spacer />

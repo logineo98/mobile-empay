@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { colors, roboto } from '../../../libs/typography/typography'
 import Modal from "react-native-modal";
 import Spacer from '../../../components/common/spacer'
-import { allInputsFilled, images } from '../../../libs/constants/constants'
+import { allInputsFilled, handleChangeMobile, images } from '../../../libs/constants/constants'
 import Container from '../../../components/common/container'
 import Wrapper from '../../../components/common/wrapper'
 import { useNavigation } from '@react-navigation/native'
@@ -33,7 +33,7 @@ const Document = () => {
     const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
     const [expireDate, setExpireDate] = useState<Date | null>(null);
     const [typeModal, setTypeModal] = useState<"document" | "delivery" | "expire">("document");
-    const initial: userModel = { document: "", documentInfos: { documentDeliveryDate: "", documentExpirationDate: "", documentLicensingAuthority: "", documentNumber: "" } }
+    const initial: userModel = { document: "", documentDeliveryDate: "", documentExpirationDate: "", documentLicensingAuthority: "", documentNumber: "" }
     const [inputs, setInputs] = useState(initial);
     const [visible, setVisible] = useState(false);
     const [img, setImg] = useState<any>();
@@ -106,16 +106,9 @@ const Document = () => {
     //traitement of login
     const handle_validate = () => {
 
-        inputs.documentInfos = {
-            ...inputs?.documentInfos,
-            documentDeliveryDate: deliveryDate ? `${deliveryDate}` : "",
-            documentExpirationDate: expireDate ? `${expireDate}` : "",
-        }
-
-        const validate: any = { document: inputs.document, documentInfos: inputs?.documentInfos }
-
-
-        if (inscription_inputs_request("document", validate, setError)) return;
+        inputs.documentDeliveryDate = deliveryDate ? `${deliveryDate}` : ""
+        inputs.documentExpirationDate = expireDate ? `${expireDate}` : ""
+        if (inscription_inputs_request("document", inputs, setError)) return;
         setStore({ ...store, ...inputs })
 
         setNext(true)
@@ -159,8 +152,8 @@ const Document = () => {
                         <Text style={{ textAlign: "left", ...styles.title }}>Informations sur le document</Text>
 
                         <View style={styles.input_wrapper}>
-                            {inputs?.documentInfos?.documentNumber && <SmallLabel text='N° du document d’identité' left={18} />}
-                            <TextInput value={inputs?.documentInfos?.documentNumber} onChangeText={(text) => setInputs(old => { return { ...old, documentInfos: { ...inputs.documentInfos, documentNumber: text } } })} placeholder={"N° du document d’identité"} placeholderTextColor={colors.gray} style={styles.input} />
+                            {inputs?.documentNumber && <SmallLabel text='N° du document d’identité' left={18} />}
+                            <TextInput value={inputs?.documentNumber} onChangeText={(text) => handleChangeMobile("documentNumber", text, setInputs)} placeholder={"N° du document d’identité"} placeholderTextColor={colors.gray} style={styles.input} />
                         </View>
 
 
@@ -172,8 +165,8 @@ const Document = () => {
                         </TouchableWithoutFeedback>
 
                         <View style={styles.input_wrapper}>
-                            {inputs?.documentInfos?.documentLicensingAuthority && <SmallLabel text='Autorité de délivrance' left={18} />}
-                            <TextInput value={inputs?.documentInfos?.documentLicensingAuthority} onChangeText={(text) => setInputs(old => { return { ...old, documentInfos: { ...inputs.documentInfos, documentLicensingAuthority: text } } })} placeholder={"Autorité de délivrance"} placeholderTextColor={colors.gray} style={styles.input} />
+                            {inputs?.documentLicensingAuthority && <SmallLabel text='Autorité de délivrance' left={18} />}
+                            <TextInput value={inputs?.documentLicensingAuthority} onChangeText={(text) => handleChangeMobile("documentLicensingAuthority", text, setInputs)} placeholder={"Autorité de délivrance"} placeholderTextColor={colors.gray} style={styles.input} />
                         </View>
 
 

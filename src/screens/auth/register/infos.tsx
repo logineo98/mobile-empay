@@ -47,6 +47,27 @@ const Infos = () => {
     //display modal
     const toggleModal = () => setModalVisible(!modalVisible)
 
+    //----- hydrate forms from asyncstorage
+    useEffect(() => {
+        AsyncStorage.getItem("inputs").then((response) => {
+            if (response !== null) {
+                const item = JSON.parse(response)
+
+                setInputs({
+                    phone: item?.phone,
+                    name: item?.name,
+                    firstname: item?.firstname,
+                    birthday: item?.birthday,
+                    address: item?.address,
+                    email: item?.email,
+                    account: item?.account,
+                })
+                setBirthday(new Date(item?.birthday))
+                if (item.account) setHaveAccount(true)
+            }
+        })
+    }, []);
+
 
     //traitement of login
     const handle_register_info = () => {

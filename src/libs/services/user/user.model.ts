@@ -11,54 +11,118 @@ export type STATUS_TYPE = {
     disable?: boolean
 }
 
-export type userModel = {
-    id?: string
-    phone?: string
-    name?: string
-    firstname?: string
-    address?: string
-    code?: string
-    email?: string
-    account?: string
-    profil?: any
-    document?: any
-    photo?: any
-    password?: string
-    confirm?: string
-    birthday?: string
-    signature?: any
-    totalAmount?: number
-    AmountToExchange?: number
-    coordinates?: COORDINATE_TYPE
-    isChecked?: boolean
-    notificationToken?: string
-    // age?: Date
+// export type userModel = {
+//     id?: string
+//     phone?: string
+//     name?: string
+//     firstname?: string
+//     address?: string
+//     code?: string
+//     email?: string
+//     account?: string
+//     profil?: any
+//     document?: any
+//     photo?: any
+//     password?: string
+//     confirm?: string
+//     birthday?: string
+//     signature?: any
+//     totalAmount?: number
+//     AmountToExchange?: number
+//     coordinates?: COORDINATE_TYPE
+//     isChecked?: boolean
+//     notificationToken?: string
+//     // age?: Date
 
-    residenceCountry?: string  //added
+//     residenceCountry?: string  //added
+//     nationality?: string //added
+//     placeOfBirth?: string //added
+//     city?: string //added
+//     nameOnCard?: string //added
+//     currentActivity?: string //added
+//     fieldOfActivity?: string //added
+
+//     documentInfos?: {
+//         documentNumber?: string //added
+//         documentDeliveryDate?: string //added
+//         documentExpirationDate?: string //added
+//         documentLicensingAuthority?: string //added
+//     }
+
+//     emergencyContact?: userEmergencyContact
+// }
+
+// export type userEmergencyContact = {
+//     name?: string; //added
+//     firstname?: string; //added
+//     address?: string; //added
+//     phone?: string; //added
+//     email?: string; //added
+//     relationship?: string; //added
+// }
+
+export type userModel = {
+    id?: string;
+    phone?: string;
+    name?: string;
+    firstname?: string;
+    birthday?: string;
+    email?: string;
+    password?: string;
     nationality?: string //added
     placeOfBirth?: string //added
-    city?: string //added
-    nameOnCard?: string //added
     currentActivity?: string //added
     fieldOfActivity?: string //added
+    profil?: any
+    signature?: any;
 
-    documentInfos?: {
-        documentNumber?: string //added
-        documentDeliveryDate?: string //added
-        documentExpirationDate?: string //added
-        documentLicensingAuthority?: string //added
-    }
+    notificationTokens?: string[];
+    refreshCode?: string;
+    status?: boolean;
 
-    emergencyContact?: userEmergencyContact
-}
+    //DOCUMENT INFORMATIONS
+    document?: any;
+    documentNumber?: string
+    documentDeliveryDate?: string
+    documentExpirationDate?: string
+    documentLicensingAuthority?: string
 
-export type userEmergencyContact = {
-    name?: string; //added
-    firstname?: string; //added
-    address?: string; //added
-    phone?: string; //added
-    email?: string; //added
-    relationship?: string; //added
+    //EMERGENCY CONTACT
+    contactName?: string;
+    contactFirstname?: string;
+    contactAddress?: string;
+    contactPhone?: string;
+    contactEmail?: string;
+    contactRelationship?: string;
+
+    //UBA INFORMATIONS
+    accountUBA?: string;
+    totalAmount?: number;     //to remove later because it is switched by cardAmount
+    AmountToExchange?: number;
+    montant?: string
+
+    //CREDIT CARD INFORMATIONS
+    nameOnCard?: string
+    cardNumber?: string
+    cardExpirationDate?: string
+    cardCVC?: string
+    cardAmount?: number
+    lostCard?: boolean;
+
+    //ADDRESS INFORMATIONS
+    residenceCountry?: string
+    city?: string
+    address?: string;
+    coordinates?: { lat?: string, lng?: string },
+
+    createdAt?: Date;
+    updatedAt?: Date;
+
+    notificationToken?: string, //not in database
+    code?: string //not in database
+    account?: string //not in database
+    confirm?: string //not in database
+    isChecked?: boolean //not in database
 }
 
 export type userStore = {
