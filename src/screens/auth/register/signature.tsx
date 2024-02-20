@@ -43,30 +43,36 @@ const Signature = () => {
     //setup signature
     useEffect(() => {
         if (sign === "") setInputs({ ...inputs, signature: "" })
-
-        const comp = async () => {
-            try {
-                const img = await CompressImg.compress(`file:///${sign}`, { output: "png", compressionMethod: "auto", quality: 0.5, })
-                setInputs({ ...inputs, signature: { uri: img, type: 'image/png', name: 'signature.png' } })
-            } catch (error: any) {
-                console.log("Erreur lors de la signature")
-            }
-        }
-        comp()
+        compressingFn()
     }, [sign, ok]);
-
-
-    //retrieve prev datas from localstorage
-    useEffect(() => { AsyncStorage.getItem("inputs").then((res: any) => { const _inpt = JSON.parse(res); setStore({ ..._inpt }) }) }, []);
 
 
     //result of traitement
     useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("emergency_contact"); setNext(false); } }, [next, store]);
 
+    //----- hydrate forms
+    useEffect(() => {
+        AsyncStorage.getItem("inputs").then((response) => {
+            if (response !== null) {
+                const item = JSON.parse(response)
+                setStore({ ...item })
+            }
+        })
+    }, []);
+
 
     const resetSign = () => { signatureRef.current.resetImage(); setInputs({ ...inputs, signature: null }) };
     const _onSaveEvent = (result: any) => { setSign(result?.pathName); setOk(!ok) };
     const _onDragEvent = () => { signatureRef.current.saveImage() };
+
+    const compressingFn = async () => {
+        try {
+            const img = await CompressImg.compress(`file:///${sign}`, { output: "png", compressionMethod: "auto", quality: 0.5, })
+            setInputs({ ...inputs, signature: { uri: img, type: 'image/png', name: 'signature.png' } })
+        } catch (error: any) {
+            console.log("Erreur lors de la signature")
+        }
+    }
 
     //traitement of login
     const handle_validate = () => {

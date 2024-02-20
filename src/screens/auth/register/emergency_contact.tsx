@@ -33,12 +33,28 @@ const EmergencyContact = () => {
     //animate login button
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
 
-    //retrieve prev datas from localstorage
-    useEffect(() => { AsyncStorage.getItem("inputs").then((res: any) => { const _inpt = JSON.parse(res); setStore({ ..._inpt }) }) }, []);
-
     //result of traitement
     useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("secure"); setNext(false); } }, [next, store]);
 
+    //----- hydrate forms
+    useEffect(() => {
+        AsyncStorage.getItem("inputs").then((response) => {
+            if (response !== null) {
+                const item = JSON.parse(response)
+                setStore({ ...item })
+
+                setInputs({
+                    contactName: item?.contactName,
+                    contactFirstname: item?.contactFirstname,
+                    contactAddress: item?.contactAddress,
+                    contactPhone: item?.contactPhone,
+                    contactEmail: item?.contactEmail,
+                    contactRelationship: item?.contactRelationship
+                })
+
+            }
+        })
+    }, []);
 
 
     //traitement of login

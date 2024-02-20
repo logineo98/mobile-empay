@@ -30,6 +30,7 @@ const Secure = () => {
     const [error, setError] = useState("");
     const [next, setNext] = useState(false);
     const initial: userModel = { password: "", confirm: "" }
+    const [parrainCode, setParrainCode] = useState("");
     const [inputs, setInputs] = useState(initial);
     const initialStore: userModel = { account: "", password: "", confirm: "", address: "", birthday: "", city: "", currentActivity: "", document: null, documentDeliveryDate: "", documentExpirationDate: "", documentLicensingAuthority: "", documentNumber: "", email: "", fieldOfActivity: "", firstname: "", contactAddress: "", contactEmail: "", contactFirstname: "", contactName: "", contactPhone: "", contactRelationship: "", name: "", profil: null, phone: "", nationality: "", placeOfBirth: "", residenceCountry: "", nameOnCard: "", signature: null, notificationToken: "", accountUBA: "", }
     const [store, setStore] = useState<userModel>(initialStore);
@@ -50,14 +51,19 @@ const Secure = () => {
     //animate login button
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
 
-    //retrieve prev datas from localstorage
-    useEffect(() => { AsyncStorage.getItem("inputs").then((res: any) => { const _inpt = JSON.parse(res); setStore({ ..._inpt }) }) }, []);
+    useEffect(() => { if (user_log_tmp) { navigation.navigate("finalisation"); dispatch({ type: "reset_user_log_tmp" }); AsyncStorage.removeItem("inputs") } }, [user_log_tmp, dispatch]);
 
-    //result of traitement
-    useEffect(() => { if (next) { navigation.navigate("finalisation"); setNext(false) } }, []);
+    //----- hydrate forms
+    useEffect(() => {
+        AsyncStorage.getItem("inputs").then((response) => {
+            if (response !== null) {
+                const item = JSON.parse(response)
+                setStore({ ...item })
 
-    useEffect(() => { if (user_log_tmp) { navigation.navigate("finalisation"); dispatch({ type: "reset_user_log_tmp" }); } }, [user_log_tmp, dispatch]);
-
+                setParrainCode(item?.parrainCode)
+            }
+        })
+    }, []);
 
     //traitement of register
     const handle_validate = async () => {
@@ -67,6 +73,7 @@ const Secure = () => {
             if (inscription_inputs_request("finalisation", validation, setError)) return;
 
             store.password = inputs.password;
+            store.parrainCode = parrainCode?.toString();
             const token = await messaging().getToken();
 
             const deviceID = await getUniqueId();
@@ -87,6 +94,7 @@ const Secure = () => {
             blob.append("photo", store.profil)
             blob.append("signature", store.signature)
             blob.append("notificationToken", notificationToken)
+            blob.append("parrainCode", store.parrainCode)
 
             blob.append("document", store.document)
             blob.append("documentNumber", store.documentNumber)
@@ -108,8 +116,6 @@ const Secure = () => {
             blob.append("residenceCountry", store.residenceCountry)
             blob.append("address", store.address)
             blob.append("city", store.city)
-
-
 
             dispatch(inscription_service(blob, notificationToken))
         } catch (error) {
@@ -138,6 +144,10 @@ const Secure = () => {
                     <Spacer />
 
                     <View style={styles.forms}>
+                        <View style={styles.input_wrapper}>
+                            {inputs?.password && <SmallLabel text='Code parrain (optionel)' left={18} />}
+                            <TextInput value={parrainCode} onChangeText={text => setParrainCode(text)} placeholder={"Code parrain (optionel)"} keyboardType="number-pad" placeholderTextColor={colors.gray} style={styles.input} />
+                        </View>
                         <View style={styles.input_wrapper}>
                             {inputs?.password && <SmallLabel text='MoTDePasse10234' left={18} />}
                             <TextInput value={inputs.password} onChangeText={text => handleChangeMobile("password", text, setInputs)} placeholder={"MoTDePasse10234"} placeholderTextColor={colors.gray} style={styles.input} />

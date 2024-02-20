@@ -80,6 +80,11 @@ export type userModel = {
     refreshCode?: string;
     status?: boolean;
 
+    //PARRAINAGE
+    parrainCode?: string;
+    parrain?: string;
+    sponsored?: string[];
+
     //DOCUMENT INFORMATIONS
     document?: any;
     documentNumber?: string
@@ -100,6 +105,8 @@ export type userModel = {
     totalAmount?: number;     //to remove later because it is switched by cardAmount
     AmountToExchange?: number;
     montant?: string
+    account?: string
+
 
     //CREDIT CARD INFORMATIONS
     nameOnCard?: string
@@ -120,7 +127,6 @@ export type userModel = {
 
     notificationToken?: string, //not in database
     code?: string //not in database
-    account?: string //not in database
     confirm?: string //not in database
     isChecked?: boolean //not in database
 }

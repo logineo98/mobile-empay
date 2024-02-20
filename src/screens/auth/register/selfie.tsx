@@ -45,12 +45,18 @@ const Selfie = () => {
     //animate login button
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
 
-    //retrieve prev datas from localstorage
-    useEffect(() => { AsyncStorage.getItem("inputs").then((res: any) => { const _inpt = JSON.parse(res); setStore({ ..._inpt }) }) }, []);
-
     //result of traitement
     useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("signature"); setNext(false); } }, [next, store]);
 
+    //----- hydrate forms
+    useEffect(() => {
+        AsyncStorage.getItem("inputs").then((response) => {
+            if (response !== null) {
+                const item = JSON.parse(response)
+                setStore({ ...item })
+            }
+        })
+    }, []);
 
     const takePhoto = async () => {
 

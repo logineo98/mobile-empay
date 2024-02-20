@@ -52,6 +52,7 @@ const Infos = () => {
         AsyncStorage.getItem("inputs").then((response) => {
             if (response !== null) {
                 const item = JSON.parse(response)
+                setStore({ ...item })
 
                 setInputs({
                     phone: item?.phone,
@@ -75,7 +76,7 @@ const Infos = () => {
         inputs.birthday = birthday ? `${birthday}` : ""
         if (inscription_inputs_request("infos", inputs, setError)) return;
 
-        setStore(inputs)
+        setStore({ ...store, ...inputs })
         setNext(true)
     }
 
