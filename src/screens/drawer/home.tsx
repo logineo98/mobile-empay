@@ -15,10 +15,10 @@ import { RootState } from '../../libs/services/store'
 // my icons
 import Feather from 'react-native-vector-icons/Feather'
 
-type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
+type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, screenName: string }
 
 const Home: FC<COMPONENT_TYPE> = (props) => {
-    const { navigation } = props
+    const { navigation, screenName } = props
 
     const { height, width } = useWindowDimensions()
 
@@ -29,6 +29,8 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
     const [displayAmount, setDisplayAmount] = useState(false)
     const [listSms, setListSms] = useState<any[]>([])
     const targetContact = '75245731'
+
+    console.log('displayVisaCard', displayVisaCard)
 
     const handleDisplayAmount = () => setDisplayAmount(prev => !prev)
 
@@ -55,7 +57,8 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
             (fail: any) => console.error('Erreur lors de la récupération des SMS :', fail),
             (count: any, smsList: any) => {
                 // console.log('Liste des SMS récupérés :', smsList)
-                setListSms(JSON.parse(smsList).filter((sms: any) => sms.address.includes(targetContact)))
+                setListSms(JSON.parse(smsList))
+                // setListSms(JSON.parse(smsList).filter((sms: any) => sms.address.includes(targetContact)))
             },
         )
     }
@@ -63,6 +66,15 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
         requestPermissionAndFetchSMS()
     }, [])
 
+    const lostCard = false
+    useEffect(() => {
+        if (screenName === undefined || screenName === 'home') {
+            if (lostCard) setDisplayVisaCard(false)
+            else setDisplayVisaCard(true)
+        }
+    }, [screenName])
+
+    // console.log('home ', host)
 
     return (
         <ScreenContainer1 displayVisaCard={displayVisaCard} setDisplayVisaCard={setDisplayVisaCard} navigation={navigation}>

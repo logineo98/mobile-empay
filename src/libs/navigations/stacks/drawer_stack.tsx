@@ -37,7 +37,7 @@ const DrawerStack: FC<COMPONENT_TYPE> = ({ route }) => {
         <drawer.Navigator initialRouteName='home' screenOptions={{ headerShown: false, swipeEnabled: false, drawerStyle: styles.drawer_style }}
             drawerContent={({ navigation }) => <CustomDrawerContent navigation={navigation} />}
         >
-            <drawer.Screen name='home' component={Home} />
+            <drawer.Screen name='home' children={({ navigation }) => <Home navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='a_propos' component={APropos} />
             <drawer.Screen name='geolocalisation' children={({ navigation }) => <Geolocalisation navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='historique' component={Historique} />

@@ -52,7 +52,7 @@ const ModalServiceClient: FC<COMPONENT_TYPE> = (props) => {
                         <Text style={styles.service_number_phone}>20 29 21 09</Text>
                     </TouchableOpacity>
 
-                    {/* fermer service client modal */}
+                    {/* fermer modal */}
                     <View style={styles.fermer_service_client_modal_container}>
                         <TouchableOpacity activeOpacity={0.5} style={styles.fermer_service_client_modal} onPress={() => setVisibleServiceClientModal(false)}>
                             <Text style={styles.fermer_service_client_modal_text}>Fermer</Text>

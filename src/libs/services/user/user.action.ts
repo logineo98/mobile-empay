@@ -5,7 +5,7 @@ import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript
 // my importations
 import { RECHARGE_TYPE, scanModel, STATUS_TYPE, userModel } from './user.model'
 import { _end_point, get_credentials } from '../endpoints'
-import { get_all_users, get_all_users_without_loading, get_qr_code, receive_recharge_notification_canceled, receive_recharge_notification_success, receive_scan_notification, recharge_compte, reset_qr_code, scan_qr_code, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
+import { card_losted, get_all_users, get_all_users_without_loading, get_qr_code, receive_recharge_notification_canceled, receive_recharge_notification_success, receive_scan_notification, recharge_compte, reset_qr_code, scan_qr_code, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
 import { Expired, debug } from '../../constants/utils'
 import { connexion_request, forgot_request, reset_request, verify_request } from './user.request'
 
@@ -336,6 +336,32 @@ export const verifyRechargeStatus = () => async (dispatch: any) => {
         dispatch({ type: recharge_compte, payload: recharge_status || '' })
     } catch (error: any) {
         debug('RECHARGE COMPTE', error?.response?.data || error.message)
+        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        dispatch(user_error(error?.response?.data || error.message))
+    }
+}
+
+export const _cardLosted = (
+    id: string, data: { lostCard: true },
+    setVisibleAskModal: (value: React.SetStateAction<boolean>) => void,
+    setDisplayVisaCard: (value: React.SetStateAction<boolean>) => void
+) => async (dispatch: any) => {
+    try {
+        dispatch({ type: user_loading })
+
+        let token = await get_credentials('accessToken')
+        let expiresIn = await get_credentials('expiresIn')
+
+        const response = await axios.post(`${_end_point.customer.update}/${id}`, data, { headers: { Authorization: `Bearer ${token}` } })
+
+        await AsyncStorage.setItem('credentials', JSON.stringify({ usr: response.data?.usr, accessToken: token, expiresIn }))
+
+        setVisibleAskModal(false)
+        setDisplayVisaCard(false)
+
+        dispatch({ type: card_losted, payload: response.data })
+    } catch (error: any) {
+        debug('CARD LOSTED  ', error?.response?.data || error.message)
         Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
         dispatch(user_error(error?.response?.data || error.message))
     }

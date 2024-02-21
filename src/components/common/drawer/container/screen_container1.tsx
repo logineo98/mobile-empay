@@ -1,4 +1,4 @@
-import { Image, Keyboard, ScrollView, StatusBar, StyleSheet, Switch, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Image, Keyboard, ScrollView, StatusBar, StyleSheet, Switch, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
@@ -9,6 +9,7 @@ import CustomLinearGradient from '../gradient/custom_linear_gradient'
 import { RootState } from '../../../../libs/services/store'
 import ModalServiceClient from '../modal/modal_service_client'
 import { _end_point } from '../../../../libs/services/endpoints'
+import ModalAsk from '../modal/modal_ask'
 // my icons
 
 
@@ -29,9 +30,20 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
     const [show, setShow] = useState(false)
     const [isKeyboardActive, setIsKeyboardActive] = useState(false)
     const [visibleServiceClientModal, setVisibleServiceClientModal] = useState(false)
+    const [visibleAskModal, setVisibleAskModal] = useState(false)
 
+    const lostCard = false
     const handleDisplayVisaCard = () => {
-        setDisplayVisaCard(!displayVisaCard)
+        if (lostCard) {
+            setDisplayVisaCard(false)
+            ToastAndroid.showWithGravity(`Vous avez signaler la perte de la carte veuillez contactez les administrateurs de l'application.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+        } else {
+            if (!displayVisaCard) setDisplayVisaCard(true)
+            else setVisibleAskModal(true)
+        }
+        // console.log(displayVisaCard)
+        // setDisplayVisaCard(!displayVisaCard)
+        // setVisibleAskModal(true)
     }
 
     useEffect(() => {
@@ -56,7 +68,8 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
             <View style={styles.header_container}>
                 <TouchableOpacity activeOpacity={0.5} style={styles.profil_info_container} onPress={() => navigation.openDrawer()}>
                     <View style={styles.profil_img_container}>
-                        {host?.photo ? <Image source={{ uri: `${_end_point.api_img}/${host.photo}` }} style={[styles.profil_img, { transform: [{ rotate: '90deg' }] }]} /> :
+                        {host?.photo ?
+                            <Image source={{ uri: `${_end_point.api_img}/${host.photo}` }} style={[styles.profil_img, { transform: [{ rotate: '90deg' }] }]} /> :
                             <Image source={images.avatar} style={styles.profil_img} />
                         }
                     </View>
@@ -98,6 +111,9 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
 
             {/* modal service client */}
             <ModalServiceClient visibleServiceClientModal={visibleServiceClientModal} setVisibleServiceClientModal={setVisibleServiceClientModal} />
+
+            {/* modal service client */}
+            <ModalAsk visibleAskModal={visibleAskModal} setVisibleAskModal={setVisibleAskModal} setDisplayVisaCard={setDisplayVisaCard} />
         </View>
     )
 }
