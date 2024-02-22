@@ -141,6 +141,7 @@ export type userStore = {
     user_tmp?: boolean
     user_log_tmp?: boolean
     user_info?: string | null
+    user_forgot_info?: string | null
     user_data?: any
     qr_code?: string
     scan_response?: string

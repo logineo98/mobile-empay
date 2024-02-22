@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colors, roboto } from '../../../libs/typography/typography'
 import Container from '../../../components/common/container'
@@ -25,50 +25,65 @@ const InfosSupp = () => {
     const [inputs, setInputs] = useState(initial);
     const [store, setStore] = useState<userModel>();
 
-    //alert for errors form this app
+    //----- display errors
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
 
-    //animate login button
+    //----- animation
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
 
-    //result of traitement
-    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("document"); setNext(false); } }, [next, store]);
+    //----- go next screen if alright
+    useEffect(() => { setLocalStorage() }, [next]);
 
-    //----- hydrate forms
-    useEffect(() => {
-        AsyncStorage.getItem("inputs").then((response) => {
-            if (response !== null) {
-                const item = JSON.parse(response)
-                setStore({ ...item })
+    //----- get local storage data and hydrate form
+    useEffect(() => { getLocalStorage() }, []);
 
-                setInputs({
-                    residenceCountry: item?.residenceCountry,
-                    city: item?.city,
-                    nationality: item?.nationality,
-                    placeOfBirth: item?.placeOfBirth,
-                    nameOnCard: item?.nameOnCard,
-                    currentActivity: item?.currentActivity,
-                    fieldOfActivity: item?.fieldOfActivity,
-                })
-            }
-        })
-    }, []);
+    //----- set local storage data and go next
+    async function setLocalStorage() {
+        if (next) {
+            const response = await getLocalStorage()
 
-    //traitement of login
+            const save = { ...response, ...inputs }
+            AsyncStorage.setItem("inputs", JSON.stringify(save));
+            navigation.navigate("document");
+            setNext(false);
+        }
+    }
+
+    //----- get local storage data
+    async function getLocalStorage() {
+        const response = await AsyncStorage.getItem("inputs");
+        if (response !== null) {
+            const item = JSON.parse(response)
+
+            setInputs({
+                residenceCountry: item?.residenceCountry,
+                city: item?.city,
+                nationality: item?.nationality,
+                placeOfBirth: item?.placeOfBirth,
+                nameOnCard: item?.nameOnCard,
+                currentActivity: item?.currentActivity,
+                fieldOfActivity: item?.fieldOfActivity,
+            })
+        }
+
+        return JSON.parse(response as string)
+    }
+
+    //----- infos supplementaire traitement
     const handle_register_info = () => {
-
         if (inscription_inputs_request("infos2", inputs, setError)) return;
 
-        setStore({ ...store, ...inputs })
         setNext(true)
     }
+
 
 
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });
 
 
     return (
-        <Wrapper image imageData={images.register_bg_img}  >
+        <Wrapper image imageData={images.register_secure_bg_img}  >
+            <StatusBar backgroundColor={"#2E427DF9"} barStyle={"light-content"} />
             <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center", }}>
                 <>

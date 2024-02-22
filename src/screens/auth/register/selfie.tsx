@@ -24,40 +24,36 @@ const Selfie = () => {
     const [inputs, setInputs] = useState<userModel>({ profil: "" });
     const [error, setError] = useState("");
     const [next, setNext] = useState(false);
-    const [store, setStore] = useState<userModel>();
     const [granted, setGranted] = useState(false)
     const device = useCameraDevice("front");
     const isFocused = useIsFocused()
 
     const [imageSource, setImageSource] = useState('');
 
-    //get camera permission
-    useEffect(() => {
-        if (device) device.sensorOrientation = "portrait-upside-down";
-        (async () => {
-            const cameraPermission = await Camera.requestCameraPermission(); setGranted(cameraPermission === 'granted');
-        })()
-    }, [device]);
+    //----- get camera permission useeffect
+    useEffect(() => { getCameraPermission() }, [device]);
 
-    //alert for errors form this app
+    //----- display errors
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error]);
 
-    //animate login button
+    //----- animation
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
 
-    //result of traitement
-    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("signature"); setNext(false); } }, [next, store]);
+    //----- go next screen if alright
+    useEffect(() => { setLocalStorage() }, [next]);
 
-    //----- hydrate forms
-    useEffect(() => {
-        AsyncStorage.getItem("inputs").then((response) => {
-            if (response !== null) {
-                const item = JSON.parse(response)
-                setStore({ ...item })
-            }
-        })
-    }, []);
+    //----- get local storage data and hydrate form
+    useEffect(() => { getLocalStorage() }, []);
 
+
+    //----- get camera permission
+    async function getCameraPermission() {
+        if (device) device.sensorOrientation = "portrait-upside-down";
+        const cameraPermission = await Camera.requestCameraPermission();
+        setGranted(cameraPermission === 'granted');
+    }
+
+    //----- take a photo
     const takePhoto = async () => {
 
         if (cameraRef.current !== null) {
@@ -72,6 +68,7 @@ const Selfie = () => {
         }
     }
 
+    //----- remove photo
     const removePhoto = async () => {
         try {
             const path = imageSource;
@@ -87,14 +84,29 @@ const Selfie = () => {
         }
     }
 
-
-    //traitement of login
-    const handle_validate = () => {
-        if (inscription_inputs_request("selfie", inputs, setError)) return;
-        setStore({ ...store, profil: inputs?.profil })
-        setNext(true)
+    //----- set local storage data and go next
+    async function setLocalStorage() {
+        if (next) {
+            const response = await getLocalStorage()
+            const save = { ...response, ...inputs }
+            AsyncStorage.setItem("inputs", JSON.stringify(save));
+            navigation.navigate("signature");
+            setNext(false);
+        }
     }
 
+    //----- get local storage data
+    async function getLocalStorage() {
+        const response = await AsyncStorage.getItem("inputs");
+        return JSON.parse(response as string)
+    }
+
+    //----- selfie traitement
+    const handle_validate = () => {
+        if (inscription_inputs_request("selfie", inputs, setError)) return;
+        //  setStore({ ...store, profil: inputs?.profil })
+        setNext(true)
+    }
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });
 
     if (!device) return <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}><ActivityIndicator size={20} color={colors.fond1} /></View>;

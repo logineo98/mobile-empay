@@ -65,8 +65,8 @@ const Login = () => {
 
     return (
         <Wrapper image imageData={images.connexion_bg_img}   >
-            <ToastContainer />
             <StatusBar backgroundColor={"#2E427D"} barStyle={"light-content"} />
+            <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View style={{ width: "100%", alignItems: "center" }}>
                     <Spacer />

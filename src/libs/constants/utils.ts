@@ -88,4 +88,4 @@ export async function requestUserPermission(subject?: any) {
 
 }
 
-export const formatCardNumber = (inputString: string) => inputString.replace(/(\d{4})(?=\d)/g, '$1 ')
+export const formatCardNumber = (inputString: string) => inputString?.replace(/(\d{4})(?=\d)/g, '$1 ')

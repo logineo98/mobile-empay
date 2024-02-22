@@ -26,62 +26,69 @@ const Signature = () => {
     const [next, setNext] = useState(false);
     const initial: userModel = { signature: null }
     const [inputs, setInputs] = useState(initial);
-    const [store, setStore] = useState<userModel>();
     const signatureRef = useRef<any>();
     const [sign, setSign] = useState<any>('');
     const [ok, setOk] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
 
 
-
-    //alert for errors form this app
+    //----- display errors
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
 
-    //animate login button
+    //----- animation
     useEffect(() => { if (inputs?.signature !== null && isChecked) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [inputs?.signature, isChecked]);
 
-    //setup signature
-    useEffect(() => {
-        if (sign === "") setInputs({ ...inputs, signature: "" })
-        compressingFn()
-    }, [sign, ok]);
+    //----- signature set up
+    useEffect(() => { compressingFn() }, [sign, ok]);
 
+    //----- go next screen if alright
+    useEffect(() => { setLocalStorage() }, [next]);
 
-    //result of traitement
-    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("emergency_contact"); setNext(false); } }, [next, store]);
-
-    //----- hydrate forms
-    useEffect(() => {
-        AsyncStorage.getItem("inputs").then((response) => {
-            if (response !== null) {
-                const item = JSON.parse(response)
-                setStore({ ...item })
-            }
-        })
-    }, []);
+    //----- get local storage data and hydrate form
+    useEffect(() => { getLocalStorage() }, []);
 
 
     const resetSign = () => { signatureRef.current.resetImage(); setInputs({ ...inputs, signature: null }) };
     const _onSaveEvent = (result: any) => { setSign(result?.pathName); setOk(!ok) };
     const _onDragEvent = () => { signatureRef.current.saveImage() };
 
-    const compressingFn = async () => {
+    //----- compress an signature image
+    async function compressingFn() {
+        if (sign === "") setInputs({ ...inputs, signature: "" })
         try {
             const img = await CompressImg.compress(`file:///${sign}`, { output: "png", compressionMethod: "auto", quality: 0.5, })
             setInputs({ ...inputs, signature: { uri: img, type: 'image/png', name: 'signature.png' } })
         } catch (error: any) {
-            console.log("Erreur lors de la signature")
+            console.log("")
         }
     }
 
-    //traitement of login
+    //----- set local storage data and go next
+    async function setLocalStorage() {
+        if (next) {
+            const response = await getLocalStorage()
+            const save = { ...response, ...inputs }
+            AsyncStorage.setItem("inputs", JSON.stringify(save));
+            navigation.navigate("emergency_contact");
+            setNext(false);
+        }
+    }
+
+    //----- get local storage data
+    async function getLocalStorage() {
+        const response = await AsyncStorage.getItem("inputs");
+        return JSON.parse(response as string)
+    }
+
+    //----- signature traitement
     const handle_validate = () => {
         const validation: userModel = { signature: inputs?.signature, isChecked: isChecked }
         if (inscription_inputs_request("signature", validation, setError)) return;
-        setStore({ ...store, signature: inputs?.signature })
+        //  setStore({ ...store, signature: inputs?.signature })
 
         setNext(true)
     }
+
 
 
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });

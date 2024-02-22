@@ -23,48 +23,57 @@ const EmergencyContact = () => {
     const [next, setNext] = useState(false);
     const initial = { contactName: "", contactFirstname: "", contactAddress: "", contactPhone: "", contactEmail: "", contactRelationship: "" }
     const [inputs, setInputs] = useState(initial);
-    const [store, setStore] = useState<userModel>();
 
 
-
-    //alert for errors form this app
+    //----- display errors
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
 
-    //animate login button
+    //----- animation
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
 
-    //result of traitement
-    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("secure"); setNext(false); } }, [next, store]);
+    //----- go next screen if alright
+    useEffect(() => { setLocalStorage() }, [next]);
 
-    //----- hydrate forms
-    useEffect(() => {
-        AsyncStorage.getItem("inputs").then((response) => {
-            if (response !== null) {
-                const item = JSON.parse(response)
-                setStore({ ...item })
-
-                setInputs({
-                    contactName: item?.contactName,
-                    contactFirstname: item?.contactFirstname,
-                    contactAddress: item?.contactAddress,
-                    contactPhone: item?.contactPhone,
-                    contactEmail: item?.contactEmail,
-                    contactRelationship: item?.contactRelationship
-                })
-
-            }
-        })
-    }, []);
+    //----- get local storage data and hydrate form
+    useEffect(() => { getLocalStorage() }, []);
 
 
-    //traitement of login
+    //----- set local storage data and go next
+    async function setLocalStorage() {
+        if (next) {
+            const response = await getLocalStorage()
+            const save = { ...response, ...inputs }
+            AsyncStorage.setItem("inputs", JSON.stringify(save));
+            navigation.navigate("secure");
+            setNext(false);
+        }
+    }
+
+    //----- get local storage data
+    async function getLocalStorage() {
+        const response = await AsyncStorage.getItem("inputs");
+        if (response !== null) {
+            const item = JSON.parse(response)
+
+            setInputs({
+                contactName: item?.contactName,
+                contactFirstname: item?.contactFirstname,
+                contactAddress: item?.contactAddress,
+                contactPhone: item?.contactPhone,
+                contactEmail: item?.contactEmail,
+                contactRelationship: item?.contactRelationship
+            })
+        }
+        return JSON.parse(response as string)
+    }
+
+    //----- emergency contact traitement
     const handle_register_info = () => {
-
         if (inscription_inputs_request("emergency", inputs, setError)) return;
 
-        setStore({ ...store, ...inputs })
         setNext(true)
     }
+
 
 
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });

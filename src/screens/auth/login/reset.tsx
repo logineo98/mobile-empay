@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Wrapper from '../../../components/common/wrapper'
 import ToastContainer from '../../../components/common/toast'
@@ -65,43 +65,46 @@ const Reset = () => {
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });
 
     return (
-        <Wrapper image imageData={images.register_document_bg_img}  >
-            <ToastContainer />
-            <Container scoll position={"between"} style={{ alignItems: "center" }}>
-                <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
-                    <Spacer />
-                    <Spacer />
-                    <View><Image source={images.logo_white} style={styles.logo} /></View>
+        <>
+            <StatusBar backgroundColor={"#2E427D"} />
+            <Wrapper image imageData={images.register_document_bg_img}  >
+                <ToastContainer />
+                <Container scoll position={"between"} style={{ alignItems: "center" }}>
+                    <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
+                        <Spacer />
+                        <Spacer />
+                        <View><Image source={images.logo_white} style={styles.logo} /></View>
 
-                    <Spacer />
+                        <Spacer />
 
-                    <View style={styles.descriptionbox}>
-                        <Text style={styles.title}>Réinitialiser mot de passe:</Text>
-                        <Text style={styles.description}>Gerer vos finances avec la neocarte EM</Text>
-                    </View>
-
-                    <Spacer />
-
-                    <View style={styles.forms}>
-                        <View style={styles.input_wrapper}>
-                            {inputs?.password && <SmallLabel text='Password' left={18} />}
-                            <TextInput value={inputs.password} onChangeText={text => handleChangeMobile("password", text, setInputs)} placeholder={"MoTDePasse10234"} placeholderTextColor={colors.gray} style={styles.input} />
+                        <View style={styles.descriptionbox}>
+                            <Text style={styles.title}>Réinitialiser mot de passe:</Text>
+                            <Text style={styles.description}>Gerer vos finances avec la neocarte EM</Text>
                         </View>
 
-                        <View style={styles.input_wrapper}>
-                            {inputs?.confirm && <SmallLabel text='Confirm' left={18} />}
-                            <TextInput value={inputs.confirm} onChangeText={text => handleChangeMobile("confirm", text, setInputs)} placeholder={"****************"} placeholderTextColor={colors.gray} style={styles.input} />
+                        <Spacer />
+
+                        <View style={styles.forms}>
+                            <View style={styles.input_wrapper}>
+                                {inputs?.password && <SmallLabel text='Password' left={18} />}
+                                <TextInput value={inputs.password} onChangeText={text => handleChangeMobile("password", text, setInputs)} placeholder={"MoTDePasse10234"} placeholderTextColor={colors.gray} style={styles.input} />
+                            </View>
+
+                            <View style={styles.input_wrapper}>
+                                {inputs?.confirm && <SmallLabel text='Confirm' left={18} />}
+                                <TextInput value={inputs.confirm} onChangeText={text => handleChangeMobile("confirm", text, setInputs)} placeholder={"****************"} placeholderTextColor={colors.gray} style={styles.input} />
+                            </View>
                         </View>
+                        <Spacer />
                     </View>
-                    <Spacer />
-                </View>
-                <Animated.View style={[animatedStyle, { alignSelf: "flex-end" }]}>
-                    <TouchableOpacity onPress={handle_reset} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
-                </Animated.View>
-                {/* <TouchableOpacity onPress={handle_validate} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity> */}
-            </Container>
-            {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Réinitialisation du mot de passe en cours.."} />}
-        </Wrapper>
+                    <Animated.View style={[animatedStyle, { alignSelf: "flex-end" }]}>
+                        <TouchableOpacity onPress={handle_reset} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
+                    </Animated.View>
+                    {/* <TouchableOpacity onPress={handle_validate} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity> */}
+                </Container>
+                {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Réinitialisation du mot de passe en cours.."} />}
+            </Wrapper>
+        </>
     )
 }
 

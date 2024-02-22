@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colors, roboto } from '../../../libs/typography/typography'
 import Wrapper from '../../../components/common/wrapper'
@@ -23,11 +23,11 @@ const Forgot = () => {
     const [click, setClick] = useState(false);
     const [inputs, setInputs] = useState({ phone: "" });
 
-    const { user_log_tmp, user_info, user_data, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
+    const { user_log_tmp, user_data, user_loading, user_forgot_info, user_errors } = useSelector((state: RootState) => state?.user)
 
 
     //alert for info
-    useEffect(() => { if (user_info && user_info !== null) { Toast.show({ type: 'info', text1: 'Informations', text2: user_info, }); dispatch({ type: 'reset_user_info' }) }; }, [user_info, dispatch]);
+    useEffect(() => { if (user_forgot_info && user_forgot_info !== null) { Toast.show({ type: 'info', text1: 'Informations', text2: user_forgot_info, }); dispatch({ type: 'reset_user_forgot_info' }) }; }, [user_forgot_info, dispatch]);
 
     //alert for errors form this app
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
@@ -40,7 +40,7 @@ const Forgot = () => {
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
 
     //result of traitement
-    useEffect(() => { if (user_log_tmp && user_data && !user_info) { navigation.navigate("verify", { data: user_data }); dispatch({ type: "reset_user_log_tmp" }); dispatch({ type: "reset_user_data" }); setClick(false) } }, [user_log_tmp, user_data, dispatch]);
+    useEffect(() => { if (user_log_tmp && user_data && !user_forgot_info && click) { navigation.navigate("verify", { data: user_data }); dispatch({ type: "reset_user_log_tmp" }); dispatch({ type: "reset_user_data" }); setClick(false) } }, [user_log_tmp, user_data, dispatch, click]);
 
 
     //traitement of forgot
@@ -54,38 +54,41 @@ const Forgot = () => {
 
 
     return (
-        <Wrapper image imageData={images.register_secure_bg_img}   >
-            <ToastContainer />
-            <Container scoll position={"between"} style={{ alignItems: "center" }}>
-                <View style={{ width: "100%", alignItems: "center" }}>
-                    <Spacer />
-                    <View><Image source={images.logo_white} style={styles.logo} /></View>
+        <>
+            <StatusBar backgroundColor={"#2E427D"} />
+            <Wrapper image imageData={images.register_secure_bg_img}   >
+                <ToastContainer />
+                <Container scoll position={"between"} style={{ alignItems: "center" }}>
+                    <View style={{ width: "100%", alignItems: "center" }}>
+                        <Spacer />
+                        <View><Image source={images.logo_white} style={styles.logo} /></View>
 
-                    <Spacer />
+                        <Spacer />
 
-                    <View style={styles.descriptionbox}>
-                        <Text style={styles.title}>Mot de passe oublié</Text>
-                        <Text style={styles.description}>Gerer vos finances avec la neocarte EM</Text>
-                    </View>
-
-
-                    <Spacer />
-
-                    <View style={styles.forms}>
-                        <View style={styles.input_wrapper}>
-                            {inputs?.phone && <SmallLabel text='Phone' left={18} />}
-                            <TextInput value={inputs?.phone} onChangeText={text => handleChangeMobile("phone", text, setInputs)} keyboardType="phone-pad" placeholder='Numéro de téléphone' placeholderTextColor={colors.gray} style={styles.input} />
+                        <View style={styles.descriptionbox}>
+                            <Text style={styles.title}>Mot de passe oublié</Text>
+                            <Text style={styles.description}>Gerer vos finances avec la neocarte EM</Text>
                         </View>
+
+
+                        <Spacer />
+
+                        <View style={styles.forms}>
+                            <View style={styles.input_wrapper}>
+                                {inputs?.phone && <SmallLabel text='Phone' left={18} />}
+                                <TextInput value={inputs?.phone} onChangeText={text => handleChangeMobile("phone", text, setInputs)} keyboardType="phone-pad" placeholder='Numéro de téléphone' placeholderTextColor={colors.gray} style={styles.input} />
+                            </View>
+                        </View>
+                        <Spacer height={10} />
+                        <Spacer />
                     </View>
-                    <Spacer height={10} />
-                    <Spacer />
-                </View>
-                <Animated.View style={[animatedStyle, { alignSelf: "flex-end" }]}>
-                    <TouchableOpacity onPress={handle_forgot} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
-                </Animated.View>
-            </Container>
-            {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Verification du numéro de téléphone en cours"} />}
-        </Wrapper>
+                    <Animated.View style={[animatedStyle, { alignSelf: "flex-end" }]}>
+                        <TouchableOpacity onPress={handle_forgot} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
+                    </Animated.View>
+                </Container>
+                {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Verification du numéro de téléphone en cours"} />}
+            </Wrapper>
+        </>
     )
 }
 

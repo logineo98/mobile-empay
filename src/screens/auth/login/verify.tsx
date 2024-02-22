@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colors, roboto } from '../../../libs/typography/typography'
 import Wrapper from '../../../components/common/wrapper'
@@ -11,7 +11,7 @@ import { RootState } from '../../../libs/services/store'
 import Toast from 'react-native-toast-message'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import ToastContainer from '../../../components/common/toast'
-import { forgot_password, forgot_verify, resent_code } from '../../../libs/services/user/user.action'
+import { forgot_verify, resent_code } from '../../../libs/services/user/user.action'
 import SecondaryLoading from '../../../components/common/secondary_loading'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import SmallLabel from '../../../components/common/small_label'
@@ -28,7 +28,7 @@ const Verify = () => {
     const [inputs, setInputs] = useState({ code: "" });
     const [debugCode, setDebugCode] = useState("");
 
-    const { user_log_tmp, user_info, user_data, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
+    const { user_log_tmp, user_forgot_info, user_data, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
 
     //setup debug code
     useEffect(() => {
@@ -42,7 +42,7 @@ const Verify = () => {
 
 
     //alert for info
-    useEffect(() => { if (user_info && user_info !== null) { Toast.show({ type: 'info', text1: 'Informations', text2: user_info, }); dispatch({ type: 'reset_user_info' }) }; }, [user_info, dispatch]);
+    useEffect(() => { if (user_forgot_info && user_forgot_info !== null) { Toast.show({ type: 'info', text1: 'Informations', text2: user_forgot_info, }); dispatch({ type: 'reset_user_forgot_info' }) }; }, [user_forgot_info, dispatch]);
 
     //alert for errors form this app
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
@@ -79,44 +79,47 @@ const Verify = () => {
 
 
     return (
-        <Wrapper image imageData={images.register_finalisation_bg_img}   >
-            <ToastContainer />
-            <Container scoll position={"between"} style={{ alignItems: "center" }}>
-                <View style={{ width: "100%", alignItems: "center" }}>
-                    <Spacer />
-                    <View><Image source={images.logo_white} style={styles.logo} /></View>
+        <>
+            <StatusBar backgroundColor={"#ccc"} />
+            <Wrapper image imageData={images.register_finalisation_bg_img}   >
+                <ToastContainer />
+                <Container scoll position={"between"} style={{ alignItems: "center" }}>
+                    <View style={{ width: "100%", alignItems: "center" }}>
+                        <Spacer />
+                        <View><Image source={images.logo_white} style={styles.logo} /></View>
 
-                    <Spacer />
+                        <Spacer />
 
-                    <View style={styles.descriptionbox}>
-                        <Text style={styles.title}>Code de vérification</Text>
-                        <Text style={styles.description}>Gerer vos finances avec la neocarte EM</Text>
-                    </View>
-
-                    <Spacer />
-
-                    <View style={styles.forms}>
-                        <View style={styles.input_wrapper}>
-                            {inputs?.code && <SmallLabel text='Code' left={18} />}
-                            <TextInput value={inputs?.code} onChangeText={text => handleChangeMobile("code", text, setInputs)} keyboardType="phone-pad" placeholder='Numéro de téléphone' placeholderTextColor={colors.gray} style={styles.input} />
+                        <View style={styles.descriptionbox}>
+                            <Text style={styles.title}>Code de vérification</Text>
+                            <Text style={styles.description}>Gerer vos finances avec la neocarte EM</Text>
                         </View>
 
-                        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
-                            <Text style={{ color: colors.white }}>Vous n'avez pas encore reçu de code? </Text>
-                            <TouchableOpacity onPress={handleRetry} activeOpacity={0.8}><Text style={{ color: colors.ika_wari_taa_bg_color }}>réessayer</Text></TouchableOpacity>
-                        </View>
+                        <Spacer />
 
-                        {debugCode && <View style={{ flexDirection: "row", alignItems: "center" }}><Text style={{ color: colors.white }}>Debug code</Text><Text style={{ color: colors.ika_wari_taa_bg_color }}>{debugCode}</Text></View>}
+                        <View style={styles.forms}>
+                            <View style={styles.input_wrapper}>
+                                {inputs?.code && <SmallLabel text='Code' left={18} />}
+                                <TextInput value={inputs?.code} onChangeText={text => handleChangeMobile("code", text, setInputs)} keyboardType="phone-pad" placeholder='Numéro de téléphone' placeholderTextColor={colors.gray} style={styles.input} />
+                            </View>
+
+                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
+                                <Text style={{ color: colors.white }}>Vous n'avez pas encore reçu de code? </Text>
+                                <TouchableOpacity onPress={handleRetry} activeOpacity={0.8}><Text style={{ color: colors.ika_wari_taa_bg_color }}>réessayer</Text></TouchableOpacity>
+                            </View>
+
+                            {debugCode && <View style={{ flexDirection: "row", alignItems: "center" }}><Text style={{ color: colors.white }}>Debug code</Text><Text style={{ color: colors.ika_wari_taa_bg_color }}>{debugCode}</Text></View>}
+                        </View>
+                        <Spacer height={10} />
+                        <Spacer />
                     </View>
-                    <Spacer height={10} />
-                    <Spacer />
-                </View>
-                <Animated.View style={[animatedStyle, { alignSelf: "flex-end" }]}>
-                    <TouchableOpacity onPress={handle_verify} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
-                </Animated.View>
-            </Container>
-            {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Verification du code de recuperation en cours.."} />}
-        </Wrapper>
+                    <Animated.View style={[animatedStyle, { alignSelf: "flex-end" }]}>
+                        <TouchableOpacity onPress={handle_verify} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
+                    </Animated.View>
+                </Container>
+                {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Verification du code de recuperation en cours.."} />}
+            </Wrapper>
+        </>
     )
 }
 

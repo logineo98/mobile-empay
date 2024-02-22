@@ -29,7 +29,7 @@ const Document = () => {
     const { height } = useWindowDimensions()
     const [error, setError] = useState("");
     const [next, setNext] = useState(false);
-    const [selectDate, setSelectDate] = useState(false);
+    const [switchDates, setSwitchDates] = useState(false);
     const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
     const [expireDate, setExpireDate] = useState<Date | null>(null);
     const [typeModal, setTypeModal] = useState<"document" | "delivery" | "expire">("document");
@@ -37,42 +37,36 @@ const Document = () => {
     const [inputs, setInputs] = useState(initial);
     const [visible, setVisible] = useState(false);
     const [img, setImg] = useState<any>();
-    const [store, setStore] = useState<userModel>();
 
-    //alert for errors form this app
+    //----- display errors
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
 
-    //animate login button
+    //----- animation
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
 
-    //result of traitement
-    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("selfie"); setNext(false); } }, [next, store]);
 
-
-    //----- hydrate forms
+    //----- set switch dates
     useEffect(() => {
-        AsyncStorage.getItem("inputs").then((response) => {
-            if (response !== null) {
-                const item = JSON.parse(response)
-                setStore({ ...item })
+        if (deliveryDate) setInputs((old) => { return { ...old, documentDeliveryDate: `${deliveryDate}`, } })
+        if (expireDate) setInputs((old) => { return { ...old, documentExpirationDate: `${expireDate}` } })
+    }, [deliveryDate, expireDate]);
 
-                setInputs({
-                    documentDeliveryDate: item?.documentDeliveryDate,
-                    documentExpirationDate: item?.documentExpirationDate,
-                    documentLicensingAuthority: item?.documentLicensingAuthority,
-                    documentNumber: item?.documentNumber
-                })
+    console.log(inputs)
 
-                if (item?.documentDeliveryDate) setDeliveryDate(new Date(item?.documentDeliveryDate))
-                if (item?.documentExpirationDate) setExpireDate(new Date(item?.documentExpirationDate))
-            }
-        })
-    }, []);
+    useEffect(() => {
 
+    }, [switchDates]);
 
+    //----- go next screen if alright
+    useEffect(() => { setLocalStorage() }, [next]);
+
+    //----- get local storage data and hydrate form
+    useEffect(() => { getLocalStorage() }, []);
+
+    //----- toggle modal
     const openModal = (type: "document" | "delivery" | "expire") => { setVisible(!visible); setTypeModal(type) }
 
-
+    //----- select an image
     const selectImage = () => {
         PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE).then((granted) => {
@@ -97,6 +91,7 @@ const Document = () => {
         setVisible(false)
     };
 
+    //----- take a photo
     const takePhoto = async () => {
         try {
             const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
@@ -119,19 +114,48 @@ const Document = () => {
         setVisible(false)
     };
 
+    console.log(inputs)
 
+    //----- set local storage data and go next
+    async function setLocalStorage() {
+        if (next) {
+            const response = await getLocalStorage()
+            const save = { ...response, ...inputs }
+            AsyncStorage.setItem("inputs", JSON.stringify(save));
+            navigation.navigate("selfie");
+            setNext(false);
+        }
+    }
 
-    //traitement of login
+    //----- get local storage data
+    async function getLocalStorage() {
+        const response = await AsyncStorage.getItem("inputs");
+        if (response !== null) {
+            const item = JSON.parse(response)
+
+            setInputs({
+                documentDeliveryDate: item?.documentDeliveryDate,
+                documentExpirationDate: item?.documentExpirationDate,
+                documentLicensingAuthority: item?.documentLicensingAuthority,
+                documentNumber: item?.documentNumber
+            })
+
+            if (item?.documentDeliveryDate) setDeliveryDate(new Date(item?.documentDeliveryDate))
+            if (item?.documentExpirationDate) setExpireDate(new Date(item?.documentExpirationDate))
+        }
+        return JSON.parse(response as string)
+    }
+
+    //----- document traitement
     const handle_validate = () => {
 
         inputs.documentDeliveryDate = deliveryDate ? `${deliveryDate}` : ""
         inputs.documentExpirationDate = expireDate ? `${expireDate}` : ""
         if (inscription_inputs_request("document", inputs, setError)) return;
-        setStore({ ...store, ...inputs })
+        // setStore({ ...store, ...inputs })
 
         setNext(true)
     }
-
 
 
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });
@@ -222,7 +246,7 @@ const Document = () => {
                         <View style={styles.date_modal}>
                             <DatePicker
                                 date={deliveryDate as Date}
-                                onDateChange={(_date) => { setDeliveryDate(_date); setSelectDate(true) }}
+                                onDateChange={(_date) => { setDeliveryDate(_date); }}
                                 mode="date"
                                 style={{ backgroundColor: "white" }}
                                 textColor={colors.black}
@@ -239,7 +263,7 @@ const Document = () => {
                         <View style={styles.date_modal}>
                             <DatePicker
                                 date={expireDate as Date}
-                                onDateChange={(_date) => { setExpireDate(_date); setSelectDate(true) }}
+                                onDateChange={(_date) => { setExpireDate(_date); }}
                                 mode="date"
                                 style={{ backgroundColor: "white" }}
                                 textColor={colors.black}

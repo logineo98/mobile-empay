@@ -16,7 +16,7 @@ const userReducer = (state = initial, action: IAction): userStore => {
         case user_logout_success: return initial;
 
         case user_verify_success:
-        case user_forgot_success: return { ...state, user_errors: false, user_loading: false, user_data: action.payload, user_info: action.payload.info, user_log_tmp: true }
+        case user_forgot_success: return { ...state, user_errors: false, user_loading: false, user_data: action.payload, user_forgot_info: action.payload.info, user_log_tmp: true }
 
         case user_resent_success: return { ...state, user_errors: false, user_loading: false, user_data: action.payload, user_info: action.payload.info }
 
@@ -58,6 +58,7 @@ const userReducer = (state = initial, action: IAction): userStore => {
         case 'reset_user_tmp': return { ...state, user_tmp: false }
         case 'reset_user_log_tmp': return { ...state, user_log_tmp: false }
         case 'reset_user_info': return { ...state, user_info: null }
+        case 'reset_user_forgot_info': return { ...state, user_forgot_info: null }
         case 'reset_user_data': return { ...state, user_data: null }
         case 'reset_user_errors': return { ...state, user_errors: null }
 

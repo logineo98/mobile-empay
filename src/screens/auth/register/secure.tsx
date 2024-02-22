@@ -28,7 +28,6 @@ const Secure = () => {
     const navigation = useNavigation<any>()
 
     const [error, setError] = useState("");
-    const [next, setNext] = useState(false);
     const initial: userModel = { password: "", confirm: "" }
     const [parrainCode, setParrainCode] = useState("");
     const [inputs, setInputs] = useState(initial);
@@ -39,33 +38,48 @@ const Secure = () => {
     const { user_info, user_log_tmp, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
 
 
-    //alert for info
+    //----- display infos
     useEffect(() => { if (user_info && user_info !== null) { Toast.show({ type: 'info', text1: 'Informations', text2: user_info, }); dispatch({ type: 'reset_user_info' }) }; }, [user_info, dispatch]);
 
-    //alert for errors form this app
+    //----- display errors
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
 
-    //alert for errors from api
+    //----- animation
     useEffect(() => { if (user_errors && user_errors !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: user_errors, }); dispatch({ type: 'reset_user_errors' }) }; }, [user_errors, dispatch]);
 
     //animate login button
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
 
-    useEffect(() => { if (user_log_tmp) { navigation.navigate("finalisation"); dispatch({ type: "reset_user_log_tmp" }); AsyncStorage.removeItem("inputs") } }, [user_log_tmp, dispatch]);
 
-    //----- hydrate forms
-    useEffect(() => {
-        AsyncStorage.getItem("inputs").then((response) => {
-            if (response !== null) {
-                const item = JSON.parse(response)
-                setStore({ ...item })
+    //----- go next screen if alright
+    useEffect(() => { if (user_log_tmp) setLocalStorage() }, [user_log_tmp, dispatch]);
 
-                setParrainCode(item?.parrainCode)
-            }
-        })
-    }, []);
+    //----- get local storage data and hydrate form
+    useEffect(() => { getLocalStorage() }, []);
 
-    //traitement of register
+
+    //----- set local storage data and go next
+    function setLocalStorage() {
+        navigation.navigate("finalisation");
+        dispatch({ type: "reset_user_log_tmp" });
+        AsyncStorage.removeItem("inputs")
+    }
+
+
+    //----- get local storage data
+    async function getLocalStorage() {
+        const response = await AsyncStorage.getItem("inputs");
+        if (response !== null) {
+            const item = JSON.parse(response)
+            setStore({ ...item })
+
+            setParrainCode(item?.parrainCode)
+        }
+        return JSON.parse(response as string)
+    }
+
+
+    //----- registration api call
     const handle_validate = async () => {
         try {
             const validation: userModel = { password: inputs?.password, confirm: inputs?.confirm }
@@ -116,6 +130,8 @@ const Secure = () => {
             blob.append("residenceCountry", store.residenceCountry)
             blob.append("address", store.address)
             blob.append("city", store.city)
+
+            console.log(store)
 
             dispatch(inscription_service(blob, notificationToken))
         } catch (error) {

@@ -1,4 +1,4 @@
-import { Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { Image, Modal, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colors, roboto } from '../../../libs/typography/typography'
 import Container from '../../../components/common/container'
@@ -22,61 +22,78 @@ const Infos = () => {
     const dispatch = useDispatch<any>()
     const navigation = useNavigation<any>()
     const [modalVisible, setModalVisible] = useState(false)
-    const [selectDate, setSelectDate] = useState(false);
     const [error, setError] = useState("");
     const [haveAccount, setHaveAccount] = useState(false);
     const [birthday, setBirthday] = useState<Date | null>(null);
+    const [switchBirthDay, setSwitchBirthDay] = useState(false);
     const [next, setNext] = useState(false);
     const initial: userModel = { phone: "", name: "", firstname: "", birthday: "", address: "", email: "" }
     const [inputs, setInputs] = useState(initial);
-    const [store, setStore] = useState<userModel>();
+    const [accountUBA, setAccountUBA] = useState("");
 
 
 
-    //alert for errors form this app
+
+    //----- display errors
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
 
-    //animate login button
+    //----- animation
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
+    console.log(inputs)
 
-    //result of traitement
-    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("infosSupp"); setNext(false); } }, [next, store]);
+    //----- set current birthday date
+    useEffect(() => { setInputs((old) => { return { ...old, birthday: `${birthday}` } }) }, [switchBirthDay]);
 
-    useEffect(() => { if (selectDate) setInputs(old => { return { ...old, birthday: `${birthday}` } }) }, [selectDate, birthday]);
+    //----- go next screen if alright
+    useEffect(() => { setLocalStorage() }, [next]);
 
-    //display modal
+    //----- get local storage data and hydrate form
+    useEffect(() => { getLocalStorage() }, []);
+
+    //----- handle toggle modal
     const toggleModal = () => setModalVisible(!modalVisible)
 
-    //----- hydrate forms from asyncstorage
-    useEffect(() => {
-        AsyncStorage.getItem("inputs").then((response) => {
-            if (response !== null) {
-                const item = JSON.parse(response)
-                setStore({ ...item })
+    //----- set local storage data
+    async function setLocalStorage() {
+        if (next) {
+            const response = await getLocalStorage()
+            const save = { ...response, ...inputs }
+            AsyncStorage.setItem("inputs", JSON.stringify(save));
+            navigation.navigate("infosSupp");
+            setNext(false);
+        }
+    }
 
-                setInputs({
-                    phone: item?.phone,
-                    name: item?.name,
-                    firstname: item?.firstname,
-                    birthday: item?.birthday,
-                    address: item?.address,
-                    email: item?.email,
-                    account: item?.account,
-                })
-                setBirthday(new Date(item?.birthday))
-                if (item.account) setHaveAccount(true)
-            }
-        })
-    }, []);
+    //   AsyncStorage.removeItem("inputs");
 
 
-    //traitement of login
+    //----- get local storage data
+    async function getLocalStorage() {
+        const response = await AsyncStorage.getItem("inputs");
+        if (response !== null) {
+            const item = JSON.parse(response)
+
+            setInputs({
+                phone: item?.phone,
+                name: item?.name,
+                firstname: item?.firstname,
+                birthday: item?.birthday,
+                address: item?.address,
+                email: item?.email,
+                account: item?.account,
+            })
+            if (item?.birthday) setBirthday(new Date(item?.birthday))
+            if (item.account) setHaveAccount(true)
+        }
+
+        return JSON.parse(response as string)
+    }
+
+    //----- infos traitement
     const handle_register_info = () => {
-
-        inputs.birthday = birthday ? `${birthday}` : ""
+        inputs.accountUBA = accountUBA
+        // inputs.birthday = birthday ? `${birthday}` : ""
         if (inscription_inputs_request("infos", inputs, setError)) return;
-
-        setStore({ ...store, ...inputs })
         setNext(true)
     }
 
@@ -86,6 +103,7 @@ const Infos = () => {
 
     return (
         <Wrapper image imageData={images.register_bg_img}  >
+            <StatusBar backgroundColor={"#b41354"} />
             <ToastContainer />
             <Container scoll position={"between"} style={{ alignItems: "center", }}>
                 <>
@@ -121,10 +139,6 @@ const Infos = () => {
                             <TextInput value={inputs.firstname} onChangeText={(text) => handleChangeMobile("firstname", text, setInputs)} placeholder={"Prénom"} placeholderTextColor={colors.gray} style={styles.input} />
                         </View>
 
-                        {/* <TouchableWithoutFeedback onPress={toggleModal}>
-                            <View style={[styles.input, { flex: 1, paddingVertical: 9, alignItems: "flex-start", paddingLeft: 15 }]}><Text style={{ color: colors.gray }}> {inputs?.birthday ? format((inputs as any).age, 'dd/MM/yyyy') : "Date de naissance"}</Text></View>
-                        </TouchableWithoutFeedback> */}
-
                         <TouchableWithoutFeedback onPress={() => { toggleModal(); setBirthday(new Date()) }}>
                             <View style={[styles.input_wrapper, { flex: 1, paddingVertical: 15, alignItems: "flex-start", paddingLeft: 15 }]}>
                                 {birthday && <SmallLabel left={20} text="Date de naissance" />}
@@ -152,7 +166,7 @@ const Infos = () => {
                         {haveAccount &&
                             <View style={styles.input_wrapper}>
                                 {inputs?.account && <SmallLabel text='Numéro de compte UBA' left={18} />}
-                                <TextInput value={inputs.account} onChangeText={(text) => handleChangeMobile("account", text, setInputs)} placeholder={"Numéro de compte UBA"} placeholderTextColor={colors.gray} style={styles.input} />
+                                <TextInput value={accountUBA} onChangeText={(text) => setAccountUBA(text)} placeholder={"Numéro de compte UBA"} placeholderTextColor={colors.gray} style={styles.input} />
                             </View>
                         }
                     </View>
@@ -168,7 +182,7 @@ const Infos = () => {
                         <View style={styles.modal}>
                             <DatePicker
                                 date={birthday as Date}
-                                onDateChange={(_date) => { setBirthday(_date); setSelectDate(true) }}
+                                onDateChange={(_date) => { setBirthday(_date); setSwitchBirthDay(!switchBirthDay) }}
                                 mode="date"
                                 style={{ backgroundColor: "white" }}
                                 textColor={colors.black}

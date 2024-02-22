@@ -75,5 +75,5 @@ export const logger = (title?: string, desc?: string) => {
 
 export const handleChangeMobile = (key: string, value: string, setInputs: any) => { setInputs((prevState: any) => ({ ...prevState, [key]: value, })) }
 
-export const allInputsFilled = (inputs: any) => Object.values(inputs).every(value => value !== '');
+export const allInputsFilled = (inputs: any) => Object.values(inputs).every(value => value !== '' && value !== undefined && value !== null);
 export const allInputsEmpty = (inputs: any) => Object.values(inputs).every(value => value === '');

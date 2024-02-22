@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Octicons from "react-native-vector-icons/Octicons"
 import Wrapper from '../../../components/common/wrapper'
@@ -11,8 +11,13 @@ import { useNavigation } from '@react-navigation/native'
 const Finalisation = () => {
     const navigation = useNavigation<any>()
 
+    //welcome #b41354
+    //infosupp blue ##2E427D
+
+
     return (
         <Wrapper image imageData={images.register_finalisation_bg_img}   >
+            <StatusBar backgroundColor={"#eee"} />
             <Container scoll position={"between"} style={{ alignItems: "center" }}>
                 <View />
 
