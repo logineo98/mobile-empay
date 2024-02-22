@@ -32,18 +32,14 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
     const [visibleServiceClientModal, setVisibleServiceClientModal] = useState(false)
     const [visibleAskModal, setVisibleAskModal] = useState(false)
 
-    const lostCard = false
     const handleDisplayVisaCard = () => {
-        if (lostCard) {
+        if (host?.lostCard) {
             setDisplayVisaCard(false)
             ToastAndroid.showWithGravity(`Vous avez signaler la perte de la carte veuillez contactez les administrateurs de l'application.`, ToastAndroid.CENTER, ToastAndroid.TOP)
         } else {
             if (!displayVisaCard) setDisplayVisaCard(true)
             else setVisibleAskModal(true)
         }
-        // console.log(displayVisaCard)
-        // setDisplayVisaCard(!displayVisaCard)
-        // setVisibleAskModal(true)
     }
 
     useEffect(() => {

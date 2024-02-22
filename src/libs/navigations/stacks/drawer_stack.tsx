@@ -31,8 +31,6 @@ const DrawerStack: FC<COMPONENT_TYPE> = ({ route }) => {
         setScreenName(routeName as string)
     }, [route])
 
-    console.log('drawer_stack', screenName)
-
     return (
         <drawer.Navigator initialRouteName='home' screenOptions={{ headerShown: false, swipeEnabled: false, drawerStyle: styles.drawer_style }}
             drawerContent={({ navigation }) => <CustomDrawerContent navigation={navigation} />}
@@ -40,7 +38,7 @@ const DrawerStack: FC<COMPONENT_TYPE> = ({ route }) => {
             <drawer.Screen name='home' children={({ navigation }) => <Home navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='a_propos' component={APropos} />
             <drawer.Screen name='geolocalisation' children={({ navigation }) => <Geolocalisation navigation={navigation} screenName={screenName} />} />
-            <drawer.Screen name='historique' component={Historique} />
+            <drawer.Screen name='historique' children={({ navigation }) => <Historique navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='ika_wari_taa_status' component={IkaWariTaaStatus} />
             <drawer.Screen name='ika_wari_taa' children={({ navigation }) => <IkaWariTaa navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='partenaire' children={({ navigation }) => <Partenaire navigation={navigation} screenName={screenName} />} />

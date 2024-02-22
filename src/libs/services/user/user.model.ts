@@ -74,6 +74,7 @@ export type userModel = {
     currentActivity?: string //added
     fieldOfActivity?: string //added
     profil?: any
+    photo?: string
     signature?: any;
 
     notificationTokens?: string[];

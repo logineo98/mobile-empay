@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../libs/services/store'
 import { getAllTarifs, getAllTarifsWithoutLoading } from '../../libs/services/tarif/tarif.action'
 import Loading from '../../components/common/drawer/others/loading'
-import NoElementFind from '../../components/common/drawer/others/no_element_find'
+import NoElementFind from '../../components/common/drawer/others/no_element'
 
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers

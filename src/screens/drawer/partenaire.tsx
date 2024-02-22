@@ -7,7 +7,7 @@ import ScreenContainer2 from '../../components/common/drawer/container/screen_co
 import PartenaireCard from '../../components/card/drawer/partenaire_card'
 import { RootState } from '../../libs/services/store'
 import { getAllPartners, getAllPartnersWithoutLoading } from '../../libs/services/partner/partner.action'
-import NoElementFind from '../../components/common/drawer/others/no_element_find'
+import NoElementFind from '../../components/common/drawer/others/no_element'
 import Loading from '../../components/common/drawer/others/loading'
 import { colors } from '../../libs/typography/typography'
 

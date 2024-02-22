@@ -5,6 +5,7 @@ import { colors, roboto } from '../../../../libs/typography/typography'
 import { useDispatch, useSelector } from 'react-redux'
 import { _cardLosted } from '../../../../libs/services/user/user.action'
 import { RootState } from '../../../../libs/services/store'
+import SecondaryLoading from '../../secondary_loading'
 
 type COMPONENT_TYPE = {
     visibleAskModal: boolean
@@ -15,7 +16,7 @@ type COMPONENT_TYPE = {
 const ModalAsk: FC<COMPONENT_TYPE> = (props) => {
     const { setDisplayVisaCard, setVisibleAskModal, visibleAskModal } = props
 
-    const { host } = useSelector((state: RootState) => state?.user)
+    const { host, user_loading } = useSelector((state: RootState) => state?.user)
     const dispatch = useDispatch<any>()
 
     const cardLosted = () => {
@@ -28,30 +29,36 @@ const ModalAsk: FC<COMPONENT_TYPE> = (props) => {
     }
 
     return (
-        <Modal transparent animationType='slide' visible={visibleAskModal}>
-            <View style={styles.modal_global_container}>
-                <View style={styles.modal_container}>
-                    <Text style={[styles.modal_title, { marginBottom: 15, }]}>Voulez-vous :</Text>
-                    <TouchableOpacity activeOpacity={0.5} style={styles.ask_container} onPress={cardLosted}>
-                        <Text style={styles.ask}>Signaler la perte de la carte ?</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.5} style={styles.ask_container} onPress={maskCard}>
-                        <Text style={styles.ask}>Juste masquer la carte ?</Text>
-                    </TouchableOpacity>
-
-                    <View style={styles.nb_container}>
-                        <Text style={styles.nb_text}>NB: Attention "Signaler la perte de la carte" est une action irréversible jusqu'à l'intervention des administrateurs.</Text>
-                    </View>
-
-                    {/* fermer modal */}
-                    <View style={styles.fermer_service_client_modal_container}>
-                        <TouchableOpacity activeOpacity={0.5} style={styles.fermer_service_client_modal} onPress={() => setVisibleAskModal(false)}>
-                            <Text style={styles.fermer_service_client_modal_text}>Fermer</Text>
+        <>
+            <Modal transparent animationType='slide' visible={visibleAskModal} >
+                <View style={styles.modal_global_container}>
+                    <View style={styles.modal_container}>
+                        <Text style={[styles.modal_title, { marginBottom: 15, }]}>Voulez-vous :</Text>
+                        <TouchableOpacity activeOpacity={0.5} style={styles.ask_container} onPress={cardLosted}>
+                            <Text style={styles.ask}>Signaler la perte de la carte ?</Text>
                         </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={0.5} style={styles.ask_container} onPress={maskCard}>
+                            <Text style={styles.ask}>Juste masquer la carte ?</Text>
+                        </TouchableOpacity>
+
+                        <View style={styles.nb_container}>
+                            <Text style={styles.nb_text}>NB: Attention "Signaler la perte de la carte" est une action irréversible jusqu'à l'intervention des administrateurs.</Text>
+                        </View>
+
+                        {/* fermer modal */}
+                        <View style={styles.fermer_service_client_modal_container}>
+                            <TouchableOpacity activeOpacity={0.5} style={styles.fermer_service_client_modal} onPress={() => setVisibleAskModal(false)}>
+                                <Text style={styles.fermer_service_client_modal_text}>Fermer</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
+                    {user_loading && <SecondaryLoading />}
                 </View>
-            </View>
-        </Modal>
+            </Modal>
+
+        </>
+
+
     )
 }
 

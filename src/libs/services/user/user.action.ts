@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 // my importations
 import { RECHARGE_TYPE, scanModel, STATUS_TYPE, userModel } from './user.model'
-import { _end_point, get_credentials } from '../endpoints'
+import { _end_point, get_credentials, set_credentials } from '../endpoints'
 import { card_losted, get_all_users, get_all_users_without_loading, get_qr_code, receive_recharge_notification_canceled, receive_recharge_notification_success, receive_scan_notification, recharge_compte, reset_qr_code, scan_qr_code, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
 import { Expired, debug } from '../../constants/utils'
 import { connexion_request, forgot_request, reset_request, verify_request } from './user.request'
@@ -109,7 +109,6 @@ export const forgot_verify = (data: userModel, setError: any) => async (dispatch
     }
 }
 
-
 export const resent_code = (data: userModel, setError: any) => async (dispatch: any) => {
     try {
         if (forgot_request(data, setError)) return;
@@ -195,13 +194,11 @@ export const send_status_geo_montant = (data: STATUS_TYPE) => async (dispatch: a
     try {
         dispatch({ type: user_loading })
 
-        let token = await get_credentials('accessToken')
-        let expiresIn = await get_credentials('expiresIn')
-        let notificationToken = await get_credentials('notificationToken')
+        let accessToken = await get_credentials('accessToken')
 
-        const response = await axios.post(`${_end_point.customer.localisation}`, data, { headers: { Authorization: `Bearer ${token}` } })
+        const response = await axios.post(`${_end_point.customer.localisation}`, data, { headers: { Authorization: `Bearer ${accessToken}` } })
 
-        await AsyncStorage.setItem('credentials', JSON.stringify({ usr: response.data, accessToken: token, expiresIn, notificationToken }))
+        set_credentials(response.data?.usr, accessToken)
 
         dispatch({ type: user_status_geo_montant, payload: { usr: response.data, } })
     } catch (error: any) {
@@ -239,12 +236,11 @@ export const _scanQrCode = (data: scanModel, navigation: DrawerNavigationHelpers
     try {
         dispatch({ type: user_loading })
 
-        let token = await get_credentials('accessToken')
-        let expiresIn = await get_credentials('expiresIn')
+        let accessToken = await get_credentials('accessToken')
 
-        const response = await axios.post(`${_end_point.customer.scanner_traitement}`, data, { headers: { Authorization: `Bearer ${token}` } })
+        const response = await axios.post(`${_end_point.customer.scanner_traitement}`, data, { headers: { Authorization: `Bearer ${accessToken}` } })
 
-        await AsyncStorage.setItem('credentials', JSON.stringify({ usr: response.data?.usr, accessToken: token, expiresIn }))
+        set_credentials(response.data?.usr, accessToken)
 
         dispatch({ type: scan_qr_code, payload: response.data })
 
@@ -349,12 +345,11 @@ export const _cardLosted = (
     try {
         dispatch({ type: user_loading })
 
-        let token = await get_credentials('accessToken')
-        let expiresIn = await get_credentials('expiresIn')
+        let accessToken = await get_credentials('accessToken')
 
-        const response = await axios.post(`${_end_point.customer.update}/${id}`, data, { headers: { Authorization: `Bearer ${token}` } })
+        const response = await axios.put(`${_end_point.customer.customerCardState}/${id}`, data, { headers: { Authorization: `Bearer ${accessToken}` } })
 
-        await AsyncStorage.setItem('credentials', JSON.stringify({ usr: response.data?.usr, accessToken: token, expiresIn }))
+        set_credentials(response.data?.usr, accessToken)
 
         setVisibleAskModal(false)
         setDisplayVisaCard(false)

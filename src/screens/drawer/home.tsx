@@ -14,6 +14,7 @@ import HistoriqueCard from '../../components/card/drawer/historique_card'
 import { RootState } from '../../libs/services/store'
 // my icons
 import Feather from 'react-native-vector-icons/Feather'
+import { formatCardNumber } from '../../libs/constants/utils'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, screenName: string }
 
@@ -22,15 +23,13 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
 
     const { height, width } = useWindowDimensions()
 
-    const { host, user_loading } = useSelector((state: RootState) => state?.user)
+    const { host, } = useSelector((state: RootState) => state?.user)
 
     const [verso, setVerso] = useState(false)
     const [displayVisaCard, setDisplayVisaCard] = useState(true)
     const [displayAmount, setDisplayAmount] = useState(false)
     const [listSms, setListSms] = useState<any[]>([])
-    const targetContact = '75245731'
-
-    console.log('displayVisaCard', displayVisaCard)
+    const targetContact = '73030732'
 
     const handleDisplayAmount = () => setDisplayAmount(prev => !prev)
 
@@ -40,9 +39,9 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
             const permissionResult = await request(PERMISSIONS.ANDROID.READ_SMS)
 
             if (permissionResult === 'granted') {
-                console.log('Permission accordée')
+                console.log('Permission sms accordée')
                 fetchSMS()
-            } else console.log('Permission refusée')
+            } else console.log('Permission sms refusée')
         } catch (error) {
             console.error('Erreur lors de la demande de permission:', error)
         }
@@ -56,25 +55,23 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
             }),
             (fail: any) => console.error('Erreur lors de la récupération des SMS :', fail),
             (count: any, smsList: any) => {
-                // console.log('Liste des SMS récupérés :', smsList)
-                setListSms(JSON.parse(smsList))
-                // setListSms(JSON.parse(smsList).filter((sms: any) => sms.address.includes(targetContact)))
+                // console.log('Liste des SMS récupérés :', count)
+                // setListSms(JSON.parse(smsList))
+                setListSms(JSON.parse(smsList).filter((sms: any) => sms.address.includes(targetContact)))
             },
         )
     }
+
     useEffect(() => {
         requestPermissionAndFetchSMS()
     }, [])
 
-    const lostCard = false
     useEffect(() => {
         if (screenName === undefined || screenName === 'home') {
-            if (lostCard) setDisplayVisaCard(false)
+            if (host?.lostCard) setDisplayVisaCard(false)
             else setDisplayVisaCard(true)
         }
     }, [screenName])
-
-    // console.log('home ', host)
 
     return (
         <ScreenContainer1 displayVisaCard={displayVisaCard} setDisplayVisaCard={setDisplayVisaCard} navigation={navigation}>
@@ -87,7 +84,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                                 <ImageBackground source={images.visa_recto} resizeMode={width <= 360 ? 'cover' : 'cover'} style={[styles.visa_img, {}]}>
                                     {/* numero de la carte */}
                                     <View style={styles.number_card_container}>
-                                        <Text numberOfLines={1} style={styles.number_card}>0000 1111 2222 3333</Text>
+                                        <Text numberOfLines={1} style={styles.number_card}>{formatCardNumber(host?.cardNumber as string)}</Text>
                                     </View>
                                     {/* expiration de la carte */}
                                     <View style={styles.expiration_card_container}>
@@ -95,17 +92,17 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                                             <Text numberOfLines={1} style={styles.expiration_card_text}>EXPIRE</Text>
                                             <Text numberOfLines={1} style={styles.expiration_card_text}>A FIN</Text>
                                         </View>
-                                        <Text numberOfLines={1} style={styles.expiration_card_value}>10 / 2026</Text>
+                                        <Text numberOfLines={1} style={styles.expiration_card_value}>{host?.cardExpirationDate}</Text>
                                     </View>
                                     {/* nom de l'utilisateur sur la carte */}
                                     <View style={styles.user_name_card_container}>
-                                        <Text numberOfLines={1} style={styles.user_name_card}>CHEICK OUMAR DIABATE</Text>
+                                        <Text numberOfLines={1} style={styles.user_name_card}>{host?.nameOnCard}</Text>
                                     </View>
                                 </ImageBackground> :
                                 <ImageBackground source={images.visa_verso} resizeMode={width <= 360 ? 'cover' : 'contain'} style={[styles.visa_img, {}]}>
                                     {/* cvc */}
                                     <View style={styles.cvc_card_container}>
-                                        <Text numberOfLines={1} style={styles.cvc_card}>123</Text>
+                                        <Text numberOfLines={1} style={styles.cvc_card}>{host?.cardCVC}</Text>
                                     </View>
                                 </ImageBackground>
                             }
@@ -117,7 +114,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                     <GradientText text='Mon solde :' style={styles.solde_name} />
                     <CustomLinearGradient style={[styles.solde_gradient_container, { width: width - 180 }]}>
                         <View style={styles.solde_gradient_amount_eye_container}>
-                            <Text style={styles.solde_gradient_amount}>{displayAmount ? `${host?.totalAmount} CFA` : '************'}</Text>
+                            <Text style={styles.solde_gradient_amount}>{displayAmount ? `${host?.cardAmount} FCFA` : '************'}</Text>
                             <TouchableOpacity activeOpacity={0.5} style={styles.solde_gradient_eye_container} onPress={handleDisplayAmount}>
                                 <Feather name={!displayAmount ? 'eye' : 'eye-off'} color={colors.black} size={20} />
                             </TouchableOpacity>
@@ -159,7 +156,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                     </View>
 
                     {/* historique card */}
-                    <HistoriqueCard style={styles.historique_card} />
+                    <HistoriqueCard style={styles.historique_card} screenName={screenName} displayVisaCard={displayVisaCard} />
                 </View>
             </View>
         </ScreenContainer1>
@@ -167,7 +164,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    home_container: { paddingHorizontal: 20, },
+    home_container: { paddingHorizontal: 20, marginTop: 15, },
 
     visa_img_container_global: { alignItems: 'center', marginBottom: 15, },
     visa_img_container: { height: 190, width: 300, },

@@ -56,6 +56,7 @@ export const images = {
     brooklyn_burger: require('../assets/images/brooklyn_burger.png'),
     logineo: require('../assets/images/logineo.png'),
     clock: require('../assets/images/clock.png'),
+    coin: require('../assets/images/coin.png'),
 }
 
 export const videos = {

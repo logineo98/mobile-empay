@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { userModel } from './user/user.model'
 
 export const get_credentials = async (type: string) => {
     const t = await AsyncStorage.getItem('credentials')
@@ -14,6 +15,13 @@ export const get_credentials = async (type: string) => {
         else if (type === 'notificationToken') return notificationToken;
         else if (type === 'usr') return usr;
     }
+}
+
+export const set_credentials = async (usr: userModel, accessToken: string) => {
+    let expiresIn = await get_credentials('expiresIn')
+    let notificationToken = await get_credentials('notificationToken')
+
+    await AsyncStorage.setItem('credentials', JSON.stringify({ usr, accessToken, expiresIn, notificationToken }))
 }
 
 //----------- endpoints
@@ -43,6 +51,9 @@ export const _end_point = {
 
         // for recharge
         recharge: `${_API_BASE}/recharges/customer-account`,
+
+        // for lost card
+        customerCardState: `${_API_BASE}/customers/customerCardState`, //put
     },
     partenaire: {
         register: `${_API_BASE}/partenaires/register`,  //post
@@ -59,5 +70,10 @@ export const _end_point = {
         show: `${_API_BASE}/tarifs/:id`,            //get
         update: `${_API_BASE}/tarifs/:id`,          //put
         delete: `${_API_BASE}/tarifs/:id`,          //delete
-    }
+    },
+    history: {
+        find: `${_API_BASE}/transactions/history`, //get,
+        transaction_days_states: `${_API_BASE}/transactions/get/days-states`, //get
+        transaction_year_states: `${_API_BASE}//transactions/get/years/states`, //get
+    },
 }
