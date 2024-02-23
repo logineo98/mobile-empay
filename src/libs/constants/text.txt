@@ -1,0 +1,11 @@
+Prepaid Card 0005
+Received :Cr XOF 1.000
+Desc:Card Load by Fab Consulting
+Date:02-08-2023 02:04
+Bal:XOF8.500
+
+Prepaid Card 0005
+POS :Dr XOF 1.000
+Desc:PRESSREADER 8779804040 NEW YORK US
+Date:02-08-2023 02:40
+Bal:XOF9.500

@@ -1,9 +1,10 @@
 import { Image, ImageBackground, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions, } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import SmsAndroid from 'react-native-get-sms-android'
 import { PERMISSIONS, request } from 'react-native-permissions'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 // my importations
 import ScreenContainer1 from '../../components/common/drawer/container/screen_container1'
 import GradientText from '../../components/common/drawer/gradient/gradient_text'
@@ -12,9 +13,12 @@ import CustomLinearGradient from '../../components/common/drawer/gradient/custom
 import { colors, roboto } from '../../libs/typography/typography'
 import HistoriqueCard from '../../components/card/drawer/historique_card'
 import { RootState } from '../../libs/services/store'
+import { formatCardNumber } from '../../libs/constants/utils'
+import { getAllSms } from '../../libs/services/sms/sms.action'
+import { SMS_TYPE } from '../../libs/services/sms/sms.model'
+import { sendSms } from '../../libs/services/user/user.action'
 // my icons
 import Feather from 'react-native-vector-icons/Feather'
-import { formatCardNumber } from '../../libs/constants/utils'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, screenName: string }
 
@@ -23,13 +27,41 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
 
     const { height, width } = useWindowDimensions()
 
-    const { host, } = useSelector((state: RootState) => state?.user)
+    const { host, } = useSelector((state: RootState) => state.user)
+    const { allSms } = useSelector((state: RootState) => state.sms)
+    const dispatch = useDispatch<any>()
 
     const [verso, setVerso] = useState(false)
     const [displayVisaCard, setDisplayVisaCard] = useState(true)
     const [displayAmount, setDisplayAmount] = useState(false)
     const [listSms, setListSms] = useState<any[]>([])
+    const [granted, setGranted] = useState<boolean | null>(null)
     const targetContact = '73030732'
+
+    const a = [
+        {
+            "_id": 1,
+            "address": "73030732",
+            "body": `Prepaid Card 0005
+                    Received: Cr XOF 1.000
+                    Desc: Card Load by Fab Consulting
+                    Date:02-08-2023 02:04
+                    Bal: XOF8.500`,
+            "creator": "com.google.android.apps.messaging",
+            "date": 1708610176113,
+            "date_sent": 1708610301000,
+            "error_code": 0,
+            "locked": 0,
+            "protocol": 0,
+            "read": 1,
+            "reply_path_present": 0,
+            "seen": 1,
+            "status": -1,
+            "sub_id": 1,
+            "thread_id": 2,
+            "type": 1
+        }
+    ]
 
     const handleDisplayAmount = () => setDisplayAmount(prev => !prev)
 
@@ -40,24 +72,29 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
 
             if (permissionResult === 'granted') {
                 console.log('Permission sms accordée')
+                setGranted(true)
                 fetchSMS()
-            } else console.log('Permission sms refusée')
+            } else {
+                console.log('Permission sms refusée')
+                setGranted(false)
+            }
         } catch (error) {
             console.error('Erreur lors de la demande de permission:', error)
         }
     }
 
-    const fetchSMS = () => {
+    const fetchSMS = async () => {
         SmsAndroid.list(
             JSON.stringify({
                 box: 'inbox', // 'inbox' pour les SMS reçus, 'sent' pour les SMS envoyés
                 // maxCount: 10, // Nombre maximal de SMS à récupérer
             }),
             (fail: any) => console.error('Erreur lors de la récupération des SMS :', fail),
-            (count: any, smsList: any) => {
-                // console.log('Liste des SMS récupérés :', count)
-                // setListSms(JSON.parse(smsList))
-                setListSms(JSON.parse(smsList).filter((sms: any) => sms.address.includes(targetContact)))
+            async (count: any, smsList: any) => {
+                const last_sms_date = await AsyncStorage.getItem('last_sms_date')
+
+                if (last_sms_date) dispatch(getAllSms(JSON.parse(smsList).filter((sms: SMS_TYPE) => (sms.address.includes(targetContact) && sms.date_sent > parseInt(last_sms_date, 10)))))
+                else dispatch(getAllSms(JSON.parse(smsList).filter((sms: SMS_TYPE) => sms.address.includes(targetContact))))
             },
         )
     }
@@ -66,10 +103,16 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
         requestPermissionAndFetchSMS()
     }, [])
 
+    // envoie du message des qu'on arrrive sur la page d'accueil
     useEffect(() => {
-        if (screenName === undefined || screenName === 'home') {
+        (host && allSms?.length > 0) && dispatch(sendSms({ customerId: host.id as string, messages: allSms.map(sms => sms.body) }, allSms[0].date_sent.toString()))
+    }, [allSms.length])
+
+    useEffect(() => {
+        if (screenName === 'home') {
             if (host?.lostCard) setDisplayVisaCard(false)
             else setDisplayVisaCard(true)
+            // ToastAndroid.showWithGravity(`Vous avez signaler la perte de la carte veuillez contactez les administrateurs de l'application.`, ToastAndroid.CENTER, ToastAndroid.TOP)
         }
     }, [screenName])
 

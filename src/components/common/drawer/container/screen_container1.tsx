@@ -1,6 +1,6 @@
 import { Image, Keyboard, ScrollView, StatusBar, StyleSheet, Switch, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 // my importations
 import { colors, roboto } from '../../../../libs/typography/typography'
@@ -10,8 +10,7 @@ import { RootState } from '../../../../libs/services/store'
 import ModalServiceClient from '../modal/modal_service_client'
 import { _end_point } from '../../../../libs/services/endpoints'
 import ModalAsk from '../modal/modal_ask'
-// my icons
-
+import { sendSms } from '../../../../libs/services/user/user.action'
 
 type COMPONENT_TYPE = {
     navigation: DrawerNavigationHelpers
@@ -26,6 +25,8 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
     const { height, width } = useWindowDimensions()
 
     const { host } = useSelector((state: RootState) => state.user)
+    const { allSms } = useSelector((state: RootState) => state.sms)
+    const dispatch = useDispatch<any>()
 
     const [show, setShow] = useState(false)
     const [isKeyboardActive, setIsKeyboardActive] = useState(false)

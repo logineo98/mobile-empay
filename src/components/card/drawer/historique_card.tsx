@@ -26,7 +26,7 @@ const HistoriqueCard: FC<COMPONENT_TYPE> = (props) => {
     const dispatch = useDispatch<any>()
 
     useEffect(() => {
-        if (screenName === undefined || screenName === 'home') host && dispatch(getAllHistorys(host.id as string))
+        if (screenName === 'home') host && dispatch(getAllHistorys(host.id as string))
         else dispatch(resetHistory())
     }, [screenName])
 

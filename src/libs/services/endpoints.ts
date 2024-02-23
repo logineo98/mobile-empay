@@ -76,4 +76,7 @@ export const _end_point = {
         transaction_days_states: `${_API_BASE}/transactions/get/days-states`, //get
         transaction_year_states: `${_API_BASE}//transactions/get/years/states`, //get
     },
+    sms: {
+        saveExternalTransactions: `${_API_BASE}/recharges/saveExternalTransactions` //post
+    }
 }

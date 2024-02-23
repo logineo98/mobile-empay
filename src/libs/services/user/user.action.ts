@@ -5,7 +5,7 @@ import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript
 // my importations
 import { RECHARGE_TYPE, scanModel, STATUS_TYPE, userModel } from './user.model'
 import { _end_point, get_credentials, set_credentials } from '../endpoints'
-import { card_losted, get_all_users, get_all_users_without_loading, get_qr_code, receive_recharge_notification_canceled, receive_recharge_notification_success, receive_scan_notification, recharge_compte, reset_qr_code, scan_qr_code, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
+import { card_losted, get_all_users, get_all_users_without_loading, get_qr_code, receive_recharge_notification_canceled, receive_recharge_notification_success, receive_scan_notification, recharge_compte, reset_qr_code, scan_qr_code, send_sms_list, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
 import { Expired, debug } from '../../constants/utils'
 import { connexion_request, forgot_request, reset_request, verify_request } from './user.request'
 
@@ -357,6 +357,26 @@ export const _cardLosted = (
         dispatch({ type: card_losted, payload: response.data })
     } catch (error: any) {
         debug('CARD LOSTED  ', error?.response?.data || error.message)
+        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        dispatch(user_error(error?.response?.data || error.message))
+    }
+}
+
+export const sendSms = (data: { customerId: string, messages: string[] }, last_sms_date: string) => async (dispatch: any) => {
+    try {
+        dispatch({ type: user_loading })
+
+        let accessToken = await get_credentials('accessToken')
+
+        const response = await axios.post(`${_end_point.sms.saveExternalTransactions}`, data, { headers: { Authorization: `Bearer ${accessToken}` } })
+
+        set_credentials(response.data?.usr, accessToken)
+
+        await AsyncStorage.setItem('last_sms_date', last_sms_date)
+
+        dispatch({ type: send_sms_list, payload: 'send' })
+    } catch (error: any) {
+        debug('SEND SMS', error?.response?.data || error.message)
         Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
         dispatch(user_error(error?.response?.data || error.message))
     }

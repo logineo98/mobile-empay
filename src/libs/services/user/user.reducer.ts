@@ -1,4 +1,4 @@
-import { user_errors, user_forgot_success, get_all_users, user_loading, user_login_success, user_logout_success, user_register_success, user_reset_success, user_verify_success, user_status_geo_montant, get_qr_code, scan_qr_code, user_resent_success, get_all_users_without_loading, recharge_compte, reset_qr_code, receive_scan_notification, receive_recharge_notification_success, receive_recharge_notification_canceled, card_losted } from './user.constant';
+import { user_errors, user_forgot_success, get_all_users, user_loading, user_login_success, user_logout_success, user_register_success, user_reset_success, user_verify_success, user_status_geo_montant, get_qr_code, scan_qr_code, user_resent_success, get_all_users_without_loading, recharge_compte, reset_qr_code, receive_scan_notification, receive_recharge_notification_success, receive_recharge_notification_canceled, card_losted, send_sms_list } from './user.constant';
 import { userStore } from './user.model'
 
 const initial: userStore = { user_loading: false, user_errors: null, user: null, allUsers: [], host: null, user_tmp: false, user_log_tmp: false, user_info: null }
@@ -53,6 +53,9 @@ const userReducer = (state = initial, action: IAction): userStore => {
             return { ...state, user_errors: false, user_loading: false, recharge_response: action.payload }
 
         case card_losted:
+            return { ...state, user_errors: false, user_loading: false, host: action.payload.usr, }
+
+        case send_sms_list:
             return { ...state, user_errors: false, user_loading: false, host: action.payload.usr, }
 
         case 'reset_user_tmp': return { ...state, user_tmp: false }

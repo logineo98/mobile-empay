@@ -24,11 +24,11 @@ type COMPONENT_TYPE = {
 const DrawerStack: FC<COMPONENT_TYPE> = ({ route }) => {
     const drawer = createDrawerNavigator()
 
-    const [screenName, setScreenName] = useState('')
+    const [screenName, setScreenName] = useState('home')
 
     useEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route)
-        setScreenName(routeName as string)
+        setScreenName(routeName as string || 'home')
     }, [route])
 
     return (
