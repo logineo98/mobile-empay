@@ -16,7 +16,7 @@ import { RootState } from '../../libs/services/store'
 import { formatCardNumber } from '../../libs/constants/utils'
 import { getAllSms } from '../../libs/services/sms/sms.action'
 import { SMS_TYPE } from '../../libs/services/sms/sms.model'
-import { sendSms } from '../../libs/services/user/user.action'
+import { getUser, sendSms } from '../../libs/services/user/user.action'
 // my icons
 import Feather from 'react-native-vector-icons/Feather'
 import Loading from '../../components/common/drawer/others/loading'
@@ -44,6 +44,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
     // quand on tire l'ecran vers le bas pour rafraichir
     const onRefresh = useCallback(() => {
         host && dispatch(getAllHistorys(host.id as string))
+        host && dispatch(getUser(host.id as string))
     }, [])
 
     const handleDisplayAmount = () => setDisplayAmount(prev => !prev)
@@ -86,21 +87,29 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                     const list_sms: SMS_TYPE[] = JSON.parse(smsList).filter((sms: SMS_TYPE) => (sms.address.includes(targetContact) && sms.date_sent > parseInt(last_sms_date, 10)));
 
                     if (clickSend) {
-                        setSendSmsLoading(true)
-                        await new Promise(resolve => setTimeout(resolve, 1000))
-                        setSendSmsLoading(false)
+                        if (list_sms.length === 0) {
+                            setSendSmsLoading(true)
+                            await new Promise(resolve => setTimeout(resolve, 1000))
+                            setSendSmsLoading(false)
+
+                            clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+                        }
                     }
 
                     (host && list_sms.length !== 0) && dispatch(sendSms({ customerId: host?.id as string, messages: list_sms.map((sms: SMS_TYPE) => sms.body) }, list_sms[0].date_sent.toString(), clickSend))
 
-                    clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+
                 } else {
                     const list_sms: SMS_TYPE[] = JSON.parse(smsList).filter((sms: SMS_TYPE) => sms.address.includes(targetContact));
 
                     if (clickSend) {
-                        setSendSmsLoading(true)
-                        await new Promise(resolve => setTimeout(resolve, 1000))
-                        setSendSmsLoading(false)
+                        if (list_sms.length === 0) {
+                            setSendSmsLoading(true)
+                            await new Promise(resolve => setTimeout(resolve, 1000))
+                            setSendSmsLoading(false)
+
+                            clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+                        }
                     }
 
                     (host && list_sms.length !== 0) && dispatch(sendSms({ customerId: host?.id as string, messages: list_sms.map((sms: SMS_TYPE) => sms.body) }, list_sms[0].date_sent.toString(), clickSend))

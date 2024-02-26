@@ -43,9 +43,9 @@ export const _end_point = {
         localisation: `${_API_BASE}/customers/localisation`,
 
         // with id
-        show: `${_API_BASE}/customers/`,
+        show: `${_API_BASE}/customers`,
         update: `${_API_BASE}/customers`,
-        remove: `${_API_BASE}/customers/`,
+        remove: `${_API_BASE}/customers`,
         get_qr_code: `${_API_BASE}/customers/qr-code`,   //get 
         scanner_traitement: `${_API_BASE}/customers/scanner-traitement`, //post
 

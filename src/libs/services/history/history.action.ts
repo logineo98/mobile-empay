@@ -48,7 +48,7 @@ export const getTransactionsDays = (id: string) => async (dispatch: any) => {
 
         let accessToken = await get_credentials('accessToken')
 
-        const response = await axios.get(`${_end_point.history.transaction_days_states}/${id}`, { headers: { Authorization: `Bearer ${accessToken}` } })
+        const response = await axios.get(`${_end_point.history.transaction_days_states}/${id}?date=${new Date().toDateString()}`, { headers: { Authorization: `Bearer ${accessToken}` } })
 
         dispatch({ type: GET_TRANSACTIONS_DAYS, payload: response.data })
     } catch (error: any) {
