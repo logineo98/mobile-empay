@@ -116,7 +116,7 @@ const Verify = () => {
                     <TouchableOpacity onPress={handle_verify} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
                 </Animated.View>
             </Container>
-            {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Verification du code de recuperation en cours.."} />}
+            {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Verification du code de recuperation en cours.."} h={"100%"} />}
         </Wrapper>
     )
 }

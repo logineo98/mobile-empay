@@ -105,7 +105,7 @@ const Login = () => {
                     <TouchableOpacity onPress={handle_login} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
                 </Animated.View>
             </Container>
-            {click && user_loading && <SecondaryLoading text={"Veuillez patienter! connexion en cours.."} />}
+            {click && user_loading && <SecondaryLoading text={"Veuillez patienter! connexion en cours.."} h={"100%"} />}
         </Wrapper>
     )
 }

@@ -85,7 +85,7 @@ const Forgot = () => {
                     <TouchableOpacity onPress={handle_forgot} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
                 </Animated.View>
             </Container>
-            {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Verification du numéro de téléphone en cours"} />}
+            {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Verification du numéro de téléphone en cours"} h={"100%"} />}
         </Wrapper>
     )
 }

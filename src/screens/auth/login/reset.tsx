@@ -102,7 +102,7 @@ const Reset = () => {
                     </Animated.View>
                     {/* <TouchableOpacity onPress={handle_validate} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity> */}
                 </Container>
-                {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Réinitialisation du mot de passe en cours.."} />}
+                {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Réinitialisation du mot de passe en cours.."} h={"100%"} />}
             </Wrapper>
         </>
     )

@@ -176,7 +176,7 @@ const Secure = () => {
                 </Animated.View>
                 {/* <TouchableOpacity onPress={handle_validate} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity> */}
             </Container>
-            {user_loading && <SecondaryLoading text={"Veuillez patienter pendant la création de compte..."} />}
+            {user_loading && <SecondaryLoading text={"Veuillez patienter pendant la création de compte..."} h={"100%"} />}
         </Wrapper>
     )
 }
