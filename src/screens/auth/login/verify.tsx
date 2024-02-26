@@ -79,47 +79,45 @@ const Verify = () => {
 
 
     return (
-        <>
-            <StatusBar backgroundColor={"#ccc"} />
-            <Wrapper image imageData={images.register_finalisation_bg_img}   >
-                <ToastContainer />
-                <Container scoll position={"between"} style={{ alignItems: "center" }}>
-                    <View style={{ width: "100%", alignItems: "center" }}>
-                        <Spacer />
-                        <View><Image source={images.logo_white} style={styles.logo} /></View>
+        <Wrapper image imageData={images.register_finalisation_bg_img}   >
+            <StatusBar translucent backgroundColor={"transparent"} />
+            <ToastContainer />
+            <Container scoll position={"between"} style={{ alignItems: "center", marginTop: 20 }}>
+                <View style={{ width: "100%", alignItems: "center" }}>
+                    <Spacer />
+                    <View><Image source={images.logo_white} style={styles.logo} /></View>
 
-                        <Spacer />
+                    <Spacer />
 
-                        <View style={styles.descriptionbox}>
-                            <Text style={styles.title}>Code de vérification</Text>
-                            <Text style={styles.description}>Gerer vos finances avec la neocarte EM</Text>
-                        </View>
-
-                        <Spacer />
-
-                        <View style={styles.forms}>
-                            <View style={styles.input_wrapper}>
-                                {inputs?.code && <SmallLabel text='Code' left={18} />}
-                                <TextInput value={inputs?.code} onChangeText={text => handleChangeMobile("code", text, setInputs)} keyboardType="phone-pad" placeholder='Numéro de téléphone' placeholderTextColor={colors.gray} style={styles.input} />
-                            </View>
-
-                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
-                                <Text style={{ color: colors.white }}>Vous n'avez pas encore reçu de code? </Text>
-                                <TouchableOpacity onPress={handleRetry} activeOpacity={0.8}><Text style={{ color: colors.ika_wari_taa_bg_color }}>réessayer</Text></TouchableOpacity>
-                            </View>
-
-                            {debugCode && <View style={{ flexDirection: "row", alignItems: "center" }}><Text style={{ color: colors.white }}>Debug code</Text><Text style={{ color: colors.ika_wari_taa_bg_color }}>{debugCode}</Text></View>}
-                        </View>
-                        <Spacer height={10} />
-                        <Spacer />
+                    <View style={styles.descriptionbox}>
+                        <Text style={styles.title}>Code de vérification</Text>
+                        <Text style={styles.description}>Gerer vos finances avec la neocarte EM</Text>
                     </View>
-                    <Animated.View style={[animatedStyle, { alignSelf: "flex-end" }]}>
-                        <TouchableOpacity onPress={handle_verify} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
-                    </Animated.View>
-                </Container>
-                {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Verification du code de recuperation en cours.."} />}
-            </Wrapper>
-        </>
+
+                    <Spacer />
+
+                    <View style={styles.forms}>
+                        <View style={styles.input_wrapper}>
+                            {inputs?.code && <SmallLabel text='Code' left={18} />}
+                            <TextInput value={inputs?.code} onChangeText={text => handleChangeMobile("code", text, setInputs)} keyboardType="phone-pad" placeholder='Numéro de téléphone' placeholderTextColor={colors.gray} style={styles.input} />
+                        </View>
+
+                        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
+                            <Text style={{ color: colors.white }}>Vous n'avez pas encore reçu de code? </Text>
+                            <TouchableOpacity onPress={handleRetry} activeOpacity={0.8}><Text style={{ color: colors.ika_wari_taa_bg_color }}>réessayer</Text></TouchableOpacity>
+                        </View>
+
+                        {debugCode && <View style={{ flexDirection: "row", alignItems: "center" }}><Text style={{ color: colors.white }}>Debug code</Text><Text style={{ color: colors.ika_wari_taa_bg_color }}>{debugCode}</Text></View>}
+                    </View>
+                    <Spacer height={10} />
+                    <Spacer />
+                </View>
+                <Animated.View style={[animatedStyle, { alignSelf: "flex-end" }]}>
+                    <TouchableOpacity onPress={handle_verify} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
+                </Animated.View>
+            </Container>
+            {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Verification du code de recuperation en cours.."} />}
+        </Wrapper>
     )
 }
 

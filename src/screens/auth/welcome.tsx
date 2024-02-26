@@ -26,7 +26,7 @@ const Welcome = () => {
 
     return (
         <Wrapper >
-            <StatusBar backgroundColor={"#b41354"} barStyle={"light-content"} />
+            <StatusBar translucent backgroundColor={"transparent"} />
             <Video source={videos.welcome} paused={false} repeat={true} resizeMode="cover" style={{ position: "absolute", height: "100%", top: 0, left: 0, right: 0, bottom: 0 }} />
 
             <Container scoll position={"around"} style={{ alignItems: "center", backgroundColor: "#b41354A1" }}>

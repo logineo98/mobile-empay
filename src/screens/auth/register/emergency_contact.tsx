@@ -81,9 +81,10 @@ const EmergencyContact = () => {
 
     return (
         <Wrapper image imageData={images.register_bg_img}  >
-            <StatusBar backgroundColor={"#b41354"} barStyle={"light-content"} />
+            <StatusBar translucent backgroundColor={"transparent"} />
+
             <ToastContainer />
-            <Container scoll position={"between"} style={{ alignItems: "center", }}>
+            <Container scoll position={"between"} style={{ alignItems: "center", marginTop: 20 }}>
                 <>
                     <Spacer />
                     <View><Image source={images.logo_white} style={styles.logo} /></View>

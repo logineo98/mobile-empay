@@ -11,14 +11,12 @@ import { useNavigation } from '@react-navigation/native'
 const Finalisation = () => {
     const navigation = useNavigation<any>()
 
-    //welcome #b41354
-    //infosupp blue ##2E427D
-
 
     return (
         <Wrapper image imageData={images.register_finalisation_bg_img}   >
-            <StatusBar backgroundColor={"#eee"} />
-            <Container scoll position={"between"} style={{ alignItems: "center" }}>
+            <StatusBar translucent backgroundColor={"transparent"} />
+
+            <Container scoll position={"between"} style={{ alignItems: "center", marginTop: 20 }}>
                 <View />
 
                 <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>

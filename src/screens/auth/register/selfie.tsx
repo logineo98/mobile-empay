@@ -114,10 +114,10 @@ const Selfie = () => {
 
     return (
         <Wrapper image imageData={images.register_selfie_bg_img} overlay={"#131722E5"}   >
-            <StatusBar backgroundColor={"#131722E5"} barStyle={"light-content"} />
+            <StatusBar translucent backgroundColor={"transparent"} />
             <ToastContainer />
             {!granted ? <NoPermissionCard permission_type='à la caméra' /> :
-                <Container scoll position={"between"} style={{ alignItems: "center" }}>
+                <Container scoll position={"between"} style={{ alignItems: "center", marginTop: 20 }}>
                     <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
                         <Spacer />
 

@@ -66,10 +66,10 @@ const Reset = () => {
 
     return (
         <>
-            <StatusBar backgroundColor={"#2E427D"} />
             <Wrapper image imageData={images.register_document_bg_img}  >
+                <StatusBar translucent backgroundColor={"transparent"} />
                 <ToastContainer />
-                <Container scoll position={"between"} style={{ alignItems: "center" }}>
+                <Container scoll position={"between"} style={{ alignItems: "center", marginTop: 20 }}>
                     <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
                         <Spacer />
                         <Spacer />

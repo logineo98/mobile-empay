@@ -39,7 +39,6 @@ const Infos = () => {
 
     //----- animation
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
-    console.log(inputs)
 
     //----- set current birthday date
     useEffect(() => { setInputs((old) => { return { ...old, birthday: `${birthday}` } }) }, [switchBirthDay]);
@@ -92,7 +91,6 @@ const Infos = () => {
     //----- infos traitement
     const handle_register_info = () => {
         inputs.accountUBA = accountUBA
-        // inputs.birthday = birthday ? `${birthday}` : ""
         if (inscription_inputs_request("infos", inputs, setError)) return;
         setNext(true)
     }
@@ -102,10 +100,10 @@ const Infos = () => {
 
 
     return (
-        <Wrapper image imageData={images.register_bg_img}  >
-            <StatusBar backgroundColor={"#b41354"} />
+        <Wrapper image imageData={images.register_bg_img} >
+            <StatusBar translucent backgroundColor={"transparent"} />
             <ToastContainer />
-            <Container scoll position={"between"} style={{ alignItems: "center", }}>
+            <Container scoll position={"between"} style={{ alignItems: "center", marginTop: 20 }}>
                 <>
                     <Spacer />
                     <View><Image source={images.logo_white} style={styles.logo} /></View>

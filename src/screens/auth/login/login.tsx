@@ -32,7 +32,8 @@ const Login = () => {
     useEffect(() => { if (user_info && user_info !== null) { Toast.show({ type: 'info', text1: 'Informations', text2: user_info, }); dispatch({ type: 'reset_user_info' }) }; }, [user_info, dispatch]);
 
     //alert for errors form this app
-    useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
+    const msg = "pas autorisés"
+    useEffect(() => { if (error && error !== null && !error.includes(msg)) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
 
     //alert for errors from api
     useEffect(() => { if (user_errors && user_errors !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: user_errors, }); dispatch({ type: 'reset_user_errors' }) }; }, [user_errors, dispatch]);
@@ -64,10 +65,10 @@ const Login = () => {
 
 
     return (
-        <Wrapper image imageData={images.connexion_bg_img}   >
-            <StatusBar backgroundColor={"#2E427D"} barStyle={"light-content"} />
+        <Wrapper image imageData={images.connexion_bg_img} >
+            <StatusBar translucent backgroundColor={"transparent"} />
             <ToastContainer />
-            <Container scoll position={"between"} style={{ alignItems: "center" }}>
+            <Container scoll position={"between"} style={{ alignItems: "center", marginTop: 20 }}>
                 <View style={{ width: "100%", alignItems: "center" }}>
                     <Spacer />
                     <View><Image source={images.logo_white} style={styles.logo} /></View>

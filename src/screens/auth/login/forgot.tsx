@@ -54,41 +54,39 @@ const Forgot = () => {
 
 
     return (
-        <>
-            <StatusBar backgroundColor={"#2E427D"} />
-            <Wrapper image imageData={images.register_secure_bg_img}   >
-                <ToastContainer />
-                <Container scoll position={"between"} style={{ alignItems: "center" }}>
-                    <View style={{ width: "100%", alignItems: "center" }}>
-                        <Spacer />
-                        <View><Image source={images.logo_white} style={styles.logo} /></View>
+        <Wrapper image imageData={images.register_secure_bg_img}   >
+            <StatusBar translucent backgroundColor={"transparent"} />
+            <ToastContainer />
+            <Container scoll position={"between"} style={{ alignItems: "center", marginTop: 20 }}>
+                <View style={{ width: "100%", alignItems: "center" }}>
+                    <Spacer />
+                    <View><Image source={images.logo_white} style={styles.logo} /></View>
 
-                        <Spacer />
+                    <Spacer />
 
-                        <View style={styles.descriptionbox}>
-                            <Text style={styles.title}>Mot de passe oublié</Text>
-                            <Text style={styles.description}>Gerer vos finances avec la neocarte EM</Text>
-                        </View>
-
-
-                        <Spacer />
-
-                        <View style={styles.forms}>
-                            <View style={styles.input_wrapper}>
-                                {inputs?.phone && <SmallLabel text='Phone' left={18} />}
-                                <TextInput value={inputs?.phone} onChangeText={text => handleChangeMobile("phone", text, setInputs)} keyboardType="phone-pad" placeholder='Numéro de téléphone' placeholderTextColor={colors.gray} style={styles.input} />
-                            </View>
-                        </View>
-                        <Spacer height={10} />
-                        <Spacer />
+                    <View style={styles.descriptionbox}>
+                        <Text style={styles.title}>Mot de passe oublié</Text>
+                        <Text style={styles.description}>Gerer vos finances avec la neocarte EM</Text>
                     </View>
-                    <Animated.View style={[animatedStyle, { alignSelf: "flex-end" }]}>
-                        <TouchableOpacity onPress={handle_forgot} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
-                    </Animated.View>
-                </Container>
-                {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Verification du numéro de téléphone en cours"} />}
-            </Wrapper>
-        </>
+
+
+                    <Spacer />
+
+                    <View style={styles.forms}>
+                        <View style={styles.input_wrapper}>
+                            {inputs?.phone && <SmallLabel text='Phone' left={18} />}
+                            <TextInput value={inputs?.phone} onChangeText={text => handleChangeMobile("phone", text, setInputs)} keyboardType="phone-pad" placeholder='Numéro de téléphone' placeholderTextColor={colors.gray} style={styles.input} />
+                        </View>
+                    </View>
+                    <Spacer height={10} />
+                    <Spacer />
+                </View>
+                <Animated.View style={[animatedStyle, { alignSelf: "flex-end" }]}>
+                    <TouchableOpacity onPress={handle_forgot} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
+                </Animated.View>
+            </Container>
+            {click && user_loading && <SecondaryLoading text={"Veuillez patienter! Verification du numéro de téléphone en cours"} />}
+        </Wrapper>
     )
 }
 

@@ -83,9 +83,9 @@ const InfosSupp = () => {
 
     return (
         <Wrapper image imageData={images.register_secure_bg_img}  >
-            <StatusBar backgroundColor={"#2E427DF9"} barStyle={"light-content"} />
+            <StatusBar translucent backgroundColor={"transparent"} />
             <ToastContainer />
-            <Container scoll position={"between"} style={{ alignItems: "center", }}>
+            <Container scoll position={"between"} style={{ alignItems: "center", marginTop: 20 }}>
                 <>
                     <Spacer />
                     <View><Image source={images.logo_white} style={styles.logo} /></View>

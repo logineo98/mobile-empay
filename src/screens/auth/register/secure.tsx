@@ -131,8 +131,6 @@ const Secure = () => {
             blob.append("address", store.address)
             blob.append("city", store.city)
 
-            console.log(store)
-
             dispatch(inscription_service(blob, notificationToken))
         } catch (error) {
             console.log("notif token error: ", error)
@@ -141,13 +139,11 @@ const Secure = () => {
 
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });
 
-
-    // #2E427D
     return (
         <Wrapper image imageData={images.register_secure_bg_img}   >
-            <StatusBar backgroundColor={"#2E427D"} barStyle={"light-content"} />
+            <StatusBar translucent backgroundColor={"transparent"} />
             <ToastContainer />
-            <Container scoll position={"between"} style={{ alignItems: "center" }}>
+            <Container scoll position={"between"} style={{ alignItems: "center", marginTop: 20 }}>
                 <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
                     <Spacer />
                     <Spacer />

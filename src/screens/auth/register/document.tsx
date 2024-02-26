@@ -51,11 +51,6 @@ const Document = () => {
         if (expireDate) setInputs((old) => { return { ...old, documentExpirationDate: `${expireDate}` } })
     }, [deliveryDate, expireDate]);
 
-    console.log(inputs)
-
-    useEffect(() => {
-
-    }, [switchDates]);
 
     //----- go next screen if alright
     useEffect(() => { setLocalStorage() }, [next]);
@@ -114,7 +109,6 @@ const Document = () => {
         setVisible(false)
     };
 
-    console.log(inputs)
 
     //----- set local storage data and go next
     async function setLocalStorage() {
@@ -162,9 +156,10 @@ const Document = () => {
 
     return (
         <Wrapper image imageData={images.register_document_bg_img}   >
-            <StatusBar backgroundColor={"#2E427D"} barStyle={"light-content"} />
+            <StatusBar translucent backgroundColor={"transparent"} />
+
             <ToastContainer />
-            <Container scoll position={"between"} style={{ alignItems: "center" }}>
+            <Container scoll position={"between"} style={{ alignItems: "center", marginTop: 20 }}>
                 <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
                     <Spacer />
                     <Spacer />

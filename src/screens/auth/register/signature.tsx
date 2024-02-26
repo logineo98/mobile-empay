@@ -96,9 +96,9 @@ const Signature = () => {
 
     return (
         <Wrapper image imageData={images.register_signature_bg_img}   >
-            <StatusBar backgroundColor={"#2E427D"} barStyle={"light-content"} />
+            <StatusBar translucent backgroundColor={"transparent"} />
             <ToastContainer />
-            <Container scoll position={"between"} style={{ alignItems: "center", }}>
+            <Container scoll position={"between"} style={{ alignItems: "center", marginTop: 20 }}>
                 <View />
 
                 <View style={{ width: "100%", alignItems: "center" }}>
