@@ -27,7 +27,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
     const [click, setClick] = useState(false);
 
     const onShare = async () => {
-        try { await Share.share({ message: host?.parrainCode as string, }) }
+        try { await Share.share({ message: `Code parrainage : ${host?.parrainCode}`, }) }
         catch (error: any) {
             Alert.alert('Message d\'erreur', error?.message, [{ text: 'OK' }])
         }

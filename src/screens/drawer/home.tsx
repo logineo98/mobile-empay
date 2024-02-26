@@ -1,5 +1,5 @@
-import { Image, ImageBackground, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions, } from 'react-native'
-import React, { FC, useEffect, useState } from 'react'
+import { ActivityIndicator, Image, ImageBackground, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions, } from 'react-native'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import SmsAndroid from 'react-native-get-sms-android'
@@ -19,6 +19,9 @@ import { SMS_TYPE } from '../../libs/services/sms/sms.model'
 import { sendSms } from '../../libs/services/user/user.action'
 // my icons
 import Feather from 'react-native-vector-icons/Feather'
+import Loading from '../../components/common/drawer/others/loading'
+import SecondaryLoading from '../../components/common/secondary_loading'
+import { getAllHistorys } from '../../libs/services/history/history.action'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, screenName: string }
 
@@ -27,43 +30,29 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
 
     const { height, width } = useWindowDimensions()
 
-    const { host, } = useSelector((state: RootState) => state.user)
-    const { allSms } = useSelector((state: RootState) => state.sms)
+    const { host, send_sms_loading } = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch<any>()
 
     const [verso, setVerso] = useState(false)
     const [displayVisaCard, setDisplayVisaCard] = useState(true)
     const [displayAmount, setDisplayAmount] = useState(false)
-    const [listSms, setListSms] = useState<any[]>([])
+    const [sendSmsLoading, setSendSmsLoading] = useState(false)
     const [granted, setGranted] = useState<boolean | null>(null)
-    const targetContact = '73030732'
+    // const targetContact = '73030732'
+    const targetContact = '70000001'
 
-    const a = [
-        {
-            "_id": 1,
-            "address": "73030732",
-            "body": `Prepaid Card 0005
-                    Received: Cr XOF 1.000
-                    Desc: Card Load by Fab Consulting
-                    Date:02-08-2023 02:04
-                    Bal: XOF8.500`,
-            "creator": "com.google.android.apps.messaging",
-            "date": 1708610176113,
-            "date_sent": 1708610301000,
-            "error_code": 0,
-            "locked": 0,
-            "protocol": 0,
-            "read": 1,
-            "reply_path_present": 0,
-            "seen": 1,
-            "status": -1,
-            "sub_id": 1,
-            "thread_id": 2,
-            "type": 1
-        }
-    ]
+    // quand on tire l'ecran vers le bas pour rafraichir
+    const onRefresh = useCallback(() => {
+        host && dispatch(getAllHistorys(host.id as string))
+    }, [])
 
     const handleDisplayAmount = () => setDisplayAmount(prev => !prev)
+
+    const handleRefresh = () => {
+        if (granted) {
+            fetchSMS(true)
+        } else ToastAndroid.showWithGravity(`Veuillez autoriser l'accès à vos SMS.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+    }
 
     /***POUR LES SMS****/
     const requestPermissionAndFetchSMS = async () => {
@@ -73,7 +62,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
             if (permissionResult === 'granted') {
                 console.log('Permission sms accordée')
                 setGranted(true)
-                fetchSMS()
+                fetchSMS(false)
             } else {
                 console.log('Permission sms refusée')
                 setGranted(false)
@@ -83,7 +72,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
         }
     }
 
-    const fetchSMS = async () => {
+    const fetchSMS = async (clickSend: boolean) => {
         SmsAndroid.list(
             JSON.stringify({
                 box: 'inbox', // 'inbox' pour les SMS reçus, 'sent' pour les SMS envoyés
@@ -93,8 +82,31 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
             async (count: any, smsList: any) => {
                 const last_sms_date = await AsyncStorage.getItem('last_sms_date')
 
-                if (last_sms_date) dispatch(getAllSms(JSON.parse(smsList).filter((sms: SMS_TYPE) => (sms.address.includes(targetContact) && sms.date_sent > parseInt(last_sms_date, 10)))))
-                else dispatch(getAllSms(JSON.parse(smsList).filter((sms: SMS_TYPE) => sms.address.includes(targetContact))))
+                if (last_sms_date) {
+                    const list_sms: SMS_TYPE[] = JSON.parse(smsList).filter((sms: SMS_TYPE) => (sms.address.includes(targetContact) && sms.date_sent > parseInt(last_sms_date, 10)));
+
+                    if (clickSend) {
+                        setSendSmsLoading(true)
+                        await new Promise(resolve => setTimeout(resolve, 1000))
+                        setSendSmsLoading(false)
+                    }
+
+                    (host && list_sms.length !== 0) && dispatch(sendSms({ customerId: host?.id as string, messages: list_sms.map((sms: SMS_TYPE) => sms.body) }, list_sms[0].date_sent.toString(), clickSend))
+
+                    clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+                } else {
+                    const list_sms: SMS_TYPE[] = JSON.parse(smsList).filter((sms: SMS_TYPE) => sms.address.includes(targetContact));
+
+                    if (clickSend) {
+                        setSendSmsLoading(true)
+                        await new Promise(resolve => setTimeout(resolve, 1000))
+                        setSendSmsLoading(false)
+                    }
+
+                    (host && list_sms.length !== 0) && dispatch(sendSms({ customerId: host?.id as string, messages: list_sms.map((sms: SMS_TYPE) => sms.body) }, list_sms[0].date_sent.toString(), clickSend))
+
+                    clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+                }
             },
         )
     }
@@ -103,21 +115,15 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
         requestPermissionAndFetchSMS()
     }, [])
 
-    // envoie du message des qu'on arrrive sur la page d'accueil
-    useEffect(() => {
-        (host && allSms?.length > 0) && dispatch(sendSms({ customerId: host.id as string, messages: allSms.map(sms => sms.body) }, allSms[0].date_sent.toString()))
-    }, [allSms.length])
-
     useEffect(() => {
         if (screenName === 'home') {
             if (host?.lostCard) setDisplayVisaCard(false)
             else setDisplayVisaCard(true)
-            // ToastAndroid.showWithGravity(`Vous avez signaler la perte de la carte veuillez contactez les administrateurs de l'application.`, ToastAndroid.CENTER, ToastAndroid.TOP)
         }
     }, [screenName])
 
     return (
-        <ScreenContainer1 displayVisaCard={displayVisaCard} setDisplayVisaCard={setDisplayVisaCard} navigation={navigation}>
+        <ScreenContainer1 displayVisaCard={displayVisaCard} setDisplayVisaCard={setDisplayVisaCard} refreshing={false} onRefresh={onRefresh} navigation={navigation}>
             <View style={styles.home_container}>
                 {/* carte visa */}
                 {displayVisaCard &&
@@ -155,12 +161,19 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                 {/* mon solde */}
                 <View style={styles.solde_name_amount_container}>
                     <GradientText text='Mon solde :' style={styles.solde_name} />
-                    <CustomLinearGradient style={[styles.solde_gradient_container, { width: width - 180 }]}>
+                    <CustomLinearGradient style={[styles.solde_gradient_container, { width: width - 180, }]}>
                         <View style={styles.solde_gradient_amount_eye_container}>
                             <Text style={styles.solde_gradient_amount}>{displayAmount ? `${host?.cardAmount} FCFA` : '************'}</Text>
-                            <TouchableOpacity activeOpacity={0.5} style={styles.solde_gradient_eye_container} onPress={handleDisplayAmount}>
-                                <Feather name={!displayAmount ? 'eye' : 'eye-off'} color={colors.black} size={20} />
-                            </TouchableOpacity>
+                            <View style={styles.solde_eye_refresh_container}>
+                                <TouchableOpacity activeOpacity={0.5} style={styles.solde_gradient_eye_container} onPress={handleDisplayAmount}>
+                                    <Feather name={!displayAmount ? 'eye' : 'eye-off'} color={colors.black} size={20} />
+                                </TouchableOpacity>
+                                {displayAmount &&
+                                    <TouchableOpacity activeOpacity={0.5} style={styles.refresh_container} onPress={handleRefresh}>
+                                        {(sendSmsLoading || send_sms_loading) ? <ActivityIndicator color={colors.white} /> : <Feather name='refresh-cw' color={colors.black} size={20} />}
+                                    </TouchableOpacity>
+                                }
+                            </View>
                         </View>
                     </CustomLinearGradient>
                 </View>
@@ -199,7 +212,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                     </View>
 
                     {/* historique card */}
-                    <HistoriqueCard style={styles.historique_card} screenName={screenName} displayVisaCard={displayVisaCard} />
+                    <HistoriqueCard style={styles.historique_card} screenName={screenName} />
                 </View>
             </View>
         </ScreenContainer1>
@@ -236,7 +249,9 @@ const styles = StyleSheet.create({
     solde_gradient_container: { height: 40, paddingHorizontal: 10, borderRadius: 20, justifyContent: 'center', },
     solde_gradient_amount_eye_container: { height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', },
     solde_gradient_amount: { color: colors.black, fontFamily: roboto.black, alignItems: 'center', },
+    solde_eye_refresh_container: { flexDirection: 'row', },
     solde_gradient_eye_container: { marginLeft: 10, },
+    refresh_container: { marginLeft: 10, },
 
     menu_global_container: { marginBottom: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', },
     menu_title_container: { alignItems: 'center', },

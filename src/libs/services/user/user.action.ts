@@ -2,10 +2,11 @@ import axios from 'axios'
 import Toast from 'react-native-toast-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
+import { ToastAndroid } from 'react-native'
 // my importations
 import { RECHARGE_TYPE, scanModel, STATUS_TYPE, userModel } from './user.model'
 import { _end_point, get_credentials, set_credentials } from '../endpoints'
-import { card_losted, get_all_users, get_all_users_without_loading, get_qr_code, receive_recharge_notification_canceled, receive_recharge_notification_success, receive_scan_notification, recharge_compte, reset_qr_code, scan_qr_code, send_sms_list, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
+import { card_losted, get_all_users, get_all_users_without_loading, get_qr_code, receive_recharge_notification_canceled, receive_recharge_notification_success, receive_scan_notification, recharge_compte, reset_all_users, reset_qr_code, scan_qr_code, send_sms_list, send_sms_loading, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
 import { Expired, debug } from '../../constants/utils'
 import { connexion_request, forgot_request, reset_request, verify_request } from './user.request'
 
@@ -173,7 +174,7 @@ export const getAllusers = () => async (dispatch: any) => {
         dispatch({ type: get_all_users, payload: response.data })
     } catch (error: any) {
         debug('GET ALL USERS', error?.response?.data || error.message)
-        dispatch(user_error(error?.response?.data || error.message))
+        dispatch(user_error(true))
     }
 }
 
@@ -343,7 +344,7 @@ export const _cardLosted = (
     setDisplayVisaCard: (value: React.SetStateAction<boolean>) => void
 ) => async (dispatch: any) => {
     try {
-        dispatch({ type: user_loading })
+        dispatch({ type: send_sms_loading })
 
         let accessToken = await get_credentials('accessToken')
 
@@ -362,9 +363,9 @@ export const _cardLosted = (
     }
 }
 
-export const sendSms = (data: { customerId: string, messages: string[] }, last_sms_date: string) => async (dispatch: any) => {
+export const sendSms = (data: { customerId: string, messages: string[] }, last_sms_date: string, clickSend: boolean) => async (dispatch: any) => {
     try {
-        dispatch({ type: user_loading })
+        dispatch({ type: clickSend ? send_sms_loading : user_loading })
 
         let accessToken = await get_credentials('accessToken')
 
@@ -374,10 +375,19 @@ export const sendSms = (data: { customerId: string, messages: string[] }, last_s
 
         await AsyncStorage.setItem('last_sms_date', last_sms_date)
 
-        dispatch({ type: send_sms_list, payload: 'send' })
+        dispatch({ type: send_sms_list, payload: response.data })
     } catch (error: any) {
         debug('SEND SMS', error?.response?.data || error.message)
         Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        ToastAndroid.showWithGravity(`Erreur survenue lors de l'actualisation du montant.`, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
+    }
+}
+
+export const resetAllUsers = () => async (dispatch: any) => {
+    try {
+        dispatch({ type: reset_all_users })
+    } catch (error: any) {
+        debug('RESET ALL USERS', error?.response?.data || error.message)
     }
 }

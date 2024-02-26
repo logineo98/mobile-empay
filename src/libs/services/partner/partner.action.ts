@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ERROR_PARTNER, GET_ALL_PARTNERS, GET_ALL_PARTNERS_WITHOUT_LOADING, LOADING_PARTNER } from './partner.constant'
+import { ERROR_PARTNER, GET_ALL_PARTNERS, LOADING_PARTNER, RESET_PARTNER } from './partner.constant'
 import { _end_point, get_credentials } from '../endpoints'
 import { debug } from '../../constants/utils'
 
@@ -7,7 +7,7 @@ const loadingPartner = () => (dispatch: any) => {
     dispatch({ type: LOADING_PARTNER })
 }
 
-const errorPartner = (payload: any) => (dispatch: any) => {
+const errorPartner = (payload: boolean) => (dispatch: any) => {
     dispatch({ type: ERROR_PARTNER, payload })
 }
 
@@ -22,19 +22,14 @@ export const getAllPartners = () => async (dispatch: any) => {
         dispatch({ type: GET_ALL_PARTNERS, payload: response.data })
     } catch (error: any) {
         debug('GET ALL PARTNERS', error?.response?.data || error.message)
-        dispatch(errorPartner(error?.response?.data))
+        dispatch(errorPartner(true))
     }
 }
 
-export const getAllPartnersWithoutLoading = () => async (dispatch: any) => {
+export const resetPartner = () => async (dispatch: any) => {
     try {
-        let token = await get_credentials('accessToken')
-
-        const response = await axios.get(`${_end_point.partenaire.find}`, { headers: { Authorization: `Bearer ${token}` } })
-
-        dispatch({ type: GET_ALL_PARTNERS_WITHOUT_LOADING, payload: response.data })
+        dispatch({ type: RESET_PARTNER })
     } catch (error: any) {
-        debug('GET ALL PARTNERS WITHOUT LOADING', error?.response?.data || error.message)
-        dispatch(errorPartner(error?.response?.data))
+        debug('RESET PARTNER', error?.response?.data || error.message)
     }
 }

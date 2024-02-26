@@ -14,10 +14,10 @@ import { PARTNER_TYPE } from '../../../libs/services/partner/partner.model'
 import { _end_point } from '../../../libs/services/endpoints'
 import { RECHARGE_TYPE } from '../../../libs/services/history/history.model'
 
-type COMPONENT_TYPE = { screenName: string, displayVisaCard?: boolean, style?: StyleProp<ViewStyle> }
+type COMPONENT_TYPE = { screenName: string, style?: StyleProp<ViewStyle> }
 
 const HistoriqueCard: FC<COMPONENT_TYPE> = (props) => {
-    const { screenName, displayVisaCard, style } = props
+    const { screenName, style } = props
 
     const { height, width } = useWindowDimensions()
 
@@ -36,7 +36,7 @@ const HistoriqueCard: FC<COMPONENT_TYPE> = (props) => {
                 <View style={{ minHeight: 260 }}>
                     <Loading />
                 </View> :
-                errorHistory ? <ErrorServer height={260} message={`Une erreur est survenue lors de la récupération des historiques.`} /> :
+                errorHistory ? <ErrorServer height={260} message={`Une erreur est survenue lors de la récupération des historiques.\nVeuillez actualiser l'écran en le tirant vers le bas.`} /> :
                     allHistorys.length === 0 ? <NoElement height={260} message={`Aucune donnée d'historique n'a été trouvée pour le moment.`} /> :
                         <>
                             {allHistorys.map((history, i) => (

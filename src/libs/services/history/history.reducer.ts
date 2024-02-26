@@ -29,13 +29,13 @@ const historyReducer = (state = initialState, action: { type: string, payload: a
             return { ...state, loadingTransactionYear: true }
 
         case ERROR_HISTORY:
-            return { ...state, errorHistory: payload, loadingHistory: false, allHistorys: null, }
+            return { ...state, errorHistory: payload, loadingHistory: false, allHistorys: {} as any, }
 
         case ERROR_TRANSACTION_DAY:
-            return { ...state, errorTransactionDay: payload, loadingTransactionDay: false, allTransactionsDays: null, }
+            return { ...state, errorTransactionDay: payload, loadingTransactionDay: false, allTransactionsDays: {} as any, }
 
         case ERROR_TRANSACTION_YEAR:
-            return { ...state, errorTransactionYear: payload, loadingTransactionYear: false, allTransactionsYear: null, }
+            return { ...state, errorTransactionYear: payload, loadingTransactionYear: false, allTransactionsYear: {} as any, }
 
         case GET_ALL_HISTORYS:
             return { ...state, allHistorys: payload, loadingHistory: false, errorHistory: false, }

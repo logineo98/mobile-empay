@@ -11,23 +11,28 @@ import { RootState } from '../../../../libs/services/store'
 import { _end_point } from '../../../../libs/services/endpoints'
 
 type COMPONENT_TYPE = {
-    navigation: DrawerNavigationHelpers
     children: JSX.Element | JSX.Element[]
+    navigation: DrawerNavigationHelpers
     title: string
+
+    handleSwitchBtn?: (value: boolean) => void
     hide_switch?: boolean
     isSwitchActive?: boolean
-    handleSwitchBtn?: (value: boolean) => void
+    onRefresh?: any
+    refreshing?: any
+    reload?: boolean
+    scroll?: boolean
 }
 
 const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
-    const { children, navigation, title, hide_switch, isSwitchActive, handleSwitchBtn } = props
+    const { children, navigation, title, handleSwitchBtn, hide_switch, isSwitchActive, onRefresh, refreshing, reload, scroll } = props
 
     const { height, width } = useWindowDimensions()
 
     const { host } = useSelector((state: RootState) => state.user)
 
     return (
-        <ScreenContainer2 title={title} scroll navigation={navigation}>
+        <ScreenContainer2 title={title} reload={reload} scroll={scroll} refreshing={refreshing} onRefresh={onRefresh} navigation={navigation}>
             <View style={styles.screen_container_3}>
                 {/* profil et switch */}
                 <View style={styles.profil_switch_container}>
@@ -39,8 +44,8 @@ const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
                             }
                         </View>
                         <View style={[styles.info_container, { width: width - (20 + 40 + 50 + 5 + 70) }]}>
-                            <Text numberOfLines={1} style={styles.info_name}> {host?.name} </Text>
-                            <Text numberOfLines={1} style={styles.info_email}> {host?.email} </Text>
+                            <Text numberOfLines={1} style={styles.info_name}>{host?.name}</Text>
+                            <Text numberOfLines={1} style={styles.info_email}>{host?.email}</Text>
                         </View>
                     </View>
                     {!hide_switch && <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={isSwitchActive ? colors.success : colors.error} value={isSwitchActive} onValueChange={(value) => handleSwitchBtn && handleSwitchBtn(value)} />}

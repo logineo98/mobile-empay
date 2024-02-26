@@ -134,9 +134,10 @@ export type userModel = {
 
 export type userStore = {
     user_loading: boolean
+    send_sms_loading?: boolean
     user_errors: string | any
     user?: userModel | null
-    allUsers?: userModel[]
+    allUsers: userModel[] | null
     host?: userModel | null
     user_tmp?: boolean
     user_log_tmp?: boolean

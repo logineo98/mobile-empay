@@ -5,8 +5,8 @@ export type TARIF_TYPE = {
 }
 
 export type INITIAL_TARIF_STATE_TYPE = {
-    tarif: null | TARIF_TYPE
-    allTarifs: Array<TARIF_TYPE>
+    tarif: TARIF_TYPE | null
+    allTarifs: Array<TARIF_TYPE> | null
     loadingTarif: boolean
-    error: any
+    error: boolean
 }

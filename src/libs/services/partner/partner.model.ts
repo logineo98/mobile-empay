@@ -6,8 +6,8 @@ export type PARTNER_TYPE = {
 }
 
 export type INITIAL_PARTNER_STATE_TYPE = {
-    partner: null | PARTNER_TYPE
-    allPartners: Array<PARTNER_TYPE>
+    partner: PARTNER_TYPE | null
+    allPartners: Array<PARTNER_TYPE> | null
     loadingPartner: boolean
     error: any
 }

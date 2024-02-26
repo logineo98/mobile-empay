@@ -1,13 +1,13 @@
-import { ERROR_TARIF, GET_ALL_TARIFS, GET_ALL_TARIFS_WHITHOUT_LOADING, LOADING_TARIF } from './tarif.constant'
+import { ERROR_TARIF, GET_ALL_TARIFS, LOADING_TARIF, RESET_TARIF } from './tarif.constant'
 import { INITIAL_TARIF_STATE_TYPE } from './tarif.model'
 
 interface IAction { type: string, payload: any }
 
 const initialState: INITIAL_TARIF_STATE_TYPE = {
     tarif: null,
-    allTarifs: [],
+    allTarifs: null,
     loadingTarif: false,
-    error: null
+    error: false,
 }
 
 const tarifReducer = (state = initialState, action: IAction): INITIAL_TARIF_STATE_TYPE => {
@@ -18,13 +18,13 @@ const tarifReducer = (state = initialState, action: IAction): INITIAL_TARIF_STAT
             return { ...state, loadingTarif: true }
 
         case ERROR_TARIF:
-            return { ...state, error: payload, loadingTarif: false }
+            return { ...state, error: payload, loadingTarif: false, allTarifs: {} as any }
 
         case GET_ALL_TARIFS:
-            return { ...state, allTarifs: payload, loadingTarif: false, error: null }
+            return { ...state, allTarifs: payload, loadingTarif: false, error: false, }
 
-        case GET_ALL_TARIFS_WHITHOUT_LOADING:
-            return { ...state, allTarifs: payload, loadingTarif: false, error: null }
+        case RESET_TARIF:
+            return { ...state, allTarifs: null, }
 
         default: return state
     }

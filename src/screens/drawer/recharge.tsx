@@ -74,7 +74,24 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
     return (
         <ScreenContainer2 title='Recharge' scroll navigation={navigation}>
             <View style={styles.recharge_container}>
-                <GradientText text={`Veuillez cliquer sur le bouton 'RECHARGER' afin de recharger votre compte via VITEPAY.`} style={styles.presentation} />
+                <GradientText text={`Détail sur les pourcentages de VITEPAY et UBA.`} style={styles.presentation} />
+
+                <View style={styles.detail_container}>
+                    <Text style={styles.detail}>Vitepay : 2%</Text>
+                    <Text style={styles.detail}>UBA : </Text>
+                    <View style={styles.detail2_container}>
+                        <Text style={styles.detail2}>       . coût de rechargement  de la carte 1,5%</Text>
+                        <Text style={styles.detail2}>       . frais de retrait gab Uba Mali 0 fcfa</Text>
+                        <Text style={styles.detail2}>       . frais de retrait gab réseau visa à l'international 3%</Text>
+                        <Text style={styles.detail2}>       . frais réseau GIM UEMOA 500 fcfa</Text>
+                        <Text style={styles.detail2}>       . frais de maintenance carte prépayée 750 fcfa</Text>
+                        <Text style={styles.detail2}>       . validité de la carte 3 ans</Text>
+                        <Text style={styles.detail2}>       . rechargement maximum/ jour 2M fcfa</Text>
+                        <Text style={styles.detail2}>       . solde cumulé Mensuel 10M fcfa</Text>
+                        <Text style={styles.detail2}>       . limite retrait/j 2M fcfa</Text>
+                        <Text style={styles.detail2}>       . limite paiement par opération (TPE&Web) 2M fcfa</Text>
+                    </View>
+                </View>
 
                 <View style={styles.btn_recharger_container}>
                     <TouchableOpacity activeOpacity={0.5} style={styles.btn_recharger} onPress={() => setVisible(true)}>
@@ -100,10 +117,10 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
                             </View>
 
                             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ padding: 10, flexGrow: 1, }} keyboardShouldPersistTaps='handled'>
-                                {user_loading ? <Loading text='Traitement en cours...' no_gradient color={colors.black} style_text_container={styles.loading_text} style_container={styles.loading} /> :
+                                {user_loading ? <Loading text='Traitement en cours...' no_gradient color={colors.black} style_text_container={styles.loading_text} style={styles.loading} /> :
                                     recharge_response === 'PENDING' ?
                                         <View style={styles.recharge_status_container}>
-                                            <Loading no_gradient color={colors.black} text=' ' style_text_container={styles.loading_text} style_container={styles.loading} />
+                                            <Loading no_gradient color={colors.black} text=' ' style_text_container={styles.loading_text} style={styles.loading} />
 
                                             <Text style={{ marginVertical: 10, color: colors.black, fontSize: 15, fontFamily: roboto.regular, textAlign: 'center', }}>
                                                 Une ou votre recharge est en cours de validation. Pour valider et terminer votre transaction, veuillez suivre les instructions envoyées au <Text style={{ fontWeight: 'bold', color: colors.fond1 }}>{vitepayData.phone}</Text>. Vous pouvez également saisir directement <Text style={{ fontWeight: 'bold', color: colors.fond1 }}>#144#3*6#</Text> (code USSD) sur votre téléphone pour afficher le menu de confirmation de paiement.
@@ -138,22 +155,15 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
                                                         {err?.phone && <Text style={styles.input_error}> {err?.phone} </Text>}
                                                     </View>
 
-                                                    <View style={styles.input_container}>
+                                                    <View style={[styles.input_container, { marginBottom: 0, }]}>
                                                         <Text style={styles.input_title}>Montant (FCFA)</Text>
                                                         <TextInput keyboardType='numeric' style={styles.input} placeholderTextColor={`rgba(0,0,0,0.5)`} placeholder={'Montant de la recharge'} value={vitepayData.montant} onChangeText={text => setVitepayData({ ...vitepayData, montant: text })} />
                                                         {err?.montant && <Text style={styles.input_error}> {err?.montant} </Text>}
                                                     </View>
-                                                </View>
 
-                                                <View style={styles.percent_partenaire_container}>
                                                     <View style={styles.percent_partenaire}>
-                                                        <Text style={styles.percent_partenaire_text}>Pourcentage Vitepay : </Text>
-                                                        <Text style={[styles.percent_partenaire_text, { fontFamily: roboto.bold, color: colors.fond1, }]}> {vitepayData.montant ? (parseInt(vitepayData.montant, 10) * 4) / 100 : 0} </Text>
-                                                        <Text style={styles.percent_partenaire_text}>FCFA</Text>
-                                                    </View>
-                                                    <View style={styles.percent_partenaire}>
-                                                        <Text style={styles.percent_partenaire_text}>Pourcentage UBA : </Text>
-                                                        <Text style={[styles.percent_partenaire_text, { fontFamily: roboto.bold, color: colors.fond1, }]}> {vitepayData.montant ? (parseInt(vitepayData.montant, 10) * 2) / 100 : 0} </Text>
+                                                        <Text style={styles.percent_partenaire_text}>Montant après déduction des frais :</Text>
+                                                        <Text style={[styles.percent_partenaire_text, { fontFamily: roboto.black, color: colors.fond1, }]}> {vitepayData.montant ? (parseInt(vitepayData.montant, 10) - (parseInt(vitepayData.montant, 10) * 3.5) / 100) : 0} </Text>
                                                         <Text style={styles.percent_partenaire_text}>FCFA</Text>
                                                     </View>
                                                 </View>
@@ -177,7 +187,12 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
 const styles = StyleSheet.create({
     recharge_container: { paddingHorizontal: 20, },
 
-    presentation: { fontSize: 15, fontFamily: roboto.black, textAlign: 'justify', marginVertical: 150, },
+    presentation: { fontSize: 15, fontFamily: roboto.black, textAlign: 'justify', },
+
+    detail_container: { marginVertical: 45, },
+    detail: { color: colors.white, fontSize: 15, fontFamily: roboto.regular, },
+    detail2_container: {},
+    detail2: { color: colors.white, fontSize: 14, fontFamily: roboto.regular, },
 
     btn_recharger_container: { alignItems: 'center', },
     btn_recharger: {},
@@ -211,9 +226,8 @@ const styles = StyleSheet.create({
     status_message: { color: colors.black, fontFamily: roboto.regular, textAlign: 'center', fontSize: 15, marginVertical: 25 },
 
     // pourcentage des partenaire
-    percent_partenaire_container: {},
-    percent_partenaire: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', },
-    percent_partenaire_text: { color: colors.black, fontFamily: roboto.regular, fontSize: 12, },
+    percent_partenaire: { flexDirection: 'row', alignItems: 'center', },
+    percent_partenaire_text: { color: colors.black, fontFamily: roboto.italic, fontSize: 10, },
 
     // bouton recharger dans le modal
     btn_container: { alignItems: 'center', marginTop: 10, },

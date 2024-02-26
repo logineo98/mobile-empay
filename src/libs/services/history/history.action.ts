@@ -85,13 +85,8 @@ export const resetHistory = () => async (dispatch: any) => {
 
 export const resetHistorySemYear = () => async (dispatch: any) => {
     try {
-        dispatch(loadingTransactionDay())
-        dispatch(loadingTransactionYear())
-
         dispatch({ type: RESET_HISTORY_SEM_YEAR, })
     } catch (error: any) {
         debug('RESET HISTORY SEMAINE YEAR', error?.response?.data || error.message)
-        dispatch(errorTransactionDay(true))
-        dispatch(errorTransactionYear(true))
     }
 }

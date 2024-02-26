@@ -1,4 +1,4 @@
-import { Image, Keyboard, ScrollView, StatusBar, StyleSheet, Switch, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Image, Keyboard, RefreshControl, ScrollView, StatusBar, StyleSheet, Switch, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
@@ -10,23 +10,23 @@ import { RootState } from '../../../../libs/services/store'
 import ModalServiceClient from '../modal/modal_service_client'
 import { _end_point } from '../../../../libs/services/endpoints'
 import ModalAsk from '../modal/modal_ask'
-import { sendSms } from '../../../../libs/services/user/user.action'
 
 type COMPONENT_TYPE = {
-    navigation: DrawerNavigationHelpers
     children: JSX.Element | JSX.Element[]
     displayVisaCard: boolean
+    navigation: DrawerNavigationHelpers
     setDisplayVisaCard: React.Dispatch<React.SetStateAction<boolean>>
+
+    onRefresh?: any
+    refreshing?: any
 }
 
 const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
-    const { children, displayVisaCard, navigation, setDisplayVisaCard } = props
+    const { children, displayVisaCard, navigation, setDisplayVisaCard, onRefresh, refreshing } = props
 
     const { height, width } = useWindowDimensions()
 
     const { host } = useSelector((state: RootState) => state.user)
-    const { allSms } = useSelector((state: RootState) => state.sms)
-    const dispatch = useDispatch<any>()
 
     const [show, setShow] = useState(false)
     const [isKeyboardActive, setIsKeyboardActive] = useState(false)
@@ -78,7 +78,7 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
                 <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={displayVisaCard ? colors.success : colors.error} value={displayVisaCard} onValueChange={handleDisplayVisaCard} />
             </View>
 
-            <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
+            <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled' refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                 {children}
             </ScrollView>
 

@@ -1,5 +1,6 @@
 
 export const user_loading = 'user_loading'
+export const send_sms_loading = 'send_sms_loading'
 export const user_errors = 'user_errors'
 
 export const user_login_success = 'user_login_success'
@@ -22,3 +23,4 @@ export const receive_recharge_notification_success = 'receive_recharge_notificat
 export const receive_recharge_notification_canceled = 'receive_recharge_notification_canceled'
 export const card_losted = 'card_losted'
 export const send_sms_list = 'send_sms_list'
+export const reset_all_users = 'reset_all_users'

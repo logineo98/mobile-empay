@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, useWindowDimensions } from 'react-native'
-import React, { FC, useEffect } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import { BarChart, LineChart } from 'react-native-chart-kit'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 // my importations
@@ -24,6 +24,18 @@ const Historique: FC<COMPONENT_TYPE> = (props) => {
     const { loadingTransactionDay, loadingTransactionYear, allTransactionsDays, allTransactionsYear, errorTransactionDay, errorTransactionYear } = useSelector((state: RootState) => state.history)
     const dispatch = useDispatch<any>()
 
+    const [refreshing, setRefreshing] = useState(false)
+
+    // quand on tire l'ecran vers le bas pour rafraichir
+    const onRefresh = useCallback(() => {
+        host && dispatch(getTransactionsDays(host.id as string))
+        host && dispatch(getTransactionsYear(host.id as string, '2024'))
+    }, [])
+
+    useEffect(() => {
+        if (loadingTransactionDay === false && loadingTransactionYear === false) setRefreshing(false)
+    }, [loadingTransactionDay, loadingTransactionYear])
+
     useEffect(() => {
         if (screenName === 'historique') {
             host && dispatch(getTransactionsDays(host.id as string))
@@ -32,15 +44,16 @@ const Historique: FC<COMPONENT_TYPE> = (props) => {
     }, [screenName])
 
     return (
-        <ScreenContainer3 title='Historique' hide_switch navigation={navigation}>
+        <ScreenContainer3 title='Historique' reload hide_switch refreshing={refreshing} onRefresh={onRefresh} navigation={navigation}>
             <View style={styles.historique_container}>
                 {/* statistique recente semaine */}
                 {(loadingTransactionDay || allTransactionsDays === null) ?
                     <View style={{ minHeight: 210, marginVertical: 15, padding: 10, }}>
                         <Loading style_text_container={{ color: colors.white }} />
                     </View> :
-                    errorTransactionDay ? <ErrorServer height={200} message={`Une erreur est survenue lors de la récupération des transactions de la semaine.`} /> :
-                        allTransactionsDays.length === 0 ? <NoElement height={200} message={`Aucune donnée des transactions de la semaine n'a été trouvée pour le moment.`} /> :
+                    errorTransactionDay ? <ErrorServer height={200} message={`Une erreur est survenue lors de la récupération des transactions de la semaine.\nVeuillez actualiser l'écran en le tirant vers le bas.`} /> :
+                        allTransactionsDays.length === 0 ? <NoElement height={200} message={`Aucune transaction n'a été effectuée cette semaine.`} /> :
+
                             <View style={styles.statistic_recent_container}>
                                 <Text style={styles.statistic_recent_title}>Dépenses récentes sur mon compte</Text>
                                 <BarChart
@@ -89,8 +102,8 @@ const Historique: FC<COMPONENT_TYPE> = (props) => {
                     <View style={{ minHeight: 210, marginVertical: 15, padding: 10, }}>
                         <Loading style_text_container={{ color: colors.white }} />
                     </View> :
-                    errorTransactionYear ? <ErrorServer height={200} message={`Une erreur est survenue lors de la récupération des transactions de l'année.`} /> :
-                        allTransactionsYear.length === 0 ? <NoElement height={200} message={`Aucune donnée des transactions de l'année n'a été trouvée pour le moment.`} /> :
+                    errorTransactionYear ? <ErrorServer height={200} message={`Une erreur est survenue lors de la récupération des transactions de l'année.\nVeuillez actualiser l'écran en le tirant vers le bas.`} /> :
+                        allTransactionsYear.length === 0 ? <NoElement height={200} message={`Aucune transaction n'a été effectuée cette année.`} /> :
                             <View style={styles.statistic_global_container}>
                                 <Text style={styles.statistic_global_title}>Historique Globale</Text>
                                 <LineChart

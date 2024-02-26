@@ -1,9 +1,9 @@
-import { ERROR_PARTNER, GET_ALL_PARTNERS, GET_ALL_PARTNERS_WITHOUT_LOADING, LOADING_PARTNER } from './partner.constant'
+import { ERROR_PARTNER, GET_ALL_PARTNERS, LOADING_PARTNER, RESET_PARTNER } from './partner.constant'
 import { INITIAL_PARTNER_STATE_TYPE } from './partner.model'
 
 const initialState: INITIAL_PARTNER_STATE_TYPE = {
     partner: null,
-    allPartners: [],
+    allPartners: null,
     loadingPartner: false,
     error: null
 }
@@ -18,13 +18,13 @@ const partnerReducer = (state = initialState, action: IAction): INITIAL_PARTNER_
             return { ...state, loadingPartner: true }
 
         case ERROR_PARTNER:
-            return { ...state, error: payload, loadingPartner: false }
+            return { ...state, error: payload, loadingPartner: false, allPartners: {} as any }
 
         case GET_ALL_PARTNERS:
-            return { ...state, allPartners: payload, loadingPartner: false, error: null }
+            return { ...state, allPartners: payload, loadingPartner: false, error: false }
 
-        case GET_ALL_PARTNERS_WITHOUT_LOADING:
-            return { ...state, allPartners: payload, loadingPartner: false, error: null }
+        case RESET_PARTNER:
+            return { ...state, allPartners: null, }
 
         default: return state
     }

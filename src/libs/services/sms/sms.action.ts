@@ -17,6 +17,8 @@ export const getAllSms = (data: SMS_TYPE[]) => async (dispatch: any) => {
     try {
         dispatch(loadingSms())
 
+        await new Promise(resolve => setTimeout(resolve, 1500))
+
         dispatch({ type: GET_ALL_SMS, payload: data })
     } catch (error: any) {
         debug('GET ALL SMS', error?.response?.data || error.message)

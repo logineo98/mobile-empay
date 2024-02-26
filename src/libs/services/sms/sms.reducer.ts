@@ -1,4 +1,4 @@
-import { ERROR_SMS, GET_ALL_SMS, LOADING_SMS, SEND_SMS } from './sms.constant'
+import { ERROR_SMS, GET_ALL_SMS, LOADING_SMS } from './sms.constant'
 import { INITIAL_SMS_STATE_TYPE } from './sms.model'
 
 interface IAction { type: string, payload: any }
@@ -22,9 +22,6 @@ const smsReducer = (state = initialState, action: IAction): INITIAL_SMS_STATE_TY
 
         case GET_ALL_SMS:
             return { ...state, allSms: payload, loadingSms: false, errorSms: false }
-
-        case SEND_SMS:
-            return { ...state, loadingSms: false, errorSms: false }
 
         default: return state
     }
