@@ -5,7 +5,7 @@ const initialState: INITIAL_PARTNER_STATE_TYPE = {
     partner: null,
     allPartners: null,
     loadingPartner: false,
-    error: null
+    error: false,
 }
 
 interface IAction { type: string, payload: any }

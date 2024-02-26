@@ -7,7 +7,7 @@ const loadingTarif = () => (dispatch: any) => {
     dispatch({ type: LOADING_TARIF })
 }
 
-const errorTarif = (payload: any) => (dispatch: any) => {
+const errorTarif = (payload: boolean) => (dispatch: any) => {
     dispatch({ type: ERROR_TARIF, payload })
 }
 
@@ -22,7 +22,7 @@ export const getAllTarifs = () => async (dispatch: any) => {
         dispatch({ type: GET_ALL_TARIFS, payload: response.data })
     } catch (error: any) {
         debug('GET ALL TARIFS', error?.response?.data || error.message)
-        dispatch(errorTarif(error?.response?.data))
+        dispatch(errorTarif(true))
     }
 }
 
