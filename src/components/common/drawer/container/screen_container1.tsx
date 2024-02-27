@@ -99,7 +99,8 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
                         <TouchableOpacity activeOpacity={0.5} style={[styles.bottom_item_container, { backgroundColor: colors.black }]} onPress={() => setShow(false)}>
                             <Image source={images.minus} style={styles.bottom_item} tintColor={colors.profil_bg_color} />
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => setVisibleServiceClientModal(true)}>
+                        {/* <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => setVisibleServiceClientModal(true)}> */}
+                        <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => navigation.navigate('chatbot')}>
                             <Image source={images.service_client} style={styles.bottom_item} tintColor={colors.black} />
                         </TouchableOpacity>
                     </View>

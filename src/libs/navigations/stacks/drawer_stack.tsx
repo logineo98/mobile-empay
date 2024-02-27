@@ -16,6 +16,7 @@ import ServiceClient from '../../../screens/drawer/service_client'
 import Status from '../../../screens/drawer/status'
 import Tarif from '../../../screens/drawer/tarif'
 import PaymentStack from './payment_stack'
+import Chatbot from '../../../screens/drawer/chatbot'
 
 type COMPONENT_TYPE = {
     route: RouteProp<ParamListBase, 'main'>
@@ -37,6 +38,7 @@ const DrawerStack: FC<COMPONENT_TYPE> = ({ route }) => {
         >
             <drawer.Screen name='home' children={({ navigation }) => <Home navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='a_propos' component={APropos} />
+            <drawer.Screen name='chatbot' children={({ navigation }) => <Chatbot navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='geolocalisation' children={({ navigation }) => <Geolocalisation navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='historique' children={({ navigation }) => <Historique navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='ika_wari_taa_status' component={IkaWariTaaStatus} />

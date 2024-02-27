@@ -14,14 +14,11 @@ import { colors, roboto } from '../../libs/typography/typography'
 import HistoriqueCard from '../../components/card/drawer/historique_card'
 import { RootState } from '../../libs/services/store'
 import { formatCardNumber } from '../../libs/constants/utils'
-import { getAllSms } from '../../libs/services/sms/sms.action'
 import { SMS_TYPE } from '../../libs/services/sms/sms.model'
 import { getUser, sendSms } from '../../libs/services/user/user.action'
+import { getAllHistorys } from '../../libs/services/history/history.action'
 // my icons
 import Feather from 'react-native-vector-icons/Feather'
-import Loading from '../../components/common/drawer/others/loading'
-import SecondaryLoading from '../../components/common/secondary_loading'
-import { getAllHistorys } from '../../libs/services/history/history.action'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, screenName: string }
 
@@ -92,7 +89,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                             await new Promise(resolve => setTimeout(resolve, 1000))
                             setSendSmsLoading(false)
 
-                            clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+                            // clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
                         }
                     }
 
@@ -108,7 +105,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                             await new Promise(resolve => setTimeout(resolve, 1000))
                             setSendSmsLoading(false)
 
-                            clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+                            // clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
                         }
                     }
 
