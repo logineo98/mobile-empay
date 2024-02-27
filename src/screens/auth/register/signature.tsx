@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import CheckBox from '@react-native-community/checkbox';
 import FontAwesome from "react-native-vector-icons/FontAwesome"
@@ -6,12 +6,11 @@ import { colors, roboto } from '../../../libs/typography/typography'
 import Wrapper from '../../../components/common/wrapper'
 import Container from '../../../components/common/container'
 import Spacer from '../../../components/common/spacer'
-import { allInputsFilled, images } from '../../../libs/constants/constants'
+import { images } from '../../../libs/constants/constants'
 import { useNavigation } from '@react-navigation/native'
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSpring } from 'react-native-reanimated';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, } from 'react-redux';
 import { userModel } from '../../../libs/services/user/user.model';
-import { RootState } from '../../../libs/services/store';
 import SignatureCapture from 'react-native-signature-capture'
 import Toast from 'react-native-toast-message';
 import { Image as CompressImg } from 'react-native-compressor';
@@ -27,58 +26,69 @@ const Signature = () => {
     const [next, setNext] = useState(false);
     const initial: userModel = { signature: null }
     const [inputs, setInputs] = useState(initial);
-    const [store, setStore] = useState<userModel>();
     const signatureRef = useRef<any>();
     const [sign, setSign] = useState<any>('');
     const [ok, setOk] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
 
 
-    console.log(inputs)
-
-
-    //alert for errors form this app
+    //----- display errors
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
 
-    //animate login button
+    //----- animation
     useEffect(() => { if (inputs?.signature !== null && isChecked) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [inputs?.signature, isChecked]);
 
-    //setup signature
-    useEffect(() => {
-        if (sign === "") setInputs({ ...inputs, signature: "" })
+    //----- signature set up
+    useEffect(() => { compressingFn() }, [sign, ok]);
 
-        const comp = async () => {
-            try {
-                const img = await CompressImg.compress(`file:///${sign}`, { output: "png", compressionMethod: "auto", quality: 0.5, })
-                setInputs({ ...inputs, signature: { uri: img, type: 'image/png', name: 'signature.png' } })
-            } catch (error: any) {
-                console.log("Erreur lors de la signature")
-            }
-        }
-        comp()
-    }, [sign, ok]);
+    //----- go next screen if alright
+    useEffect(() => { setLocalStorage() }, [next]);
 
-
-    //retrieve prev datas from localstorage
-    useEffect(() => { AsyncStorage.getItem("inputs").then((res: any) => { const _inpt = JSON.parse(res); setStore({ ..._inpt }) }) }, []);
-
-
-    //result of traitement
-    useEffect(() => { if (next) { AsyncStorage.setItem("inputs", JSON.stringify(store)); navigation.navigate("secure"); setNext(false); } }, [next, store]);
+    //----- get local storage data and hydrate form
+    useEffect(() => { getLocalStorage() }, []);
 
 
     const resetSign = () => { signatureRef.current.resetImage(); setInputs({ ...inputs, signature: null }) };
     const _onSaveEvent = (result: any) => { setSign(result?.pathName); setOk(!ok) };
     const _onDragEvent = () => { signatureRef.current.saveImage() };
 
-    //traitement of login
+    //----- compress an signature image
+    async function compressingFn() {
+        if (sign === "") setInputs({ ...inputs, signature: "" })
+        try {
+            const img = await CompressImg.compress(`file:///${sign}`, { output: "png", compressionMethod: "auto", quality: 0.5, })
+            setInputs({ ...inputs, signature: { uri: img, type: 'image/png', name: 'signature.png' } })
+        } catch (error: any) {
+            console.log("")
+        }
+    }
+
+    //----- set local storage data and go next
+    async function setLocalStorage() {
+        if (next) {
+            const response = await getLocalStorage()
+            const save = { ...response, ...inputs }
+            AsyncStorage.setItem("inputs", JSON.stringify(save));
+            navigation.navigate("emergency_contact");
+            setNext(false);
+        }
+    }
+
+    //----- get local storage data
+    async function getLocalStorage() {
+        const response = await AsyncStorage.getItem("inputs");
+        return JSON.parse(response as string)
+    }
+
+    //----- signature traitement
     const handle_validate = () => {
         const validation: userModel = { signature: inputs?.signature, isChecked: isChecked }
         if (inscription_inputs_request("signature", validation, setError)) return;
-        setStore({ ...store, signature: inputs?.signature })
+        //  setStore({ ...store, signature: inputs?.signature })
 
         setNext(true)
     }
+
 
 
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });
@@ -86,8 +96,9 @@ const Signature = () => {
 
     return (
         <Wrapper image imageData={images.register_signature_bg_img}   >
+            <StatusBar translucent backgroundColor={"transparent"} />
             <ToastContainer />
-            <Container scoll position={"between"} style={{ alignItems: "center" }}>
+            <Container scoll position={"between"} style={{ alignItems: "center", marginTop: 20 }}>
                 <View />
 
                 <View style={{ width: "100%", alignItems: "center" }}>

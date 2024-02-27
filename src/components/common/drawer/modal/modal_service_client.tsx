@@ -15,11 +15,8 @@ const ModalServiceClient: FC<COMPONENT_TYPE> = (props) => {
 
     const call = (phoneNumber: string) => {
 
-        if (Platform.OS === 'android') {
-            phoneNumber = `tel:${phoneNumber}`
-        } else if (Platform.OS === 'ios') {
-            phoneNumber = `telprompt:${phoneNumber}`
-        }
+        if (Platform.OS === 'android') phoneNumber = `tel:${phoneNumber}`
+        else if (Platform.OS === 'ios') phoneNumber = `telprompt:${phoneNumber}`
 
         setVisibleServiceClientModal(false)
 
@@ -31,7 +28,7 @@ const ModalServiceClient: FC<COMPONENT_TYPE> = (props) => {
             <View style={styles.modal_global_container}>
                 <View style={styles.modal_container}>
                     <Text style={[styles.modal_title, { marginBottom: 15, }]}>Service Client</Text>
-                    <TouchableOpacity activeOpacity={0.5} style={styles.service_client_container} onPress={() => call('50001231')}>
+                    <TouchableOpacity activeOpacity={0.5} style={styles.service_client_container} onPress={() => call('+22350001231')}>
                         <View style={[styles.service_icon_type_container, { backgroundColor: colors.screen_bg_color, }]}>
                             <View style={styles.service_icon_container}>
                                 <Image source={images.service_client} tintColor={colors.drawer_icon_color} style={styles.service_icon} />
@@ -40,7 +37,7 @@ const ModalServiceClient: FC<COMPONENT_TYPE> = (props) => {
                         </View>
                         <Text style={styles.service_number_phone}>50 00 12 31</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.5} style={styles.service_client_container} onPress={() => call('20292109')}>
+                    <TouchableOpacity activeOpacity={0.5} style={styles.service_client_container} onPress={() => call('+22344979599')}>
                         <CustomLinearGradient style={styles.service_client_gradient}>
                             <View style={styles.service_icon_type_container}>
                                 <View style={styles.service_icon_container}>
@@ -49,10 +46,10 @@ const ModalServiceClient: FC<COMPONENT_TYPE> = (props) => {
                                 <Text style={[styles.service_type, { color: colors.black, }]}>UBA-GIM</Text>
                             </View>
                         </CustomLinearGradient>
-                        <Text style={styles.service_number_phone}>20 29 21 09</Text>
+                        <Text style={styles.service_number_phone}>44 97 95 99</Text>
                     </TouchableOpacity>
 
-                    {/* fermer service client modal */}
+                    {/* fermer modal */}
                     <View style={styles.fermer_service_client_modal_container}>
                         <TouchableOpacity activeOpacity={0.5} style={styles.fermer_service_client_modal} onPress={() => setVisibleServiceClientModal(false)}>
                             <Text style={styles.fermer_service_client_modal_text}>Fermer</Text>

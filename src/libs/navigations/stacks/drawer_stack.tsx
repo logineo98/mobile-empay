@@ -24,23 +24,21 @@ type COMPONENT_TYPE = {
 const DrawerStack: FC<COMPONENT_TYPE> = ({ route }) => {
     const drawer = createDrawerNavigator()
 
-    const [screenName, setScreenName] = useState('')
+    const [screenName, setScreenName] = useState('home')
 
     useEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route)
-        setScreenName(routeName as string)
+        setScreenName(routeName as string || 'home')
     }, [route])
-
-    console.log('drawer_stack', screenName)
 
     return (
         <drawer.Navigator initialRouteName='home' screenOptions={{ headerShown: false, swipeEnabled: false, drawerStyle: styles.drawer_style }}
             drawerContent={({ navigation }) => <CustomDrawerContent navigation={navigation} />}
         >
-            <drawer.Screen name='home' component={Home} />
+            <drawer.Screen name='home' children={({ navigation }) => <Home navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='a_propos' component={APropos} />
             <drawer.Screen name='geolocalisation' children={({ navigation }) => <Geolocalisation navigation={navigation} screenName={screenName} />} />
-            <drawer.Screen name='historique' component={Historique} />
+            <drawer.Screen name='historique' children={({ navigation }) => <Historique navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='ika_wari_taa_status' component={IkaWariTaaStatus} />
             <drawer.Screen name='ika_wari_taa' children={({ navigation }) => <IkaWariTaa navigation={navigation} screenName={screenName} />} />
             <drawer.Screen name='partenaire' children={({ navigation }) => <Partenaire navigation={navigation} screenName={screenName} />} />

@@ -1,4 +1,4 @@
-import { ImageBackground, ImageStyle, ScrollView, StyleSheet, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
+import { ImageBackground, ImageStyle, ScrollView, StatusBar, StyleSheet, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
 import React from 'react'
 
 type props = { overlay?: string, style?: ViewStyle, imageStyle?: ImageStyle, children?: React.JSX.Element | React.JSX.Element[] | any, image?: boolean, imageData?: any }
@@ -17,7 +17,7 @@ const Wrapper = ({ children, style, image, imageData, imageStyle, overlay }: pro
             <View style={[styles.container, style]}>
                 {children}
             </View> :
-            (<ImageBackground source={imageData} style={[styles.containerImg, imageStyle, {}]}>
+            (<ImageBackground source={imageData} style={[styles.containerImg, imageStyle, { height: "100%", }]}>
                 {overlay && <View style={{ ...StyleSheet.absoluteFillObject, backgroundColor: overlay }} />}
                 {children}
             </ImageBackground>)

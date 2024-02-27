@@ -24,7 +24,7 @@ export const colors = {
     auth_icon: 'rgba(0,0,0,0.5)',
     placeholder: 'rgba(0,0,0,0.2)',
     divider: 'rgba(0,0,0,0.2)',
-    tz_blue: '#0459B5',
+    blue: '#0459B5',
     success: '#82dd55',
     error: '#e23636',
     warning: '#edb95e',

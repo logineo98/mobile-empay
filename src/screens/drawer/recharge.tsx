@@ -46,7 +46,7 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
         } else {
             setErr(initialError)
 
-            dispatch(recharge({ customerId: host?.id as string, amount: parseInt(vitepayData.montant, 10), phone: vitepayData.phone }))
+            dispatch(recharge({ customerId: host?.id as string, amount: parseInt(vitepayData.montant, 10), phone: vitepayData.phone, transactionType: 'crediter' }))
         }
     }
 
@@ -68,15 +68,30 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
     }
 
     useEffect(() => {
-        if (screenName === 'recharge') {
-            dispatch(verifyRechargeStatus())
-        }
+        if (screenName === 'recharge') dispatch(verifyRechargeStatus())
     }, [screenName, clickRefaireRecharge])
 
     return (
         <ScreenContainer2 title='Recharge' scroll navigation={navigation}>
             <View style={styles.recharge_container}>
-                <GradientText text={`Veuillez cliquer sur le bouton 'RECHARGER' afin de recharger votre compte via VITEPAY.`} style={styles.presentation} />
+                <GradientText text={`Détail sur les pourcentages de VITEPAY et UBA.`} style={styles.presentation} />
+
+                <View style={styles.detail_container}>
+                    <Text style={styles.detail}>Vitepay : 2%</Text>
+                    <Text style={styles.detail}>UBA : </Text>
+                    <View style={styles.detail2_container}>
+                        <Text style={styles.detail2}>       . coût de rechargement  de la carte 1,5%</Text>
+                        <Text style={styles.detail2}>       . frais de retrait gab Uba Mali 0 fcfa</Text>
+                        <Text style={styles.detail2}>       . frais de retrait gab réseau visa à l'international 3%</Text>
+                        <Text style={styles.detail2}>       . frais réseau GIM UEMOA 500 fcfa</Text>
+                        <Text style={styles.detail2}>       . frais de maintenance carte prépayée 750 fcfa</Text>
+                        <Text style={styles.detail2}>       . validité de la carte 3 ans</Text>
+                        <Text style={styles.detail2}>       . rechargement maximum/ jour 2M fcfa</Text>
+                        <Text style={styles.detail2}>       . solde cumulé Mensuel 10M fcfa</Text>
+                        <Text style={styles.detail2}>       . limite retrait/j 2M fcfa</Text>
+                        <Text style={styles.detail2}>       . limite paiement par opération (TPE&Web) 2M fcfa</Text>
+                    </View>
+                </View>
 
                 <View style={styles.btn_recharger_container}>
                     <TouchableOpacity activeOpacity={0.5} style={styles.btn_recharger} onPress={() => setVisible(true)}>
@@ -89,6 +104,7 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
                 <Modal transparent animationType='slide' visible={visible}>
                     <View style={styles.modal_global_container}>
                         <View style={[styles.modal_container, { height: height < 500 ? '100%' : '60%', }]}>
+                            {/* <View style={[styles.modal_container, { height: height < 500 ? '100%' : '60%', }]}> */}
                             {/* modal header vitepay logo et close icon */}
                             <View style={styles.modal_header_container}>
                                 <View style={[styles.vitepay_logo_container, { top: -80, left: width - (width / 2 + 80), }]}>
@@ -101,10 +117,10 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
                             </View>
 
                             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ padding: 10, flexGrow: 1, }} keyboardShouldPersistTaps='handled'>
-                                {user_loading ? <Loading text='Traitement en cours...' no_gradient color={colors.black} style_text_container={styles.loading_text} style_container={styles.loading} /> :
+                                {user_loading ? <Loading text='Traitement en cours...' no_gradient color={colors.black} style_text_container={styles.loading_text} style={styles.loading} /> :
                                     recharge_response === 'PENDING' ?
                                         <View style={styles.recharge_status_container}>
-                                            <Loading no_gradient color={colors.black} text=' ' style_text_container={styles.loading_text} style_container={styles.loading} />
+                                            <Loading no_gradient color={colors.black} text=' ' style_text_container={styles.loading_text} style={styles.loading} />
 
                                             <Text style={{ marginVertical: 10, color: colors.black, fontSize: 15, fontFamily: roboto.regular, textAlign: 'center', }}>
                                                 Une ou votre recharge est en cours de validation. Pour valider et terminer votre transaction, veuillez suivre les instructions envoyées au <Text style={{ fontWeight: 'bold', color: colors.fond1 }}>{vitepayData.phone}</Text>. Vous pouvez également saisir directement <Text style={{ fontWeight: 'bold', color: colors.fond1 }}>#144#3*6#</Text> (code USSD) sur votre téléphone pour afficher le menu de confirmation de paiement.
@@ -117,7 +133,7 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
                                                     <Text style={styles.btn_name}>Oui</Text>
                                                 </TouchableOpacity>
                                             </View>
-                                        </View> : (recharge_response === 'CANCELED' || recharge_response === 'SUCCESS') ?
+                                        </View> : (recharge_response == 'CANCELED' || recharge_response === 'SUCCESS') ?
                                             <View style={styles.recharge_status_container}>
                                                 <View style={styles.status_icon_container}>
                                                     {recharge_response === 'SUCCESS' ? <FontAwesome5 name='check-circle' color={colors.success} size={100} style={styles.status_icon} /> : <Entypo name='circle-with-cross' color={colors.error} size={100} style={styles.status_icon} />}
@@ -132,16 +148,24 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
                                                 </View>
                                             </View> :
                                             <View style={styles.formulaire_container}>
-                                                <View style={styles.input_container}>
-                                                    <Text style={styles.input_title}>Téléphone</Text>
-                                                    <TextInput keyboardType='numeric' maxLength={8} style={styles.input} placeholderTextColor={`rgba(0,0,0,0.5)`} placeholder={'Numéro orange (sans l\'indicatif)'} value={vitepayData.phone} onChangeText={text => setVitepayData({ ...vitepayData, phone: text })} />
-                                                    {err?.phone && <Text style={styles.input_error}> {err?.phone} </Text>}
-                                                </View>
+                                                <View>
+                                                    <View style={styles.input_container}>
+                                                        <Text style={styles.input_title}>Téléphone</Text>
+                                                        <TextInput keyboardType='numeric' maxLength={8} style={styles.input} placeholderTextColor={`rgba(0,0,0,0.5)`} placeholder={'Numéro orange (sans l\'indicatif)'} value={vitepayData.phone} onChangeText={text => setVitepayData({ ...vitepayData, phone: text })} />
+                                                        {err?.phone && <Text style={styles.input_error}> {err?.phone} </Text>}
+                                                    </View>
 
-                                                <View style={styles.input_container}>
-                                                    <Text style={styles.input_title}>Montant (FCFA)</Text>
-                                                    <TextInput keyboardType='numeric' style={styles.input} placeholderTextColor={`rgba(0,0,0,0.5)`} placeholder={'Montant de la recharge'} value={vitepayData.montant} onChangeText={text => setVitepayData({ ...vitepayData, montant: text })} />
-                                                    {err?.montant && <Text style={styles.input_error}> {err?.montant} </Text>}
+                                                    <View style={[styles.input_container, { marginBottom: 0, }]}>
+                                                        <Text style={styles.input_title}>Montant (FCFA)</Text>
+                                                        <TextInput keyboardType='numeric' style={styles.input} placeholderTextColor={`rgba(0,0,0,0.5)`} placeholder={'Montant de la recharge'} value={vitepayData.montant} onChangeText={text => setVitepayData({ ...vitepayData, montant: text })} />
+                                                        {err?.montant && <Text style={styles.input_error}> {err?.montant} </Text>}
+                                                    </View>
+
+                                                    <View style={styles.percent_partenaire}>
+                                                        <Text style={styles.percent_partenaire_text}>Montant après déduction des frais :</Text>
+                                                        <Text style={[styles.percent_partenaire_text, { fontFamily: roboto.black, color: colors.fond1, }]}> {vitepayData.montant ? (parseInt(vitepayData.montant, 10) - (parseInt(vitepayData.montant, 10) * 3.5) / 100) : 0} </Text>
+                                                        <Text style={styles.percent_partenaire_text}>FCFA</Text>
+                                                    </View>
                                                 </View>
 
                                                 <View style={styles.btn_container}>
@@ -163,7 +187,12 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
 const styles = StyleSheet.create({
     recharge_container: { paddingHorizontal: 20, },
 
-    presentation: { fontSize: 15, fontFamily: roboto.black, textAlign: 'justify', marginVertical: 150, },
+    presentation: { fontSize: 15, fontFamily: roboto.black, textAlign: 'justify', },
+
+    detail_container: { marginVertical: 45, },
+    detail: { color: colors.white, fontSize: 15, fontFamily: roboto.regular, },
+    detail2_container: {},
+    detail2: { color: colors.white, fontSize: 14, fontFamily: roboto.regular, },
 
     btn_recharger_container: { alignItems: 'center', },
     btn_recharger: {},
@@ -187,11 +216,6 @@ const styles = StyleSheet.create({
     input: { height: 60, color: colors.black, fontFamily: roboto.regular, fontSize: 13, },
     input_error: { color: colors.fond1, fontFamily: roboto.italic, fontSize: 10, },
 
-    // bouton recharger dans le modal
-    btn_container: { alignItems: 'center', marginTop: 10, },
-    btn: { width: 200, backgroundColor: colors.screen_bg_color, padding: 10, borderRadius: 20, },
-    btn_name: { color: colors.white, fontFamily: roboto.black, textAlign: 'center', textTransform: 'uppercase', },
-
     // recharge status
     recharge_status_container: { flex: 1, justifyContent: 'space-between', },
     loading: {},
@@ -201,7 +225,14 @@ const styles = StyleSheet.create({
     status_icon: {},
     status_message: { color: colors.black, fontFamily: roboto.regular, textAlign: 'center', fontSize: 15, marginVertical: 25 },
 
+    // pourcentage des partenaire
+    percent_partenaire: { flexDirection: 'row', alignItems: 'center', },
+    percent_partenaire_text: { color: colors.black, fontFamily: roboto.italic, fontSize: 10, },
 
+    // bouton recharger dans le modal
+    btn_container: { alignItems: 'center', marginTop: 10, },
+    btn: { width: 200, backgroundColor: colors.screen_bg_color, padding: 10, borderRadius: 20, },
+    btn_name: { color: colors.white, fontFamily: roboto.black, textAlign: 'center', textTransform: 'uppercase', },
 })
 
 export default Recharge

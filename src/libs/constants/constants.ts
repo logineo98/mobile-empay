@@ -20,7 +20,7 @@ export const images = {
     register_secure_bg_img: require("../assets/images/IMAGE8.jpg"),
     register_finalisation_bg_img: require("../assets/images/IMAGE10.jpg"),
     auth_action_btn_img: require("../assets/images/SKIP_ICON.png"),
-
+    welcome: require("../assets/images/welcome.gif"),
 
     // tz
     logo_white: require('../assets/images/logo_white.png'),
@@ -55,6 +55,12 @@ export const images = {
     yara_oil: require('../assets/images/yara_oil.png'),
     brooklyn_burger: require('../assets/images/brooklyn_burger.png'),
     logineo: require('../assets/images/logineo.png'),
+    clock: require('../assets/images/clock.png'),
+    coin: require('../assets/images/coin.png'),
+}
+
+export const videos = {
+    welcome: require("../assets/videos/welcome.mp4")
 }
 
 
@@ -69,5 +75,5 @@ export const logger = (title?: string, desc?: string) => {
 
 export const handleChangeMobile = (key: string, value: string, setInputs: any) => { setInputs((prevState: any) => ({ ...prevState, [key]: value, })) }
 
-export const allInputsFilled = (inputs: any) => Object.values(inputs).every(value => value !== '');
+export const allInputsFilled = (inputs: any) => Object.values(inputs).every(value => value !== '' && value !== undefined && value !== null);
 export const allInputsEmpty = (inputs: any) => Object.values(inputs).every(value => value === '');

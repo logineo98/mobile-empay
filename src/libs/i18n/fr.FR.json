@@ -13,8 +13,8 @@
         "register_link": "S'inscrire",
         "forgot_password_link": "Mot de passe oublié!",
         "errors": {
-            "phone_field_empty": "Un numéro de téléphone est requis.",
-            "password_field_empty": "Un mot de passe est requis.",
+            "phone_field_empty": "Un numéro de téléphone ne doit pas être vide.",
+            "password_field_empty": "Un mot de passe ne doit pas être vide.",
             "incorrect": "Un numéro de téléphone ou mot de passe incorrect.",
             "signature_condition": "Veuillez accepter les conditions générales d'abord."
         }
@@ -28,12 +28,53 @@
             "firstname": "Prénom",
             "birth": "Date de naissance",
             "errors": {
-                "phone_field_empty": "Un numéro de téléphone est requis.",
-                "name_field_empty": "Un nom est requis.",
-                "firstname": "Un prenom est requis.",
-                "password_field_empty": "Un mot de passe est requis.",
+                "phone_field_empty": "Le numéro de téléphone ne doit pas être vide.",
+                "name_field_empty": "Le nom ne doit pas être vide.",
+                "firstname": "Le prenom ne doit pas être vide.",
+                "password_field_empty": "Le mot de passe ne doit pas être vide.",
                 "phone_incorrect": "Format numéro de téléphone incorrect.",
-                "birthday_error": "Choisissez une date inférieur à la date d'aujourd'hui."
+                "birthday_empty": "La date de naissancene doit pas être vide.",
+                "birthday_error": "Choisissez une date inférieur à la date d'aujourd'hui.",
+                "email_empty": "L'adresse ne doit pas être vide."
+            }
+        },
+        "emergency": {
+            "title": "Inscription",
+            "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum incidunt laborum",
+            "phone_field": "Numéro de téléphone",
+            "name": "Nom du contact",
+            "firstname": "Prénom du contact",
+            "address": "Adresse du contact",
+            "phone": "Téléphone portable du contact",
+            "email": "Email du contact",
+            "relationship": "Nature de relation",
+            "errors": {
+                "name_field_empty": "Le nom de votre contact à prevenir est necessaire.",
+                "firstname_field_empty": "Le prénom de votre contact à prevenir est necessaire.",
+                "address_field_empty": "L'adresse de votre contact à prevenir est necessaire.",
+                "phone_field_empty": "Le téléphone portable de votre contact à prevenir est necessaire.",
+                "email_field_empty": "L'email de votre contact à prevenir est necessaire.",
+                "relationship_field_empty": "La nature de relation de votre contact à prevenir est necessaire."
+            }
+        },
+        "infosSupp": {
+            "title": "Inscription",
+            "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum incidunt laborum",
+            "residenceCountry": "Pays de résidence",
+            "nationality": "Nationalité",
+            "placeOfBirth": "Lieu de naissance",
+            "city": "Ville",
+            "nameOnCard": "Nom exact que vous voulez voir apparaître sur la carte",
+            "currentActivity": "Emploi/ occupation actuelle",
+            "fieldOfActivity": "Domaine d'activité de l'employeur",
+            "errors": {
+                "residenceCountry_field_empty": "Le pays de résidence ne doit pas être vide.",
+                "nationality_field_empty": "La nationalité ne doit pas être vide.",
+                "placeOfBirth_field_empty": "Le lieu de naissance ne doit pas être vide.",
+                "city_field_empty": "La ville ne doit pas être vide.",
+                "nameOnCard_field_empty": "Le nom exact à afficher sur la carte est neccessaire.",
+                "currentActivity_field_empty": "L'emploi/ occupation actuelle ne doit pas être vide.",
+                "fieldOfActivity_field_empty": "Le domaine d'activité de l'employeur est neccessaire."
             }
         },
         "account": {
@@ -48,8 +89,8 @@
             },
             "account_count_field": "Numéro de compte UBA",
             "errors": {
-                "address_field_empty": "Une adresse est requise.",
-                "email_field_empty": "Un email est requis."
+                "address_field_empty": "Une adresse ne doit pas être videe.",
+                "email_field_empty": "Un email ne doit pas être vide."
             }
         },
         "document": {
@@ -60,7 +101,11 @@
             "cin": "CIN",
             "photo_text": "Faire la photo de votre pièce d'identité",
             "errors": {
-                "choice": "Le choix d'un document est neccessaire."
+                "choice": "Le choix d'un document est neccessaire.",
+                "document_number_empty": "Le numéro de votre document est neccessaire",
+                "document_delivery_empty": "La date de delivrance de votre document est neccessaire.",
+                "document_autority_empty": "L'autorité de delivrance de votre document est neccessaire.",
+                "document_expiration_empty": "La date d'expiration de votre document est neccessaire."
             }
         },
         "identity": {
@@ -68,7 +113,7 @@
                 "title": "Inscription",
                 "description": "Faire un selfie",
                 "errors": {
-                    "photo": "Votre photo est requise."
+                    "photo": "Votre photo ne doit pas être videe."
                 }
             },
             "signature": {
@@ -76,7 +121,7 @@
                 "description": "Signez manuellement dans le champ ci-dessous.",
                 "authorize": "J'accepte les conditions générales",
                 "errors": {
-                    "signature": "Votre signature est requise.",
+                    "signature": "Votre signature ne doit pas être videe.",
                     "authorize": "Veuillez accepté les conditions générales."
                 }
             },
@@ -86,7 +131,7 @@
                 "password": "Mot de passe",
                 "confirm": "Confirmation mot de passe",
                 "errors": {
-                    "password_empty": "Un mot de passe est requis.",
+                    "password_empty": "Un mot de passe ne doit pas être vide.",
                     "confirm_empty": "Les mots de passe ne se correspondent pas.",
                     "password_size": "Taille mot de passe trop court.",
                     "password_faible": "Mot de passe faible."
@@ -103,7 +148,7 @@
         "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum incidunt laborum consequatur eius quod impedit ab asperiores eveniet molestias nihil.",
         "phone_field": "Numéro de téléphone*",
         "errors": {
-            "phone_field_empty": "Un numéro de téléphone est requis.",
+            "phone_field_empty": "Un numéro de téléphone ne doit pas être vide.",
             "phone_field_format": "Format numéro de téléphone est incorrect."
         }
     },
@@ -122,7 +167,7 @@
         "password": "Mot de passe",
         "confirm": "Confirmation mot de passe",
         "errors": {
-            "password_empty": "Un mot de passe est requis.",
+            "password_empty": "Un mot de passe ne doit pas être vide.",
             "confirm_empty": "Les mots de passe ne se correspondent pas.",
             "password_size": "Taille mot de passe trop court.",
             "password_weak": "Mot de passe faible."

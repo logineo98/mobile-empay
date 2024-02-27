@@ -26,13 +26,13 @@ const TarifCard: FC<COMPONENT_TYPE> = (props) => {
                 </View>
             </View>
 
-            {index === 2 &&
+            {description.includes('ORANGE' || 'MOOV') &&
                 <View style={styles.mobile_img_container}>
                     <Image source={images.mobile_money} style={styles.mobile_img} />
                 </View>
             }
 
-            {index === 3 &&
+            {description.includes('GIM') &&
                 <View style={styles.guichet_img_container}>
                     <Image source={images.guichet} style={styles.guichet_img} />
                 </View>

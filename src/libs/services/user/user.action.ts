@@ -2,10 +2,11 @@ import axios from 'axios'
 import Toast from 'react-native-toast-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
+import { ToastAndroid } from 'react-native'
 // my importations
 import { RECHARGE_TYPE, scanModel, STATUS_TYPE, userModel } from './user.model'
-import { _end_point, get_credentials } from '../endpoints'
-import { get_all_users, get_all_users_without_loading, get_qr_code, receive_recharge_notification_canceled, receive_recharge_notification_success, receive_scan_notification, recharge_compte, reset_qr_code, scan_qr_code, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
+import { _end_point, get_credentials, set_credentials } from '../endpoints'
+import { card_losted, get_all_users, get_qr_code, get_user, receive_card_losted_notification, receive_recharge_notification_canceled, receive_recharge_notification_success, receive_scan_notification, recharge_compte, reset_all_users, reset_qr_code, scan_qr_code, send_sms_list, send_sms_loading, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
 import { Expired, debug } from '../../constants/utils'
 import { connexion_request, forgot_request, reset_request, verify_request } from './user.request'
 
@@ -109,7 +110,6 @@ export const forgot_verify = (data: userModel, setError: any) => async (dispatch
     }
 }
 
-
 export const resent_code = (data: userModel, setError: any) => async (dispatch: any) => {
     try {
         if (forgot_request(data, setError)) return;
@@ -174,20 +174,24 @@ export const getAllusers = () => async (dispatch: any) => {
         dispatch({ type: get_all_users, payload: response.data })
     } catch (error: any) {
         debug('GET ALL USERS', error?.response?.data || error.message)
-        dispatch(user_error(error?.response?.data || error.message))
+        dispatch(user_error(true))
     }
 }
 
-export const getAllusersWithoutLoading = () => async (dispatch: any) => {
+export const getUser = (id: string) => async (dispatch: any) => {
     try {
-        let token = await get_credentials('accessToken')
+        dispatch({ type: user_loading })
 
-        const response = await axios.get(`${_end_point.customer.find}`, { headers: { Authorization: `Bearer ${token}` } })
+        let accessToken = await get_credentials('accessToken')
 
-        dispatch({ type: get_all_users_without_loading, payload: response.data })
+        const response = await axios.get(`${_end_point.customer.show}/${id}`, { headers: { Authorization: `Bearer ${accessToken}` } })
+
+        set_credentials(response.data?.usr, accessToken)
+
+        dispatch({ type: get_user, payload: response.data })
     } catch (error: any) {
-        debug('GET ALL USERS WITHOUT LOADING', error?.response?.data || error.message)
-        dispatch(user_error(error?.response?.data || error.message))
+        debug('GET USER', error?.response?.data || error.message)
+        dispatch(user_error(true))
     }
 }
 
@@ -195,13 +199,11 @@ export const send_status_geo_montant = (data: STATUS_TYPE) => async (dispatch: a
     try {
         dispatch({ type: user_loading })
 
-        let token = await get_credentials('accessToken')
-        let expiresIn = await get_credentials('expiresIn')
-        let notificationToken = await get_credentials('notificationToken')
+        let accessToken = await get_credentials('accessToken')
 
-        const response = await axios.post(`${_end_point.customer.localisation}`, data, { headers: { Authorization: `Bearer ${token}` } })
+        const response = await axios.post(`${_end_point.customer.localisation}`, data, { headers: { Authorization: `Bearer ${accessToken}` } })
 
-        await AsyncStorage.setItem('credentials', JSON.stringify({ usr: response.data, accessToken: token, expiresIn, notificationToken }))
+        set_credentials(response.data?.usr, accessToken)
 
         dispatch({ type: user_status_geo_montant, payload: { usr: response.data, } })
     } catch (error: any) {
@@ -239,12 +241,11 @@ export const _scanQrCode = (data: scanModel, navigation: DrawerNavigationHelpers
     try {
         dispatch({ type: user_loading })
 
-        let token = await get_credentials('accessToken')
-        let expiresIn = await get_credentials('expiresIn')
+        let accessToken = await get_credentials('accessToken')
 
-        const response = await axios.post(`${_end_point.customer.scanner_traitement}`, data, { headers: { Authorization: `Bearer ${token}` } })
+        const response = await axios.post(`${_end_point.customer.scanner_traitement}`, data, { headers: { Authorization: `Bearer ${accessToken}` } })
 
-        await AsyncStorage.setItem('credentials', JSON.stringify({ usr: response.data?.usr, accessToken: token, expiresIn }))
+        set_credentials(response.data?.usr, accessToken)
 
         dispatch({ type: scan_qr_code, payload: response.data })
 
@@ -338,5 +339,77 @@ export const verifyRechargeStatus = () => async (dispatch: any) => {
         debug('RECHARGE COMPTE', error?.response?.data || error.message)
         Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
         dispatch(user_error(error?.response?.data || error.message))
+    }
+}
+
+export const _cardLosted = (
+    id: string, data: { lostCard: boolean },
+    setVisibleAskModal: (value: React.SetStateAction<boolean>) => void,
+    setDisplayVisaCard: (value: React.SetStateAction<boolean>) => void
+) => async (dispatch: any) => {
+    try {
+        dispatch({ type: user_loading })
+
+        let accessToken = await get_credentials('accessToken')
+
+        const response = await axios.put(`${_end_point.customer.customerCardState}/${id}`, data, { headers: { Authorization: `Bearer ${accessToken}` } })
+
+        set_credentials(response.data?.usr, accessToken)
+
+        setVisibleAskModal(false)
+        setDisplayVisaCard(false)
+
+        dispatch({ type: card_losted, payload: response.data })
+    } catch (error: any) {
+        debug('CARD LOSTED  ', error?.response?.data || error.message)
+        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        dispatch(user_error(error?.response?.data || error.message))
+    }
+}
+
+export const receiveCardLostedNotification = (usr: userModel) => async (dispatch: any) => {
+    try {
+        dispatch({ type: user_loading })
+
+        let accessToken = await get_credentials('accessToken')
+
+        set_credentials(usr, accessToken)
+
+        dispatch({ type: receive_card_losted_notification, payload: usr })
+    } catch (error: any) {
+        debug('RECEIVE CARD LOSTED NOTIFICATION', error?.response?.data || error.message)
+        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
+        dispatch(user_error(error?.response?.data || error.message))
+    }
+}
+
+export const sendSms = (data: { customerId: string, messages: string[] }, last_sms_date: string, clickSend: boolean) => async (dispatch: any) => {
+    try {
+        dispatch({ type: clickSend ? send_sms_loading : user_loading })
+
+        let accessToken = await get_credentials('accessToken')
+
+        const response = await axios.post(`${_end_point.sms.saveExternalTransactions}`, data, { headers: { Authorization: `Bearer ${accessToken}` } })
+
+        set_credentials(response.data?.usr, accessToken)
+
+        await AsyncStorage.setItem('last_sms_date', last_sms_date)
+
+        clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+
+        dispatch({ type: send_sms_list, payload: response.data })
+    } catch (error: any) {
+        debug('SEND SMS', error?.response?.data || error.message)
+        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        ToastAndroid.showWithGravity(`Erreur survenue lors de l'actualisation du montant.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+        dispatch(user_error(error?.response?.data || error.message))
+    }
+}
+
+export const resetAllUsers = () => async (dispatch: any) => {
+    try {
+        dispatch({ type: reset_all_users })
+    } catch (error: any) {
+        debug('RESET ALL USERS', error?.response?.data || error.message)
     }
 }

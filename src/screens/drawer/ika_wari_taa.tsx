@@ -14,10 +14,7 @@ import { RootState } from '../../libs/services/store'
 import { _scanQrCode, getQrCode, resetQrCode } from '../../libs/services/user/user.action'
 import Loading from '../../components/common/drawer/others/loading'
 
-type COMPONENT_TYPE = {
-    navigation: DrawerNavigationHelpers
-    screenName: string
-}
+type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, screenName: string }
 
 const IkaWariTaa: FC<COMPONENT_TYPE> = (props) => {
     const { navigation, screenName } = props
@@ -33,7 +30,7 @@ const IkaWariTaa: FC<COMPONENT_TYPE> = (props) => {
     const [err, setErr] = useState<{ montant: string }>()
 
     const handleShowQrCode = () => {
-        if (host?.AmountToExchange && host?.coordinates?.la && host?.coordinates?.lo) {
+        if (host?.AmountToExchange && host?.coordinates?.lat && host?.coordinates?.lng) {
             setShowQrCode(true)
             setScanQrCode(false)
             dispatch(getQrCode(host?.id as string))

@@ -1,24 +1,28 @@
-import { Image, Keyboard, ScrollView, StatusBar, StyleSheet, Switch, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Image, Keyboard, RefreshControl, ScrollView, StatusBar, StyleSheet, Switch, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 // my importations
 import { colors, roboto } from '../../../../libs/typography/typography'
 import { images } from '../../../../libs/constants/constants'
-// my icons
 import CustomLinearGradient from '../gradient/custom_linear_gradient'
 import { RootState } from '../../../../libs/services/store'
 import ModalServiceClient from '../modal/modal_service_client'
+import { _end_point } from '../../../../libs/services/endpoints'
+import ModalAsk from '../modal/modal_ask'
 
 type COMPONENT_TYPE = {
-    navigation: DrawerNavigationHelpers
     children: JSX.Element | JSX.Element[]
     displayVisaCard: boolean
+    navigation: DrawerNavigationHelpers
     setDisplayVisaCard: React.Dispatch<React.SetStateAction<boolean>>
+
+    onRefresh?: any
+    refreshing?: any
 }
 
 const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
-    const { children, displayVisaCard, navigation, setDisplayVisaCard } = props
+    const { children, displayVisaCard, navigation, setDisplayVisaCard, onRefresh, refreshing } = props
 
     const { height, width } = useWindowDimensions()
 
@@ -27,6 +31,17 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
     const [show, setShow] = useState(false)
     const [isKeyboardActive, setIsKeyboardActive] = useState(false)
     const [visibleServiceClientModal, setVisibleServiceClientModal] = useState(false)
+    const [visibleAskModal, setVisibleAskModal] = useState(false)
+
+    const handleDisplayVisaCard = () => {
+        if (host?.lostCard) {
+            setDisplayVisaCard(false)
+            ToastAndroid.showWithGravity(`Vous avez signaler la perte de la carte veuillez contactez les administrateurs de l'application.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+        } else {
+            if (!displayVisaCard) setDisplayVisaCard(true)
+            else setVisibleAskModal(true)
+        }
+    }
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -50,17 +65,20 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
             <View style={styles.header_container}>
                 <TouchableOpacity activeOpacity={0.5} style={styles.profil_info_container} onPress={() => navigation.openDrawer()}>
                     <View style={styles.profil_img_container}>
-                        <Image source={images.avatar} style={styles.profil_img} />
+                        {host?.photo ?
+                            <Image source={{ uri: `${_end_point.api_img}/${host.photo}` }} style={[styles.profil_img, { transform: [{ rotate: '90deg' }] }]} /> :
+                            <Image source={images.avatar} style={styles.profil_img} />
+                        }
                     </View>
                     <View style={styles.info_container}>
-                        <Text numberOfLines={1} style={styles.info_name}> {host?.name} </Text>
-                        <Text numberOfLines={1} style={styles.info_email}> {host?.email} </Text>
+                        <Text numberOfLines={1} style={styles.info_name}>{host?.name}</Text>
+                        <Text numberOfLines={1} style={styles.info_email}>{host?.email}</Text>
                     </View>
                 </TouchableOpacity>
-                <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={displayVisaCard ? colors.success : colors.error} value={displayVisaCard} onValueChange={setDisplayVisaCard} />
+                <Switch trackColor={{ false: colors.white, true: colors.white }} thumbColor={displayVisaCard ? colors.success : colors.error} value={displayVisaCard} onValueChange={handleDisplayVisaCard} />
             </View>
 
-            <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
+            <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled' refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                 {children}
             </ScrollView>
 
@@ -90,6 +108,9 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
 
             {/* modal service client */}
             <ModalServiceClient visibleServiceClientModal={visibleServiceClientModal} setVisibleServiceClientModal={setVisibleServiceClientModal} />
+
+            {/* modal service client */}
+            <ModalAsk visibleAskModal={visibleAskModal} setVisibleAskModal={setVisibleAskModal} setDisplayVisaCard={setDisplayVisaCard} />
         </View>
     )
 }

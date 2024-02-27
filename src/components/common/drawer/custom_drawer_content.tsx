@@ -1,4 +1,4 @@
-import { Alert, Image, Modal, ScrollView, Share, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Alert, Image, Modal, ScrollView, Share, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { FC, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
@@ -10,6 +10,7 @@ import { RootState } from '../../../libs/services/store'
 import { logout } from '../../../libs/services/user/user.action'
 import ModalServiceClient from './modal/modal_service_client'
 import SecondaryLoading from '../secondary_loading'
+import { _end_point } from '../../../libs/services/endpoints'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
 
@@ -26,7 +27,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
     const [click, setClick] = useState(false);
 
     const onShare = async () => {
-        try { await Share.share({ message: 'Veuillez, télécharger l\'application EM-PAY', }) }
+        try { await Share.share({ message: `Code parrainage : ${host?.parrainCode}`, }) }
         catch (error: any) {
             Alert.alert('Message d\'erreur', error?.message, [{ text: 'OK' }])
         }
@@ -37,7 +38,9 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
             {/* profil container */}
             <TouchableOpacity activeOpacity={0.5} style={styles.profil_info_container} onPress={() => navigation.closeDrawer()}>
                 <View style={styles.profil_img_container}>
-                    <Image source={images.avatar} style={styles.profil_img} />
+                    {host?.photo ? <Image source={{ uri: `${_end_point.api_img}/${host.photo}` }} style={[styles.profil_img, { transform: [{ rotate: '90deg' }] }]} /> :
+                        <Image source={images.avatar} style={styles.profil_img} />
+                    }
                 </View>
                 <View style={styles.info_container}>
                     <Text numberOfLines={1} style={styles.info_name}> {host?.name} </Text>
@@ -48,7 +51,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
             {/* menus */}
             <View style={[styles.item_global_container, { height: height - (135 + 70), marginTop: 10, }]}>
                 <ScrollView contentContainerStyle={{}} showsVerticalScrollIndicator={false}>
-                    <TouchableOpacity activeOpacity={0.5} style={[styles.item_container, { marginTop: 20, }]} onPress={() => navigation.navigate('status')}>
+                    <TouchableOpacity activeOpacity={0.5} style={[styles.item_container, { marginTop: 20, opacity: 0.4, }]} onPress={() => ToastAndroid.showWithGravity('En cours développement pour le moment.', ToastAndroid.CENTER, ToastAndroid.TOP) /*navigation.navigate('status')*/}>
                         <Image source={images.status} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
                         <Text style={styles.item_name}>Statut/Disponibilité</Text>
                     </TouchableOpacity>
@@ -78,7 +81,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
                         <Text style={styles.item_name}>Parrainage</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity activeOpacity={0.5} style={styles.item_container}>
+                    <TouchableOpacity activeOpacity={0.5} style={[styles.item_container, { opacity: 0.4, }]} onPress={() => ToastAndroid.showWithGravity('En cours développement pour le moment.', ToastAndroid.CENTER, ToastAndroid.TOP)}>
                         <Image source={images.update} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
                         <Text style={styles.item_name}>Mise à jour disponible</Text>
                     </TouchableOpacity>
@@ -129,7 +132,7 @@ const styles = StyleSheet.create({
     // profil container
     profil_info_container: { backgroundColor: colors.profil_bg_color, flexDirection: 'row', alignItems: 'center', padding: 10, borderRadius: 40, },
     profil_img_container: { height: 50, width: 50, borderRadius: 50, padding: 3, backgroundColor: colors.profil_bg_color, elevation: 5, },
-    profil_img: { height: '100%', width: '100%', objectFit: 'cover', },
+    profil_img: { height: '100%', width: '100%', objectFit: 'cover', borderRadius: 50, },
     info_container: { width: 150, marginLeft: 5, },
     info_name: { color: colors.black, fontSize: 15, fontFamily: roboto.black, },
     info_email: { color: colors.black, fontSize: 10, fontFamily: roboto.regular, },
