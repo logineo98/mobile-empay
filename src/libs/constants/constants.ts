@@ -5,11 +5,11 @@ export const images = {
     startimes: require('../assets/images/startimes.png'),
     vitepay: require('../assets/images/vitepay.png'),
     marker: require('../assets/images/marker.png'),
-    bg: require('../assets/images/bg.jpg'),
     auth_bg: require('../assets/images/auth_bg.jpeg'),
     login_bg_img: 'https://picsum.photos/200/300/?blur=2',
     noimage: require('../assets/images/no_img.png'),
     auth_action: require('../assets/images/btn.png'),
+    logo2: require('../assets/images/logo2.gif'),
 
     welcome_bg_img: require("../assets/images/IMAGE2.jpg"),
     connexion_bg_img: require("../assets/images/IMAGE3.jpg"),
