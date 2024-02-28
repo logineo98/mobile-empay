@@ -59,10 +59,10 @@ const Secure = () => {
 
 
     //----- set local storage data and go next
-    function setLocalStorage() {
+    async function setLocalStorage() {
         navigation.navigate("finalisation");
         dispatch({ type: "reset_user_log_tmp" });
-        AsyncStorage.removeItem("inputs")
+        await AsyncStorage.removeItem("inputs")
     }
 
 
@@ -123,7 +123,7 @@ const Secure = () => {
             blob.append("contactEmail", store.contactEmail)
             blob.append("contactRelationship", store.contactRelationship)
 
-            blob.append("accountUBA", store.account)
+            blob.append("accountUBA", store.accountUBA)
 
             blob.append("nameOnCard", store.nameOnCard)
 

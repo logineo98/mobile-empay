@@ -71,26 +71,35 @@ const Infos = () => {
         const response = await AsyncStorage.getItem("inputs");
         if (response !== null) {
             const item = JSON.parse(response)
+            console.log(item)
 
-            setInputs({
-                phone: item?.phone,
-                name: item?.name,
-                firstname: item?.firstname,
-                birthday: item?.birthday,
-                address: item?.address,
-                email: item?.email,
-                account: item?.account,
-            })
-            if (item?.birthday) setBirthday(new Date(item?.birthday))
-            if (item.account) setHaveAccount(true)
+            if (item) {
+                setInputs({
+                    phone: item?.phone,
+                    name: item?.name,
+                    firstname: item?.firstname,
+                    birthday: item?.birthday,
+                    address: item?.address,
+                    email: item?.email,
+                    account: item?.account,
+                })
+
+                console.log(typeof item.birthday)
+                if ((item?.birthday !== "null" || item?.birthday !== null) && typeof item?.birthday === "string") setBirthday(new Date(item?.birthday))
+                if (item.accountUBA) setHaveAccount(true)
+            }
         }
 
         return JSON.parse(response as string)
     }
 
+
     //----- infos traitement
     const handle_register_info = () => {
         inputs.accountUBA = accountUBA
+        inputs.birthday = birthday ? `${birthday}` : ""
+
+        console.log(inputs)
         if (inscription_inputs_request("infos", inputs, setError)) return;
         setNext(true)
     }
