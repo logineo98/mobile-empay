@@ -9,7 +9,6 @@ export const images = {
     login_bg_img: 'https://picsum.photos/200/300/?blur=2',
     noimage: require('../assets/images/no_img.png'),
     auth_action: require('../assets/images/btn.png'),
-    logo2: require('../assets/images/logo2.gif'),
 
     welcome_bg_img: require("../assets/images/IMAGE2.jpg"),
     connexion_bg_img: require("../assets/images/IMAGE3.jpg"),

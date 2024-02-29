@@ -14,25 +14,26 @@ import Video from 'react-native-video';
 const Welcome = () => {
     const navigation = useNavigation<any>()
     const dispatch = useDispatch<any>()
-    const { host } = useSelector((state: RootState) => state?.user)
+    const { host, user_loading } = useSelector((state: RootState) => state?.user)
     const [loading, setLoading] = useState(true);
 
     useEffect(() => { dispatch(checking()) }, [dispatch]);
 
 
     useEffect(() => {
-        const timer = setTimeout(() => { setLoading(false) }, 1000)
+        const timer = setTimeout(() => { setLoading(false) }, 500)
         return () => clearTimeout(timer)
     }, []);
 
 
-    if (loading && !host)
+    if (loading && !host && user_loading)
         return (
-            <View style={{ flex: 1, paddingTop: StatusBar.currentHeight, width: "100%", alignItems: "center", backgroundColor: colors.white }}>
+            <View style={{ flex: 1, paddingTop: StatusBar.currentHeight, width: "100%", alignItems: "center", justifyContent: "center", backgroundColor: colors.screen_bg_color }}>
                 <StatusBar translucent backgroundColor={"transparent"} />
-                <Image source={images.logo2} style={{ resizeMode: "cover", width: "100%" }} />
-                <View style={{ flex: 1, backgroundColor: colors.white, width: "100%", alignItems: "center", justifyContent: "center" }}>
-                    <ActivityIndicator size={"large"} color={colors.gradient_color[0]} />
+                <ActivityIndicator size={"large"} color={colors.white} />
+                <View style={styles.textbox}>
+                    <Text style={styles.text}>Veuillez patienter!</Text>
+                    <Text style={styles.text}>Traitement d'opération encours..</Text>
                 </View>
             </View>
         )
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     descriptionbox: { alignItems: "center", justifyContent: "center", gap: 8 },
     title: { fontSize: 28, color: colors.white, fontFamily: roboto.bold },
     description: { fontSize: 14, color: colors.white, fontFamily: roboto.regular },
-    txtbox: { alignItems: 'center', justifyContent: 'center', marginTop: 15 },
+    textbox: { alignItems: 'center', justifyContent: 'center', marginTop: 15 },
     text: { fontSize: 12, color: colors.white },
 })
 

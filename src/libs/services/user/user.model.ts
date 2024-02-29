@@ -144,6 +144,7 @@ export type userStore = {
     user_info?: string | null
     user_forgot_info?: string | null
     user_data?: any
+    verify_code?: any,
     qr_code?: string
     scan_response?: string
     scan_response_status?: boolean

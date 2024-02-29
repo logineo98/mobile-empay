@@ -28,17 +28,12 @@ const Verify = () => {
     const [inputs, setInputs] = useState({ code: "" });
     const [debugCode, setDebugCode] = useState("");
 
-    const { user_log_tmp, user_forgot_info, user_data, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
+    const { user_log_tmp, user_forgot_info, user_data, verify_code, user_loading, user_errors } = useSelector((state: RootState) => state?.user)
 
     //setup debug code
     useEffect(() => {
-        AsyncStorage.getItem("code")
-            .then((res: any) => {
-                if (user_data) setDebugCode(user_data?.code);
-                else if (routes?.data?.code) setDebugCode(routes?.data?.code)
-                else if (res) setDebugCode(res);
-            })
-    }, [routes, user_data]);
+        setDebugCodeStore()
+    }, [routes, user_data, verify_code]);
 
 
     //alert for info
@@ -55,8 +50,33 @@ const Verify = () => {
     useEffect(() => { if (allInputsFilled(inputs)) { scale.value = withRepeat(withSpring(1.2), -1, true); } else scale.value = withSpring(1); }, [allInputsFilled(inputs)]);
 
     //result of traitement
-    useEffect(() => { if (user_log_tmp && user_data) { navigation.navigate("reset", { data: user_data }); dispatch({ type: "reset_user_log_tmp" }); dispatch({ type: "reset_user_data" }); setClick(false) } }, [user_log_tmp, user_data, dispatch]);
+    useEffect(() => { if (user_log_tmp && user_data) { console.log(user_forgot_info); goNext() } }, [user_log_tmp, user_data, dispatch]);
 
+    //----- set local storage data
+    async function setDebugCodeStore() {
+        try {
+            if (verify_code && verify_code !== undefined && verify_code !== null) AsyncStorage.setItem("code", JSON.stringify(verify_code?.code))
+            const response = await AsyncStorage.getItem("code");
+            if (response) {
+                let code = JSON.parse(response)
+                if (user_data) setDebugCode(user_data?.code);
+                else if (routes?.data?.code) setDebugCode(routes?.data?.code)
+                else if (response) setDebugCode(code);
+            }
+            dispatch({ type: "reset_user_verify_code" })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    //----- go next screen
+    async function goNext() {
+        //   AsyncStorage.setItem("code", `${inputs.code}`)
+        navigation.navigate("reset", { data: user_data });
+        dispatch({ type: "reset_user_log_tmp" });
+        dispatch({ type: "reset_user_data" });
+        setClick(false)
+    }
 
 
     //traitement of verify
@@ -66,12 +86,13 @@ const Verify = () => {
         AsyncStorage.setItem("code", `${inputs.code}`)
         dispatch(forgot_verify(inputs, setError))
         setClick(true)
+
     }
 
 
     const handleRetry = () => {
         dispatch(resent_code({ phone: routes?.data?.phone }, setError))
-        routes.code = null
+        routes.data.code = null
         setClick(true)
     }
 
