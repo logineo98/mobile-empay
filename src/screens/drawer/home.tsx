@@ -35,8 +35,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
     const [displayAmount, setDisplayAmount] = useState(false)
     const [sendSmsLoading, setSendSmsLoading] = useState(false)
     const [granted, setGranted] = useState<boolean | null>(null)
-    // const targetContact = '73030732'
-    const targetContact = '70000001'
+    const targetContact = '+22350000060'
 
     // quand on tire l'ecran vers le bas pour rafraichir
     const onRefresh = useCallback(() => {
@@ -81,37 +80,30 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                 const last_sms_date = await AsyncStorage.getItem('last_sms_date')
 
                 if (last_sms_date) {
-                    const list_sms: SMS_TYPE[] = JSON.parse(smsList).filter((sms: SMS_TYPE) => (sms.address.includes(targetContact) && sms.date_sent > parseInt(last_sms_date, 10)));
+                    const list_sms: SMS_TYPE[] = JSON.parse(smsList).filter((sms: SMS_TYPE) => (sms?.service_center?.includes(targetContact) && sms?.body?.includes('Prepaid Card') && sms?.date_sent > parseInt(last_sms_date, 10)));
 
                     if (clickSend) {
                         if (list_sms.length === 0) {
                             setSendSmsLoading(true)
                             await new Promise(resolve => setTimeout(resolve, 1000))
                             setSendSmsLoading(false)
-
-                            // clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
                         }
                     }
 
                     (host && list_sms.length !== 0) && dispatch(sendSms({ customerId: host?.id as string, messages: list_sms.map((sms: SMS_TYPE) => sms.body) }, list_sms[0].date_sent.toString(), clickSend))
-
 
                 } else {
-                    const list_sms: SMS_TYPE[] = JSON.parse(smsList).filter((sms: SMS_TYPE) => sms.address.includes(targetContact));
+                    const list_sms: SMS_TYPE[] = JSON.parse(smsList).filter((sms: SMS_TYPE) => (sms?.service_center?.includes(targetContact) && sms?.body?.includes('Prepaid Card')));
 
                     if (clickSend) {
                         if (list_sms.length === 0) {
                             setSendSmsLoading(true)
                             await new Promise(resolve => setTimeout(resolve, 1000))
                             setSendSmsLoading(false)
-
-                            // clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
                         }
                     }
 
                     (host && list_sms.length !== 0) && dispatch(sendSms({ customerId: host?.id as string, messages: list_sms.map((sms: SMS_TYPE) => sms.body) }, list_sms[0].date_sent.toString(), clickSend))
-
-                    clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
                 }
             },
         )
