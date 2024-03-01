@@ -67,9 +67,9 @@ export const _end_point = {
         register: `${_API_BASE}/tarifs/register`,   //post
         find: `${_API_BASE}/tarifs`,                //get
 
-        show: `${_API_BASE}/tarifs/:id`,            //get
-        update: `${_API_BASE}/tarifs/:id`,          //put
-        delete: `${_API_BASE}/tarifs/:id`,          //delete
+        show: `${_API_BASE}/tarifs`,            //get
+        update: `${_API_BASE}/tarifs`,          //put
+        delete: `${_API_BASE}/tarifs`,          //delete
     },
     history: {
         find: `${_API_BASE}/transactions/history`, //get,
@@ -78,5 +78,13 @@ export const _end_point = {
     },
     sms: {
         saveExternalTransactions: `${_API_BASE}/recharges/saveExternalTransactions` //post
-    }
+    },
+    setting: {
+        register: `${_API_BASE}/settings/register`,   //post
+        find: `${_API_BASE}/settings`,                //get
+
+        show: `${_API_BASE}/settings`,            //get
+        update: `${_API_BASE}/settings`,          //put
+        delete: `${_API_BASE}/settings`,          //delete
+    },
 }

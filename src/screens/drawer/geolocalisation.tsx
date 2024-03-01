@@ -43,7 +43,7 @@ const Geolocalisation: FC<COMPONENT_TYPE> = (props) => {
 
                 if (granted) {
                     Geolocation.getCurrentPosition(info => {
-                        setInitialRegion({ ...initialRegion, latitude: info.coords.latitude, longitude: info.coords.longitude })
+                        setInitialRegion({ ...initialRegion, latitude: info?.coords?.latitude, longitude: info?.coords?.longitude })
                     })
                 }
             })()

@@ -1,17 +1,15 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-
+import { useSelector } from 'react-redux'
 // my importations
 import DrawerStack from './stacks/drawer_stack'
 import AuthStack from './stacks/auth_stack'
-import { useSelector } from 'react-redux'
 import { RootState } from '../services/store'
 
 const RootNavigation = () => {
     const root = createNativeStackNavigator()
     const { host } = useSelector((state: RootState) => state.user)
-
 
     return (
         <NavigationContainer >

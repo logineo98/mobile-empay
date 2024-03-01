@@ -383,7 +383,7 @@ export const receiveCardLostedNotification = (usr: userModel) => async (dispatch
     }
 }
 
-export const sendSms = (data: { customerId: string, messages: string[] }, last_sms_date: string, clickSend: boolean) => async (dispatch: any) => {
+export const sendSms = (data: { customerId: string, messages: string[] }, last_sms_date: string, clickSend: boolean, setSendSmsLoading?: (value: React.SetStateAction<boolean>) => void) => async (dispatch: any) => {
     try {
         dispatch({ type: clickSend ? send_sms_loading : user_loading })
 
@@ -395,7 +395,10 @@ export const sendSms = (data: { customerId: string, messages: string[] }, last_s
 
         await AsyncStorage.setItem('last_sms_date', last_sms_date)
 
-        clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+        if (clickSend) {
+            ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+            setSendSmsLoading && setSendSmsLoading(false)
+        }
 
         dispatch({ type: send_sms_list, payload: response.data })
     } catch (error: any) {

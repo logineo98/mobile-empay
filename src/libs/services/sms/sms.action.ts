@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
 // my importations
 import { _end_point } from '../endpoints'
 import { ERROR_SMS, GET_ALL_SMS, LOADING_SMS, } from './sms.constant'
