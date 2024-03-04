@@ -135,7 +135,7 @@ export const vitepay_data_validation = (data: { phone: string, montant: string }
     else if (!phone_regex.test(phone)) error = { ...error, phone: 'Doit être un numéro ORANGE.' }
 
     if (!montant || montant.trim() === '') error = { ...error, montant: 'Veuillez renseigner le champ.' }
-    else if (parseInt(montant, 10) < 500) error = { ...error, montant: `Montant doit être d'au moins 500 FCFA.` }
+    else if (parseInt(montant, 10) < 1500) error = { ...error, montant: `Montant doit être d'au moins 1500 FCFA.` }
 
     return { error, initialError }
 }
