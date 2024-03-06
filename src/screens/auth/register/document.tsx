@@ -29,11 +29,10 @@ const Document = () => {
     const { height } = useWindowDimensions()
     const [error, setError] = useState("");
     const [next, setNext] = useState(false);
-    const [switchDates, setSwitchDates] = useState(false);
     const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
     const [expireDate, setExpireDate] = useState<Date | null>(null);
     const [typeModal, setTypeModal] = useState<"document" | "delivery" | "expire">("document");
-    const initial: userModel = { document: "", documentDeliveryDate: "", documentExpirationDate: "", documentLicensingAuthority: "", documentNumber: "" }
+    const initial: userModel = { document: "", documentDeliveryDate: "", documentExpirationDate: "", documentLicensingAuthority: "", documentNumber: "", documentType: "" }
     const [inputs, setInputs] = useState(initial);
     const [visible, setVisible] = useState(false);
     const [img, setImg] = useState<any>();
@@ -59,7 +58,7 @@ const Document = () => {
     useEffect(() => { getLocalStorage() }, []);
 
     //----- toggle modal
-    const openModal = (type: "document" | "delivery" | "expire") => { setVisible(!visible); setTypeModal(type) }
+    const openModal = (type: "document" | "delivery" | "expire", documentType?: string) => { setVisible(!visible); setTypeModal(type); if (type === "document") setInputs((old) => { return { ...old, documentType: documentType } }) }
 
     //----- select an image
     const selectImage = () => {
@@ -121,6 +120,8 @@ const Document = () => {
         }
     }
 
+    console.log(inputs)
+
     //----- get local storage data
     async function getLocalStorage() {
         const response = await AsyncStorage.getItem("inputs");
@@ -142,11 +143,9 @@ const Document = () => {
 
     //----- document traitement
     const handle_validate = () => {
-
         inputs.documentDeliveryDate = deliveryDate ? `${deliveryDate}` : ""
         inputs.documentExpirationDate = expireDate ? `${expireDate}` : ""
         if (inscription_inputs_request("document", inputs, setError)) return;
-        // setStore({ ...store, ...inputs })
 
         setNext(true)
     }
@@ -180,9 +179,9 @@ const Document = () => {
                     }
 
                     <View style={styles.buttons}>
-                        <TouchableOpacity onPress={() => openModal("document")} style={styles.btn} activeOpacity={0.9}><Text style={{ color: colors.gray }}>Nina</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => openModal("document")} style={styles.btn} activeOpacity={0.9}><Text style={{ color: colors.gray }}>Passport</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => openModal("document")} style={styles.btn} activeOpacity={0.9}><Text style={{ color: colors.gray }}>CIN</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => openModal("document", "Nina")} style={styles.btn} activeOpacity={0.9}><Text style={{ color: colors.gray }}>Nina</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => openModal("document", "Passport")} style={styles.btn} activeOpacity={0.9}><Text style={{ color: colors.gray }}>Passport</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => openModal("document", "CIN")} style={styles.btn} activeOpacity={0.9}><Text style={{ color: colors.gray }}>CIN</Text></TouchableOpacity>
                     </View>
                     <Spacer height={25} />
                     <View style={styles.forms}>

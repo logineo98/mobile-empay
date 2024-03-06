@@ -92,6 +92,7 @@ export type userModel = {
     documentDeliveryDate?: string
     documentExpirationDate?: string
     documentLicensingAuthority?: string
+    documentType?: string;
 
     //EMERGENCY CONTACT
     contactName?: string;

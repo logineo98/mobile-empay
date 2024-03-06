@@ -51,7 +51,6 @@ export const login = (data: userModel, setError: any) => async (dispatch: any) =
         if (connexion_request(data, setError)) return;
 
         dispatch({ type: user_loading })
-
         const res = await axios.post(_end_point.customer.login, data)
 
         res.data.expiresIn = new Date().getTime() + parseInt(res.data.expiresIn)
@@ -280,7 +279,6 @@ export const recharge = (data: RECHARGE_TYPE) => async (dispatch: any) => {
         dispatch({ type: user_loading })
 
         let token = await get_credentials('accessToken')
-
         const response = await axios.post(`${_end_point.customer.recharge}`, data, { headers: { Authorization: `Bearer ${token}` } })
 
         await AsyncStorage.setItem('recharge_status', response.data.paymentStatus)
