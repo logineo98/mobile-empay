@@ -13,7 +13,7 @@ type COMPONENT_TYPE = {
     setDisplayVisaCard: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ModalAsk: FC<COMPONENT_TYPE> = (props) => {
+const ModalAskCloseCard: FC<COMPONENT_TYPE> = (props) => {
     const { setDisplayVisaCard, setVisibleAskModal, visibleAskModal } = props
 
     const { host, user_loading } = useSelector((state: RootState) => state?.user)
@@ -46,19 +46,16 @@ const ModalAsk: FC<COMPONENT_TYPE> = (props) => {
                         </View>
 
                         {/* fermer modal */}
-                        <View style={styles.fermer_service_client_modal_container}>
-                            <TouchableOpacity activeOpacity={0.5} style={styles.fermer_service_client_modal} onPress={() => setVisibleAskModal(false)}>
-                                <Text style={styles.fermer_service_client_modal_text}>Fermer</Text>
+                        <View style={styles.footer_modal_container}>
+                            <TouchableOpacity activeOpacity={0.5} style={styles.footer_modal_content} onPress={() => setVisibleAskModal(false)}>
+                                <Text style={styles.footer_modal_content_text}>Fermer</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                     {user_loading && <SecondaryLoading />}
                 </View>
             </Modal>
-
         </>
-
-
     )
 }
 
@@ -68,16 +65,16 @@ const styles = StyleSheet.create({
     modal_container: { backgroundColor: colors.white, padding: 20, borderRadius: 20, },
     modal_title: { color: colors.black, fontSize: 25, fontFamily: roboto.black, textAlign: 'center', },
 
-    // modal service client
+    // modal ask container
     ask_container: { marginBottom: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
     ask: { width: '100%', color: colors.black, fontSize: 20, fontFamily: roboto.black, textAlign: 'center', },
 
-    fermer_service_client_modal_container: { alignItems: 'center', },
-    fermer_service_client_modal: { width: 130, padding: 10, borderRadius: 20, backgroundColor: colors.screen_bg_color, },
-    fermer_service_client_modal_text: { color: colors.white, fontFamily: roboto.regular, textAlign: 'center', },
+    footer_modal_container: { alignItems: 'center', },
+    footer_modal_content: { width: 130, padding: 10, borderRadius: 20, backgroundColor: colors.screen_bg_color, },
+    footer_modal_content_text: { color: colors.white, fontFamily: roboto.regular, textAlign: 'center', },
 
     nb_container: { marginBottom: 5, },
     nb_text: { color: colors.error, fontSize: 11, fontFamily: roboto.regular, textAlign: 'center', },
 })
 
-export default ModalAsk
+export default ModalAskCloseCard

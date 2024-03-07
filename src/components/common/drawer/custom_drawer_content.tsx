@@ -1,4 +1,4 @@
-import { Alert, Image, Modal, ScrollView, Share, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Alert, Image, Modal, PermissionsAndroid, ScrollView, Share, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { FC, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
@@ -11,6 +11,7 @@ import { logout } from '../../../libs/services/user/user.action'
 import ModalServiceClient from './modal/modal_service_client'
 import SecondaryLoading from '../secondary_loading'
 import { _end_point } from '../../../libs/services/endpoints'
+import ModalAskCloseLocalisation from './modal/modal_ask_ask_localisation'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
 
@@ -24,6 +25,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
 
     const [visibleLogoutModal, setVisibleLogoutModal] = useState(false)
     const [visibleServiceClientModal, setVisibleServiceClientModal] = useState(false)
+    const [visibleModalAskLocalisation, setVisibleModalAskLocalisation] = useState(false)
     const [click, setClick] = useState(false);
 
     const onShare = async () => {
@@ -31,6 +33,16 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
         catch (error: any) {
             Alert.alert('Message d\'erreur', error?.message, [{ text: 'OK' }])
         }
+    }
+
+    const handleLocation = async () => {
+        try {
+            const geolocalisationPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+
+            if (geolocalisationPermission === 'granted') {
+                setVisibleModalAskLocalisation(true)
+            } else ToastAndroid.showWithGravity(`Veuillez autoriser la localisation !`, ToastAndroid.CENTER, ToastAndroid.TOP)
+        } catch (error) { }
     }
 
     return (
@@ -55,6 +67,14 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
                         <Image source={images.status} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
                         <Text style={styles.item_name}>Statut/Disponibilité</Text>
                     </TouchableOpacity>
+
+                    <View style={{ marginBottom: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
+                        <TouchableOpacity activeOpacity={0.5} style={[styles.item_container, { marginBottom: 0, }]} onPress={handleLocation}>
+                            <Image source={images.location} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
+                            <Text style={styles.item_name}>Localisation</Text>
+                        </TouchableOpacity>
+                        <Text style={{ height: 15, width: 15, borderRadius: 20, backgroundColor: (host?.coordinates?.lat && host.coordinates.lng) ? colors.success : colors.error, }}></Text>
+                    </View>
 
                     <TouchableOpacity activeOpacity={0.5} style={styles.item_container} onPress={() => navigation.navigate('tarif')}>
                         <Image source={images.tarif} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
@@ -122,6 +142,9 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
 
             {/* modal service client */}
             <ModalServiceClient visibleServiceClientModal={visibleServiceClientModal} setVisibleServiceClientModal={setVisibleServiceClientModal} />
+
+            {/* modal localisation */}
+            <ModalAskCloseLocalisation visibleAskModal={visibleModalAskLocalisation} setVisibleAskModal={setVisibleModalAskLocalisation} />
         </View>
     )
 }

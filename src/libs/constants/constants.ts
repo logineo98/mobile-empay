@@ -56,6 +56,7 @@ export const images = {
     logineo: require('../assets/images/logineo.png'),
     clock: require('../assets/images/clock.png'),
     coin: require('../assets/images/coin.png'),
+    location: require('../assets/images/location.png'),
 }
 
 export const videos = {

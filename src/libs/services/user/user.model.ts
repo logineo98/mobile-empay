@@ -11,56 +11,6 @@ export type STATUS_TYPE = {
     disable?: boolean
 }
 
-// export type userModel = {
-//     id?: string
-//     phone?: string
-//     name?: string
-//     firstname?: string
-//     address?: string
-//     code?: string
-//     email?: string
-//     account?: string
-//     profil?: any
-//     document?: any
-//     photo?: any
-//     password?: string
-//     confirm?: string
-//     birthday?: string
-//     signature?: any
-//     totalAmount?: number
-//     AmountToExchange?: number
-//     coordinates?: COORDINATE_TYPE
-//     isChecked?: boolean
-//     notificationToken?: string
-//     // age?: Date
-
-//     residenceCountry?: string  //added
-//     nationality?: string //added
-//     placeOfBirth?: string //added
-//     city?: string //added
-//     nameOnCard?: string //added
-//     currentActivity?: string //added
-//     fieldOfActivity?: string //added
-
-//     documentInfos?: {
-//         documentNumber?: string //added
-//         documentDeliveryDate?: string //added
-//         documentExpirationDate?: string //added
-//         documentLicensingAuthority?: string //added
-//     }
-
-//     emergencyContact?: userEmergencyContact
-// }
-
-// export type userEmergencyContact = {
-//     name?: string; //added
-//     firstname?: string; //added
-//     address?: string; //added
-//     phone?: string; //added
-//     email?: string; //added
-//     relationship?: string; //added
-// }
-
 export type userModel = {
     id?: string;
     phone?: string;

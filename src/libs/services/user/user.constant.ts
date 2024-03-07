@@ -25,3 +25,4 @@ export const receive_card_losted_notification = 'receive_card_losted_notificatio
 export const card_losted = 'card_losted'
 export const send_sms_list = 'send_sms_list'
 export const reset_all_users = 'reset_all_users'
+export const actived_unactivated_location = 'actived_unactivated_location'
