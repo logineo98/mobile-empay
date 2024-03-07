@@ -115,6 +115,7 @@ const Secure = () => {
             blob.append("documentDeliveryDate", store.documentDeliveryDate)
             blob.append("documentExpirationDate", store.documentExpirationDate)
             blob.append("documentLicensingAuthority", store.documentLicensingAuthority)
+            blob.append("documentType", store.documentType)
 
             blob.append("contactName", store.contactName)
             blob.append("contactFirstname", store.contactFirstname)
@@ -130,6 +131,9 @@ const Secure = () => {
             blob.append("residenceCountry", store.residenceCountry)
             blob.append("address", store.address)
             blob.append("city", store.city)
+
+            console.log(store)
+
 
             dispatch(inscription_service(blob, notificationToken))
         } catch (error) {

@@ -35,6 +35,7 @@ const Document = () => {
     const initial: userModel = { document: "", documentDeliveryDate: "", documentExpirationDate: "", documentLicensingAuthority: "", documentNumber: "", documentType: "" }
     const [inputs, setInputs] = useState(initial);
     const [visible, setVisible] = useState(false);
+    const [documentType, setDocumentType] = useState("");
     const [img, setImg] = useState<any>();
 
     //----- display errors
@@ -58,7 +59,7 @@ const Document = () => {
     useEffect(() => { getLocalStorage() }, []);
 
     //----- toggle modal
-    const openModal = (type: "document" | "delivery" | "expire", documentType?: string) => { setVisible(!visible); setTypeModal(type); if (type === "document") setInputs((old) => { return { ...old, documentType: documentType } }) }
+    const openModal = (type: "document" | "delivery" | "expire", documentType?: string) => { setVisible(!visible); setTypeModal(type); if (type === "document") { setDocumentType(documentType as string); setInputs((old) => { return { ...old, documentType: documentType } }) } }
 
     //----- select an image
     const selectImage = () => {
@@ -132,9 +133,10 @@ const Document = () => {
                 documentDeliveryDate: item?.documentDeliveryDate,
                 documentExpirationDate: item?.documentExpirationDate,
                 documentLicensingAuthority: item?.documentLicensingAuthority,
-                documentNumber: item?.documentNumber
+                documentNumber: item?.documentNumber,
+                documentType: item?.documentType
             })
-
+            if (item?.documentType) setDocumentType(item?.documentType)
             if (item?.documentDeliveryDate) setDeliveryDate(new Date(item?.documentDeliveryDate))
             if (item?.documentExpirationDate) setExpireDate(new Date(item?.documentExpirationDate))
         }
@@ -145,6 +147,7 @@ const Document = () => {
     const handle_validate = () => {
         inputs.documentDeliveryDate = deliveryDate ? `${deliveryDate}` : ""
         inputs.documentExpirationDate = expireDate ? `${expireDate}` : ""
+        inputs.documentType = documentType
         if (inscription_inputs_request("document", inputs, setError)) return;
 
         setNext(true)
