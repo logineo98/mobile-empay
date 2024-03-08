@@ -1,4 +1,4 @@
-import { Alert, Image, Modal, PermissionsAndroid, ScrollView, Share, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { ActivityIndicator, Alert, Image, Modal, PermissionsAndroid, ScrollView, Share, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { FC, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
@@ -136,9 +136,14 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
                             </TouchableOpacity>
                         </View>
                     </View>
+
+                    {(click && user_loading) &&
+                        <View style={{ backgroundColor: colors.black, position: 'absolute', height: '100%', width: width, justifyContent: 'center', }}>
+                            <ActivityIndicator size='large' color={colors.white} />
+                        </View>
+                    }
                 </View>
             </Modal>
-            {click && user_loading && <SecondaryLoading text={'Déconnexion en cours...'} />}
 
             {/* modal service client */}
             <ModalServiceClient visibleServiceClientModal={visibleServiceClientModal} setVisibleServiceClientModal={setVisibleServiceClientModal} />

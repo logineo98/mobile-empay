@@ -206,6 +206,7 @@ export const send_status_geo_montant = (data: STATUS_TYPE) => async (dispatch: a
         dispatch({ type: user_status_geo_montant, payload: { usr: response.data, } })
     } catch (error: any) {
         debug('SEND STATUS GEO MONTANT', error?.response?.data || error.message)
+        ToastAndroid.showWithGravity(error?.response?.data || error.message, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -222,6 +223,7 @@ export const getQrCode = (id: string) => async (dispatch: any) => {
     } catch (error: any) {
         debug('GET QR CODE', error?.response?.data || error.message)
         dispatch({ type: reset_qr_code, payload: 'reset' })
+        ToastAndroid.showWithGravity(error?.response?.data || error.message, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -250,7 +252,7 @@ export const _scanQrCode = (data: scanModel, navigation: DrawerNavigationHelpers
         navigation.navigate('ika_wari_taa_status', { status: response.data.status })
     } catch (error: any) {
         debug('SCAN QR CODE', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
+        ToastAndroid.showWithGravity(error?.response?.data || error.message, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -268,7 +270,6 @@ export const receiveScanNotification = (usr: userModel) => async (dispatch: any)
         dispatch({ type: receive_scan_notification, payload: usr })
     } catch (error: any) {
         debug('RECEIVE SCAN QR CODE NOTIFICATION', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -285,7 +286,7 @@ export const recharge = (data: RECHARGE_TYPE) => async (dispatch: any) => {
         dispatch({ type: recharge_compte, payload: response.data.paymentStatus })
     } catch (error: any) {
         debug('RECHARGE COMPTE', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        ToastAndroid.showWithGravity(error?.response?.data || error.message, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -304,7 +305,6 @@ export const receiveRechargeNotificationSuccess = (usr: userModel, recharge_stat
         dispatch({ type: receive_recharge_notification_success, payload: { usr, recharge_status: recharge_status.paymentStatus } })
     } catch (error: any) {
         debug('RECEIVE RECHARGE NOTIFICATION SUCCESS', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -318,7 +318,6 @@ export const receiveRechargeNotificationCanceled = (recharge_status: { paymentSt
         dispatch({ type: receive_recharge_notification_canceled, payload: recharge_status.paymentStatus })
     } catch (error: any) {
         debug('RECEIVE RECHARGE NOTIFICATION CANCELED', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -334,7 +333,7 @@ export const verifyRechargeStatus = () => async (dispatch: any) => {
         dispatch({ type: recharge_compte, payload: recharge_status || '' })
     } catch (error: any) {
         debug('RECHARGE COMPTE', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        ToastAndroid.showWithGravity(error?.response?.data || error.message, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -359,7 +358,7 @@ export const _cardLosted = (
         dispatch({ type: card_losted, payload: response.data })
     } catch (error: any) {
         debug('CARD LOSTED  ', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        ToastAndroid.showWithGravity(error?.response?.data || error.message, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -375,7 +374,6 @@ export const receiveCardLostedNotification = (usr: userModel) => async (dispatch
         dispatch({ type: receive_card_losted_notification, payload: usr })
     } catch (error: any) {
         debug('RECEIVE CARD LOSTED NOTIFICATION', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -400,7 +398,6 @@ export const sendSms = (data: { customerId: string, messages: string[] }, last_s
         dispatch({ type: send_sms_list, payload: response.data })
     } catch (error: any) {
         debug('SEND SMS', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
         clickSend && ToastAndroid.showWithGravity(`Erreur survenue lors de l'actualisation du montant.`, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
     }
@@ -415,7 +412,7 @@ export const _activedUnactivatedLocation = (id: string, data: { coordinates: { l
         const response = await axios.put(`${_end_point.customer.update}/${id}`, data, { headers: { Authorization: `Bearer ${accessToken}` } })
 
         set_credentials(response.data?.usr, accessToken)
-        ToastAndroid.showWithGravity((data.coordinates.lat && data.coordinates.lng) ? `Activé` : 'Désactiver', ToastAndroid.CENTER, ToastAndroid.TOP)
+        ToastAndroid.showWithGravity((data.coordinates.lat && data.coordinates.lng) ? `Localisation activée` : 'Localisation désactivée', ToastAndroid.CENTER, ToastAndroid.TOP)
 
         dispatch({ type: actived_unactivated_location, payload: response.data })
 
