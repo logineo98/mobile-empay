@@ -1,13 +1,11 @@
-import { ActivityIndicator, Modal, PermissionsAndroid, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
-import React, { FC, useState } from 'react'
+import { ActivityIndicator, Modal, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import React, { FC, } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import Geolocation from '@react-native-community/geolocation'
 // my importations
-import SecondaryLoading from '../../secondary_loading'
 import { RootState } from '../../../../libs/services/store'
 import { colors, roboto } from '../../../../libs/typography/typography'
 import { _activedUnactivatedLocation, _cardLosted } from '../../../../libs/services/user/user.action'
-import Geolocation from '@react-native-community/geolocation'
-import CustomLinearGradient from '../gradient/custom_linear_gradient'
 
 type COMPONENT_TYPE = {
     visibleAskModal: boolean
