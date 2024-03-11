@@ -21,7 +21,6 @@ export const images = {
     auth_action_btn_img: require("../assets/images/SKIP_ICON.png"),
     welcome: require("../assets/images/welcome.gif"),
     logo_republic: require("../assets/images/logo_Repulique.png"),
-    logo_signature: require("../assets/images/Signature_N_logo.png"),
     signature_logo: require("../assets/images/signature_logo.png"),
     signature_text: require("../assets/images/signature_text.png"),
 
