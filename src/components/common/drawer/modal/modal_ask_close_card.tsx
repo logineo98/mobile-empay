@@ -1,12 +1,14 @@
 import { ActivityIndicator, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { FC } from 'react'
-// my importations
-import { colors, roboto } from '../../../../libs/typography/typography'
-import { useDispatch, useSelector } from 'react-redux'
-import { _cardLosted } from '../../../../libs/services/user/user.action'
-import { RootState } from '../../../../libs/services/store'
-import SecondaryLoading from '../../secondary_loading'
 import { useWindowDimensions } from 'react-native'
+// my importations
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../../../libs/services/store'
+import CustomLinearGradient from '../gradient/custom_linear_gradient'
+import { colors, roboto } from '../../../../libs/typography/typography'
+import { _cardLosted } from '../../../../libs/services/user/user.action'
+// my icons
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 type COMPONENT_TYPE = {
     visibleAskModal: boolean
@@ -35,13 +37,13 @@ const ModalAskCloseCard: FC<COMPONENT_TYPE> = (props) => {
         <Modal transparent animationType='slide' visible={visibleAskModal} >
             <View style={[styles.modal_global_container, {}]}>
                 <View style={styles.modal_container}>
-                    <Text style={[styles.modal_title, { marginBottom: 15, }]}>Voulez-vous :</Text>
-                    <TouchableOpacity activeOpacity={0.5} style={styles.ask_container} onPress={cardLosted}>
-                        <Text style={styles.ask}>Signaler la perte de la carte ?</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.5} style={styles.ask_container} onPress={maskCard}>
-                        <Text style={styles.ask}>Juste masquer la carte ?</Text>
-                    </TouchableOpacity>
+                    <View style={{ alignItems: 'flex-end', marginBottom: 10, }}>
+                        <TouchableOpacity activeOpacity={0.5} style={{}} onPress={() => setVisibleAskModal(false)}>
+                            <AntDesign name='closecircle' color={colors.black} size={30} />
+                        </TouchableOpacity>
+                    </View>
+
+                    <Text style={[styles.modal_title, {}]}>Voulez-vous signaler la perte de votre carte ?</Text>
 
                     <View style={styles.nb_container}>
                         <Text style={styles.nb_text}>NB: Attention "Signaler la perte de la carte" est une action irréversible jusqu'à l'intervention des administrateurs.</Text>
@@ -49,8 +51,13 @@ const ModalAskCloseCard: FC<COMPONENT_TYPE> = (props) => {
 
                     {/* fermer modal */}
                     <View style={styles.footer_modal_container}>
-                        <TouchableOpacity activeOpacity={0.5} style={styles.footer_modal_content} onPress={() => setVisibleAskModal(false)}>
-                            <Text style={styles.footer_modal_content_text}>Fermer</Text>
+                        <TouchableOpacity activeOpacity={0.5} style={[styles.footer_modal_content, { padding: 10, }]} onPress={maskCard}>
+                            <Text style={styles.footer_modal_content_text}>Masquer</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={0.5} style={styles.footer_modal_content} onPress={cardLosted}>
+                            <CustomLinearGradient style={{ borderRadius: 20, }}>
+                                <Text style={[styles.footer_modal_content_text, { padding: 10, }]}>Oui</Text>
+                            </CustomLinearGradient>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -71,15 +78,11 @@ const styles = StyleSheet.create({
     modal_container: { backgroundColor: colors.white, padding: 20, borderRadius: 20, },
     modal_title: { color: colors.black, fontSize: 25, fontFamily: roboto.black, textAlign: 'center', },
 
-    // modal ask container
-    ask_container: { marginBottom: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
-    ask: { width: '100%', color: colors.black, fontSize: 20, fontFamily: roboto.black, textAlign: 'center', },
-
-    footer_modal_container: { alignItems: 'center', },
-    footer_modal_content: { width: 130, padding: 10, borderRadius: 20, backgroundColor: colors.screen_bg_color, },
+    footer_modal_container: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
+    footer_modal_content: { width: '49%', borderRadius: 20, backgroundColor: colors.screen_bg_color, },
     footer_modal_content_text: { color: colors.white, fontFamily: roboto.regular, textAlign: 'center', },
 
-    nb_container: { marginBottom: 5, },
+    nb_container: { marginVertical: 10, },
     nb_text: { color: colors.error, fontSize: 11, fontFamily: roboto.regular, textAlign: 'center', },
 })
 

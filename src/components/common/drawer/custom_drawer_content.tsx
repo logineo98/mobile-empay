@@ -9,7 +9,6 @@ import CustomLinearGradient from './gradient/custom_linear_gradient'
 import { RootState } from '../../../libs/services/store'
 import { logout } from '../../../libs/services/user/user.action'
 import ModalServiceClient from './modal/modal_service_client'
-import SecondaryLoading from '../secondary_loading'
 import { _end_point } from '../../../libs/services/endpoints'
 import ModalAskCloseLocalisation from './modal/modal_ask_ask_localisation'
 
@@ -124,14 +123,14 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
                 <View style={styles.modal_global_container}>
                     <View style={styles.modal_container}>
                         <Text style={styles.modal_title}>Déconnexion</Text>
-                        <Text style={styles.deconnexion_content}>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo facere tenetur alias! A, optio. Enim dignissimos molestias in accusamus vel.</Text>
+                        <Text style={styles.deconnexion_content}>Voulez-vous vraiment vous déconnecter ?</Text>
                         <View style={styles.back_validate_container}>
                             <TouchableOpacity activeOpacity={0.5} style={[styles.back_validate, { padding: 10, }]} onPress={() => setVisibleLogoutModal(false)}>
                                 <Text style={styles.back_validate_name}>Annuler</Text>
                             </TouchableOpacity>
                             <TouchableOpacity activeOpacity={0.5} style={styles.back_validate} onPress={() => { dispatch(logout()); setClick(true) }}>
                                 <CustomLinearGradient style={styles.validate_gradient}>
-                                    <Text style={[styles.back_validate_name, { color: colors.black, }]}>Se déconnecter</Text>
+                                    <Text style={[styles.back_validate_name, { color: colors.white, }]}>Se déconnecter</Text>
                                 </CustomLinearGradient>
                             </TouchableOpacity>
                         </View>
@@ -188,10 +187,9 @@ const styles = StyleSheet.create({
     deconnexion_content: { color: colors.black, fontFamily: roboto.regular, textAlign: 'center', marginVertical: 20, },
 
     back_validate_container: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', },
-    back_validate: { width: 130, backgroundColor: colors.screen_bg_color, borderRadius: 20, },
+    back_validate: { width: '49%', backgroundColor: colors.screen_bg_color, borderRadius: 20, },
     back_validate_name: { color: colors.white, fontFamily: roboto.regular, textAlign: 'center', },
     validate_gradient: { padding: 10, borderRadius: 20, },
-
 })
 
 export default CustomDrawerContent

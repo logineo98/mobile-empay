@@ -6,6 +6,7 @@ import Geolocation from '@react-native-community/geolocation'
 import { RootState } from '../../../../libs/services/store'
 import { colors, roboto } from '../../../../libs/typography/typography'
 import { _activedUnactivatedLocation, _cardLosted } from '../../../../libs/services/user/user.action'
+import CustomLinearGradient from '../gradient/custom_linear_gradient'
 
 type COMPONENT_TYPE = {
     visibleAskModal: boolean
@@ -42,11 +43,13 @@ const ModalAskCloseLocalisation: FC<COMPONENT_TYPE> = (props) => {
 
                     {/* footer modal */}
                     <View style={styles.footer_modal_container}>
-                        <TouchableOpacity activeOpacity={0.5} style={styles.footer_modal_content} onPress={() => setVisibleAskModal(false)}>
+                        <TouchableOpacity activeOpacity={0.5} style={[styles.footer_modal_content, { padding: 10, }]} onPress={() => setVisibleAskModal(false)}>
                             <Text style={styles.footer_modal_content_text}>Fermer</Text>
                         </TouchableOpacity>
                         <TouchableOpacity activeOpacity={0.5} style={styles.footer_modal_content} onPress={handleGetLocation}>
-                            <Text style={styles.footer_modal_content_text}>Oui</Text>
+                            <CustomLinearGradient style={{ borderRadius: 20, }}>
+                                <Text style={[styles.footer_modal_content_text, { padding: 10, }]}>Oui</Text>
+                            </CustomLinearGradient>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -72,7 +75,7 @@ const styles = StyleSheet.create({
     // modal ask container
 
     footer_modal_container: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
-    footer_modal_content: { width: '49%', padding: 10, borderRadius: 20, backgroundColor: colors.screen_bg_color, },
+    footer_modal_content: { width: '49%', borderRadius: 20, backgroundColor: colors.screen_bg_color, },
     footer_modal_content_text: { color: colors.white, fontFamily: roboto.regular, textAlign: 'center', },
 })
 
