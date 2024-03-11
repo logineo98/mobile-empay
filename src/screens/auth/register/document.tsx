@@ -110,6 +110,7 @@ const Document = () => {
     };
 
 
+
     //----- set local storage data and go next
     async function setLocalStorage() {
         if (next) {
@@ -120,8 +121,6 @@ const Document = () => {
             setNext(false);
         }
     }
-
-    console.log(inputs)
 
     //----- get local storage data
     async function getLocalStorage() {
@@ -241,33 +240,38 @@ const Document = () => {
                 {typeModal === "delivery" &&
                     <TouchableWithoutFeedback onPress={() => setVisible(false)}>
                         <View style={styles.date_modal}>
-                            <DatePicker
-                                date={deliveryDate as Date}
-                                onDateChange={(_date) => { setDeliveryDate(_date); }}
-                                mode="date"
-                                style={{ backgroundColor: "white" }}
-                                textColor={colors.black}
-                            />
-                            <TouchableOpacity activeOpacity={0.8} onPress={() => openModal("delivery")} style={[styles.date_button, { width: "84%", }]}>
-                                <Text style={{ color: colors.white, letterSpacing: 1, fontSize: 14 }}>Selectionner</Text>
-                            </TouchableOpacity>
+                            <View style={{ backgroundColor: "white", paddingVertical: 10, paddingHorizontal: 5, paddingBottom: 0, borderRadius: 15, width: "95%", alignItems: "center" }}>
+                                <DatePicker
+                                    date={deliveryDate as Date}
+                                    onDateChange={(_date) => { setDeliveryDate(_date); }}
+                                    mode="date"
+                                    style={{ backgroundColor: "white", borderRadius: 25, width: 320 }}
+                                    textColor={colors.black}
+                                />
+                                <TouchableOpacity activeOpacity={0.8} onPress={() => openModal("delivery")} style={[styles.date_button, { width: 320, borderRadius: 15 }]}>
+                                    <Text style={{ color: colors.white, letterSpacing: 1, fontSize: 14 }}>Selectionner</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
+
                     </TouchableWithoutFeedback>
                 }
 
                 {typeModal === "expire" &&
                     <TouchableWithoutFeedback onPress={() => setVisible(false)}>
                         <View style={styles.date_modal}>
-                            <DatePicker
-                                date={expireDate as Date}
-                                onDateChange={(_date) => { setExpireDate(_date); }}
-                                mode="date"
-                                style={{ backgroundColor: "white" }}
-                                textColor={colors.black}
-                            />
-                            <TouchableOpacity activeOpacity={0.8} onPress={() => openModal("delivery")} style={[styles.date_button, { width: "84%", }]}>
-                                <Text style={{ color: colors.white, letterSpacing: 1, fontSize: 14 }}>Selectionner</Text>
-                            </TouchableOpacity>
+                            <View style={{ backgroundColor: "white", paddingVertical: 10, paddingHorizontal: 5, paddingBottom: 0, borderRadius: 15, width: "95%", alignItems: "center" }}>
+                                <DatePicker
+                                    date={expireDate as Date}
+                                    onDateChange={(_date) => { setExpireDate(_date); }}
+                                    mode="date"
+                                    style={{ backgroundColor: "white" }}
+                                    textColor={colors.black}
+                                />
+                                <TouchableOpacity activeOpacity={0.8} onPress={() => openModal("delivery")} style={[styles.date_button, { width: 320, borderRadius: 15 }]}>
+                                    <Text style={{ color: colors.white, letterSpacing: 1, fontSize: 14 }}>Selectionner</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </TouchableWithoutFeedback>
                 }

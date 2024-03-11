@@ -57,14 +57,12 @@ const Secure = () => {
     //----- get local storage data and hydrate form
     useEffect(() => { getLocalStorage() }, []);
 
-
     //----- set local storage data and go next
     async function setLocalStorage() {
         navigation.navigate("finalisation");
         dispatch({ type: "reset_user_log_tmp" });
         await AsyncStorage.removeItem("inputs")
     }
-
 
     //----- get local storage data
     async function getLocalStorage() {
@@ -133,8 +131,6 @@ const Secure = () => {
             blob.append("city", store.city)
 
             console.log(store)
-
-
             dispatch(inscription_service(blob, notificationToken))
         } catch (error) {
             console.log("notif token error: ", error)

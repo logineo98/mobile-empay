@@ -37,6 +37,7 @@ const InfosSupp = () => {
     //----- get local storage data and hydrate form
     useEffect(() => { getLocalStorage() }, []);
 
+
     //----- set local storage data and go next
     async function setLocalStorage() {
         if (next) {

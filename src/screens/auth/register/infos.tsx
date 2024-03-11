@@ -49,6 +49,7 @@ const Infos = () => {
     //----- get local storage data and hydrate form
     useEffect(() => { getLocalStorage() }, []);
 
+
     //----- handle toggle modal
     const toggleModal = () => setModalVisible(!modalVisible)
 
@@ -71,7 +72,6 @@ const Infos = () => {
         const response = await AsyncStorage.getItem("inputs");
         if (response !== null) {
             const item = JSON.parse(response)
-            console.log(item)
 
             if (item) {
                 setInputs({
@@ -187,16 +187,19 @@ const Infos = () => {
                 <Modal visible={modalVisible} animationType="slide" transparent={true} onRequestClose={toggleModal} style={{ alignItems: "center" }}>
                     <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
                         <View style={styles.modal}>
-                            <DatePicker
-                                date={birthday as Date}
-                                onDateChange={(_date) => { setBirthday(_date); setSwitchBirthDay(!switchBirthDay) }}
-                                mode="date"
-                                style={{ backgroundColor: "white" }}
-                                textColor={colors.black}
-                            />
-                            <TouchableOpacity onPress={toggleModal} style={[styles.button, { width: "75%", }]}>
-                                <Text style={{ color: colors.white, letterSpacing: 1, fontSize: 14 }}>Selectionner</Text>
-                            </TouchableOpacity>
+                            <View style={{ backgroundColor: "white", paddingVertical: 10, paddingHorizontal: 5, paddingBottom: 0, borderRadius: 15, width: "85%", alignItems: "center" }}>
+                                <DatePicker
+                                    date={birthday as Date}
+                                    onDateChange={(_date) => { setBirthday(_date); setSwitchBirthDay(!switchBirthDay) }}
+                                    mode="date"
+                                    style={{ backgroundColor: "white", borderRadius: 25, width: 320 }}
+                                    textColor={colors.black}
+                                />
+                                <TouchableOpacity activeOpacity={0.8} onPress={toggleModal} style={[styles.button, { width: 320, borderRadius: 15 }]}>
+                                    <Text style={{ color: colors.white, letterSpacing: 1, fontSize: 14 }}>Selectionner</Text>
+                                </TouchableOpacity>
+                            </View>
+
                         </View>
                     </TouchableWithoutFeedback>
                 </Modal>
