@@ -1,16 +1,21 @@
-import { Alert, StyleSheet, } from 'react-native'
+import { Alert, } from 'react-native'
 import React, { useEffect } from 'react'
 import { Provider } from 'react-redux'
 import messaging from '@react-native-firebase/messaging'
 import PushNotification from 'react-native-push-notification'
 import 'react-native-gesture-handler'
+import SplashScreen from 'react-native-splash-screen';
+
 // my importations
 import Store from './src/libs/services/store'
 import RootNavigation from './src/libs/navigations/root_navigation'
 import { requestUserPermission } from './src/libs/constants/utils'
-import { receiveCardLostedNotification, receiveRechargeNotificationCanceled, receiveRechargeNotificationSuccess, receiveScanNotification } from './src/libs/services/user/user.action'
+import { checking, receiveCardLostedNotification, receiveRechargeNotificationCanceled, receiveRechargeNotificationSuccess, receiveScanNotification } from './src/libs/services/user/user.action'
 
 const App = () => {
+  useEffect(() => { Store.dispatch<any>(checking()) }, []);
+
+  useEffect(() => { SplashScreen.hide(); }, []);
 
   useEffect(() => {
     requestUserPermission()
@@ -67,6 +72,7 @@ const App = () => {
   }, [])
 
 
+
   return (
     <Provider store={Store}>
       <RootNavigation />
@@ -75,5 +81,3 @@ const App = () => {
 }
 
 export default App
-
-const styles = StyleSheet.create({})

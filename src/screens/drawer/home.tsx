@@ -2,9 +2,10 @@ import { ActivityIndicator, Image, ImageBackground, StyleSheet, Text, ToastAndro
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
-import SmsAndroid from 'react-native-get-sms-android'
 import { PERMISSIONS, request } from 'react-native-permissions'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import axios from 'axios'
+import SmsAndroid from 'react-native-get-sms-android'
 // my importations
 import ScreenContainer1 from '../../components/common/drawer/container/screen_container1'
 import GradientText from '../../components/common/drawer/gradient/gradient_text'
@@ -13,15 +14,14 @@ import CustomLinearGradient from '../../components/common/drawer/gradient/custom
 import { colors, roboto } from '../../libs/typography/typography'
 import HistoriqueCard from '../../components/card/drawer/historique_card'
 import { RootState } from '../../libs/services/store'
-import { formatCardNumber } from '../../libs/constants/utils'
-import { getAllSms } from '../../libs/services/sms/sms.action'
+import { debug, formatCardNumber, getFourthLastCaractere } from '../../libs/constants/utils'
 import { SMS_TYPE } from '../../libs/services/sms/sms.model'
 import { getUser, sendSms } from '../../libs/services/user/user.action'
+import { getAllHistorys } from '../../libs/services/history/history.action'
+import { _end_point, get_credentials } from '../../libs/services/endpoints'
+import { SETTING_TYPE } from '../../libs/services/setting/setting.model'
 // my icons
 import Feather from 'react-native-vector-icons/Feather'
-import Loading from '../../components/common/drawer/others/loading'
-import SecondaryLoading from '../../components/common/secondary_loading'
-import { getAllHistorys } from '../../libs/services/history/history.action'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, screenName: string }
 
@@ -38,8 +38,6 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
     const [displayAmount, setDisplayAmount] = useState(false)
     const [sendSmsLoading, setSendSmsLoading] = useState(false)
     const [granted, setGranted] = useState<boolean | null>(null)
-    // const targetContact = '73030732'
-    const targetContact = '70000001'
 
     // quand on tire l'ecran vers le bas pour rafraichir
     const onRefresh = useCallback(() => {
@@ -81,40 +79,45 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
             }),
             (fail: any) => console.error('Erreur lors de la récupération des SMS :', fail),
             async (count: any, smsList: any) => {
-                const last_sms_date = await AsyncStorage.getItem('last_sms_date')
-
-                if (last_sms_date) {
-                    const list_sms: SMS_TYPE[] = JSON.parse(smsList).filter((sms: SMS_TYPE) => (sms.address.includes(targetContact) && sms.date_sent > parseInt(last_sms_date, 10)));
-
+                try {
                     if (clickSend) {
-                        if (list_sms.length === 0) {
-                            setSendSmsLoading(true)
-                            await new Promise(resolve => setTimeout(resolve, 1000))
-                            setSendSmsLoading(false)
-
-                            clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
-                        }
+                        setSendSmsLoading(true)
+                        await new Promise(resolve => setTimeout(resolve, 1000))
                     }
 
-                    (host && list_sms.length !== 0) && dispatch(sendSms({ customerId: host?.id as string, messages: list_sms.map((sms: SMS_TYPE) => sms.body) }, list_sms[0].date_sent.toString(), clickSend))
+                    const last_sms_date = await AsyncStorage.getItem('last_sms_date')
+                    const accessToken = await get_credentials('accessToken')
+                    const response = await axios.get(`${_end_point.setting.find}`, { headers: { Authorization: `Bearer ${accessToken}` } })
 
+                    const service_center = (response.data as Array<SETTING_TYPE>).find(setting => setting.name === 'service_center')?.value
 
-                } else {
-                    const list_sms: SMS_TYPE[] = JSON.parse(smsList).filter((sms: SMS_TYPE) => sms.address.includes(targetContact));
+                    if (last_sms_date) {
+                        const list_sms: SMS_TYPE[] = service_center ? JSON.parse(smsList).filter((sms: SMS_TYPE) => ((sms?.address?.includes(service_center) || sms?.service_center?.includes(service_center)) && sms?.body?.includes('Prepaid Card') && sms?.body?.includes(getFourthLastCaractere(host?.cardNumber as string)) && (sms?.body?.includes('Received :Cr') || sms?.body?.includes('POS: Dr')) && sms?.date_sent > parseInt(last_sms_date, 10))) : []
 
-                    if (clickSend) {
                         if (list_sms.length === 0) {
-                            setSendSmsLoading(true)
-                            await new Promise(resolve => setTimeout(resolve, 1000))
-                            setSendSmsLoading(false)
+                            if (clickSend) {
+                                setSendSmsLoading(false)
 
-                            clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+                                ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+                            }
+                        } else {
+                            host && dispatch(sendSms({ customerId: host?.id as string, messages: list_sms.map((sms: SMS_TYPE) => sms.body) }, list_sms[0].date_sent.toString(), clickSend, clickSend ? setSendSmsLoading : undefined))
+                        }
+                    } else {
+                        const list_sms: SMS_TYPE[] = service_center ? JSON.parse(smsList).filter((sms: SMS_TYPE) => ((sms?.address?.includes(service_center) || sms?.service_center?.includes(service_center)) && sms?.body?.includes('Prepaid Card') && sms?.body?.includes(getFourthLastCaractere(host?.cardNumber as string)) && (sms?.body?.includes('Received :Cr') || sms?.body?.includes('POS: Dr')))) : []
+
+                        if (list_sms.length === 0) {
+                            if (clickSend) {
+                                setSendSmsLoading(false)
+
+                                ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+                            }
+                        } else {
+                            host && dispatch(sendSms({ customerId: host?.id as string, messages: list_sms.map((sms: SMS_TYPE) => sms.body) }, list_sms[0].date_sent.toString(), clickSend, clickSend ? setSendSmsLoading : undefined))
                         }
                     }
-
-                    (host && list_sms.length !== 0) && dispatch(sendSms({ customerId: host?.id as string, messages: list_sms.map((sms: SMS_TYPE) => sms.body) }, list_sms[0].date_sent.toString(), clickSend))
-
-                    clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+                } catch (error: any) {
+                    debug('GET ALL SETTINGS', error?.response?.data || error.message)
                 }
             },
         )

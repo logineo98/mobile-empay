@@ -1,11 +1,10 @@
-import { StyleSheet, } from 'react-native'
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { useSelector } from 'react-redux'
 // my importations
 import DrawerStack from './stacks/drawer_stack'
 import AuthStack from './stacks/auth_stack'
-import { useSelector } from 'react-redux'
 import { RootState } from '../services/store'
 
 const RootNavigation = () => {
@@ -14,14 +13,14 @@ const RootNavigation = () => {
 
     return (
         <NavigationContainer >
-            <root.Navigator screenOptions={{ headerShown: false }} initialRouteName='auth'>
-                {host ? <root.Screen name='main' options={{ animation: 'slide_from_right' }} component={DrawerStack} /> :
+            <root.Navigator screenOptions={{ headerShown: false }} initialRouteName={host ? "main" : "auth"}>
+                {(host && host !== null && host !== undefined) ?
+                    <root.Screen name='main' options={{ animation: 'slide_from_right' }} component={DrawerStack} /> :
                     <root.Screen name='auth' component={AuthStack} />}
             </root.Navigator>
         </NavigationContainer>
     )
 }
 
-const styles = StyleSheet.create({})
 
 export default RootNavigation

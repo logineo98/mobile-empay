@@ -6,10 +6,9 @@ import { ToastAndroid } from 'react-native'
 // my importations
 import { RECHARGE_TYPE, scanModel, STATUS_TYPE, userModel } from './user.model'
 import { _end_point, get_credentials, set_credentials } from '../endpoints'
-import { card_losted, get_all_users, get_qr_code, get_user, receive_card_losted_notification, receive_recharge_notification_canceled, receive_recharge_notification_success, receive_scan_notification, recharge_compte, reset_all_users, reset_qr_code, scan_qr_code, send_sms_list, send_sms_loading, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
+import { actived_unactivated_location, card_losted, get_all_users, get_qr_code, get_user, receive_card_losted_notification, receive_recharge_notification_canceled, receive_recharge_notification_success, receive_scan_notification, recharge_compte, reset_all_users, reset_qr_code, scan_qr_code, send_sms_list, send_sms_loading, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
 import { Expired, debug } from '../../constants/utils'
 import { connexion_request, forgot_request, reset_request, verify_request } from './user.request'
-
 
 const user_error = (error: any) => (dispatch: any) => {
     if (error === "Network Error") dispatch({ type: user_errors, payload: "Erreur lors de la connexion au serveur" })
@@ -51,7 +50,6 @@ export const login = (data: userModel, setError: any) => async (dispatch: any) =
         if (connexion_request(data, setError)) return;
 
         dispatch({ type: user_loading })
-
         const res = await axios.post(_end_point.customer.login, data)
 
         res.data.expiresIn = new Date().getTime() + parseInt(res.data.expiresIn)
@@ -208,6 +206,7 @@ export const send_status_geo_montant = (data: STATUS_TYPE) => async (dispatch: a
         dispatch({ type: user_status_geo_montant, payload: { usr: response.data, } })
     } catch (error: any) {
         debug('SEND STATUS GEO MONTANT', error?.response?.data || error.message)
+        ToastAndroid.showWithGravity(error?.response?.data || error.message, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -224,6 +223,7 @@ export const getQrCode = (id: string) => async (dispatch: any) => {
     } catch (error: any) {
         debug('GET QR CODE', error?.response?.data || error.message)
         dispatch({ type: reset_qr_code, payload: 'reset' })
+        ToastAndroid.showWithGravity(error?.response?.data || error.message, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -252,7 +252,7 @@ export const _scanQrCode = (data: scanModel, navigation: DrawerNavigationHelpers
         navigation.navigate('ika_wari_taa_status', { status: response.data.status })
     } catch (error: any) {
         debug('SCAN QR CODE', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
+        ToastAndroid.showWithGravity(error?.response?.data || error.message, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -270,7 +270,6 @@ export const receiveScanNotification = (usr: userModel) => async (dispatch: any)
         dispatch({ type: receive_scan_notification, payload: usr })
     } catch (error: any) {
         debug('RECEIVE SCAN QR CODE NOTIFICATION', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -280,7 +279,6 @@ export const recharge = (data: RECHARGE_TYPE) => async (dispatch: any) => {
         dispatch({ type: user_loading })
 
         let token = await get_credentials('accessToken')
-
         const response = await axios.post(`${_end_point.customer.recharge}`, data, { headers: { Authorization: `Bearer ${token}` } })
 
         await AsyncStorage.setItem('recharge_status', response.data.paymentStatus)
@@ -288,7 +286,7 @@ export const recharge = (data: RECHARGE_TYPE) => async (dispatch: any) => {
         dispatch({ type: recharge_compte, payload: response.data.paymentStatus })
     } catch (error: any) {
         debug('RECHARGE COMPTE', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        ToastAndroid.showWithGravity(error?.response?.data || error.message, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -307,7 +305,6 @@ export const receiveRechargeNotificationSuccess = (usr: userModel, recharge_stat
         dispatch({ type: receive_recharge_notification_success, payload: { usr, recharge_status: recharge_status.paymentStatus } })
     } catch (error: any) {
         debug('RECEIVE RECHARGE NOTIFICATION SUCCESS', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -321,7 +318,6 @@ export const receiveRechargeNotificationCanceled = (recharge_status: { paymentSt
         dispatch({ type: receive_recharge_notification_canceled, payload: recharge_status.paymentStatus })
     } catch (error: any) {
         debug('RECEIVE RECHARGE NOTIFICATION CANCELED', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -337,7 +333,7 @@ export const verifyRechargeStatus = () => async (dispatch: any) => {
         dispatch({ type: recharge_compte, payload: recharge_status || '' })
     } catch (error: any) {
         debug('RECHARGE COMPTE', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        ToastAndroid.showWithGravity(error?.response?.data || error.message, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -362,7 +358,7 @@ export const _cardLosted = (
         dispatch({ type: card_losted, payload: response.data })
     } catch (error: any) {
         debug('CARD LOSTED  ', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
+        ToastAndroid.showWithGravity(error?.response?.data || error.message, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
@@ -378,12 +374,11 @@ export const receiveCardLostedNotification = (usr: userModel) => async (dispatch
         dispatch({ type: receive_card_losted_notification, payload: usr })
     } catch (error: any) {
         debug('RECEIVE CARD LOSTED NOTIFICATION', error?.response?.data || error.message)
-        Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message, })
         dispatch(user_error(error?.response?.data || error.message))
     }
 }
 
-export const sendSms = (data: { customerId: string, messages: string[] }, last_sms_date: string, clickSend: boolean) => async (dispatch: any) => {
+export const sendSms = (data: { customerId: string, messages: string[] }, last_sms_date: string, clickSend: boolean, setSendSmsLoading?: (value: React.SetStateAction<boolean>) => void) => async (dispatch: any) => {
     try {
         dispatch({ type: clickSend ? send_sms_loading : user_loading })
 
@@ -395,13 +390,37 @@ export const sendSms = (data: { customerId: string, messages: string[] }, last_s
 
         await AsyncStorage.setItem('last_sms_date', last_sms_date)
 
-        clickSend && ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+        if (clickSend) {
+            ToastAndroid.showWithGravity(`Montant actualisé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+            setSendSmsLoading && setSendSmsLoading(false)
+        }
 
         dispatch({ type: send_sms_list, payload: response.data })
     } catch (error: any) {
         debug('SEND SMS', error?.response?.data || error.message)
+        clickSend && ToastAndroid.showWithGravity(`Erreur survenue lors de l'actualisation du montant.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+        dispatch(user_error(error?.response?.data || error.message))
+    }
+}
+
+export const _activedUnactivatedLocation = (id: string, data: { coordinates: { lat?: string, lng?: string } }, setVisibleAskModal: React.Dispatch<React.SetStateAction<boolean>>) => async (dispatch: any) => {
+    try {
+        dispatch({ type: user_loading })
+
+        let accessToken = await get_credentials('accessToken')
+
+        const response = await axios.put(`${_end_point.customer.update}/${id}`, data, { headers: { Authorization: `Bearer ${accessToken}` } })
+
+        set_credentials(response.data?.usr, accessToken)
+        ToastAndroid.showWithGravity((data.coordinates.lat && data.coordinates.lng) ? `Localisation activée` : 'Localisation désactivée', ToastAndroid.CENTER, ToastAndroid.TOP)
+
+        dispatch({ type: actived_unactivated_location, payload: response.data })
+
+        setVisibleAskModal(false)
+    } catch (error: any) {
+        debug('ACTIVATED OR UNACTIVATED LOCATION', error?.response?.data || error.message)
         Toast.show({ type: 'info', text1: 'Informations', text2: error?.response?.data || error.message })
-        ToastAndroid.showWithGravity(`Erreur survenue lors de l'actualisation du montant.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+        ToastAndroid.showWithGravity(error?.response?.data || error.message, ToastAndroid.CENTER, ToastAndroid.TOP)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }

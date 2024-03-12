@@ -25,10 +25,12 @@ export const set_credentials = async (usr: userModel, accessToken: string) => {
 }
 
 //----------- endpoints
-const _API_BASE = 'http://192.168.50.82:8080/api/v1'
+const _API_BASE = 'https://empay-api.appemploietmoi.com/api/v1'
+// const _API_BASE = 'http://192.168.50.82:8080/api/v1'
 
 export const _end_point = {
-    api_img: 'http://192.168.50.82:9000',
+    api_img: 'https://empay-file.appemploietmoi.com',
+    // api_img: 'http://192.168.50.82:9000',
     customer: {
         // without id
         login: `${_API_BASE}/customers/login`,
@@ -67,9 +69,9 @@ export const _end_point = {
         register: `${_API_BASE}/tarifs/register`,   //post
         find: `${_API_BASE}/tarifs`,                //get
 
-        show: `${_API_BASE}/tarifs/:id`,            //get
-        update: `${_API_BASE}/tarifs/:id`,          //put
-        delete: `${_API_BASE}/tarifs/:id`,          //delete
+        show: `${_API_BASE}/tarifs`,            //get
+        update: `${_API_BASE}/tarifs`,          //put
+        delete: `${_API_BASE}/tarifs`,          //delete
     },
     history: {
         find: `${_API_BASE}/transactions/history`, //get,
@@ -78,5 +80,13 @@ export const _end_point = {
     },
     sms: {
         saveExternalTransactions: `${_API_BASE}/recharges/saveExternalTransactions` //post
-    }
+    },
+    setting: {
+        register: `${_API_BASE}/settings/register`,   //post
+        find: `${_API_BASE}/settings`,                //get
+
+        show: `${_API_BASE}/settings`,            //get
+        update: `${_API_BASE}/settings`,          //put
+        delete: `${_API_BASE}/settings`,          //delete
+    },
 }

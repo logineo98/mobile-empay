@@ -5,7 +5,6 @@ export const images = {
     startimes: require('../assets/images/startimes.png'),
     vitepay: require('../assets/images/vitepay.png'),
     marker: require('../assets/images/marker.png'),
-    bg: require('../assets/images/bg.jpg'),
     auth_bg: require('../assets/images/auth_bg.jpeg'),
     login_bg_img: 'https://picsum.photos/200/300/?blur=2',
     noimage: require('../assets/images/no_img.png'),
@@ -21,6 +20,9 @@ export const images = {
     register_finalisation_bg_img: require("../assets/images/IMAGE10.jpg"),
     auth_action_btn_img: require("../assets/images/SKIP_ICON.png"),
     welcome: require("../assets/images/welcome.gif"),
+    logo_republic: require("../assets/images/logo_Repulique.png"),
+    signature_logo: require("../assets/images/signature_logo.png"),
+    signature_text: require("../assets/images/signature_text.png"),
 
     // tz
     logo_white: require('../assets/images/logo_white.png'),
@@ -57,6 +59,7 @@ export const images = {
     logineo: require('../assets/images/logineo.png'),
     clock: require('../assets/images/clock.png'),
     coin: require('../assets/images/coin.png'),
+    location: require('../assets/images/location.png'),
 }
 
 export const videos = {

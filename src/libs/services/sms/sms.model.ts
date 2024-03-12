@@ -14,6 +14,7 @@ export type SMS_TYPE = {
     status: number
     sub_id: number
     thread_id: number
+    service_center: string
     type: number
 }
 

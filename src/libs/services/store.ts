@@ -5,13 +5,15 @@ import tarifReducer from './tarif/tarif.reducer'
 import userReducer from './user/user.reducer'
 import historyReducer from './history/history.reducer'
 import smsReducer from './sms/sms.reducer'
+import settingReducer from './setting/setting.reducer'
 
 const reducers = combineReducers({
     partner: partnerReducer,
     tarif: tarifReducer,
     user: userReducer,
     history: historyReducer,
-    sms: smsReducer
+    sms: smsReducer,
+    setting: settingReducer,
 })
 
 const Store = legacy_createStore(reducers, applyMiddleware(thunk))

@@ -57,14 +57,12 @@ const Secure = () => {
     //----- get local storage data and hydrate form
     useEffect(() => { getLocalStorage() }, []);
 
-
     //----- set local storage data and go next
-    function setLocalStorage() {
+    async function setLocalStorage() {
         navigation.navigate("finalisation");
         dispatch({ type: "reset_user_log_tmp" });
-        AsyncStorage.removeItem("inputs")
+        await AsyncStorage.removeItem("inputs")
     }
-
 
     //----- get local storage data
     async function getLocalStorage() {
@@ -115,6 +113,7 @@ const Secure = () => {
             blob.append("documentDeliveryDate", store.documentDeliveryDate)
             blob.append("documentExpirationDate", store.documentExpirationDate)
             blob.append("documentLicensingAuthority", store.documentLicensingAuthority)
+            blob.append("documentType", store.documentType)
 
             blob.append("contactName", store.contactName)
             blob.append("contactFirstname", store.contactFirstname)
@@ -123,7 +122,7 @@ const Secure = () => {
             blob.append("contactEmail", store.contactEmail)
             blob.append("contactRelationship", store.contactRelationship)
 
-            blob.append("accountUBA", store.account)
+            blob.append("accountUBA", store.accountUBA)
 
             blob.append("nameOnCard", store.nameOnCard)
 
@@ -131,6 +130,7 @@ const Secure = () => {
             blob.append("address", store.address)
             blob.append("city", store.city)
 
+            console.log(store)
             dispatch(inscription_service(blob, notificationToken))
         } catch (error) {
             console.log("notif token error: ", error)

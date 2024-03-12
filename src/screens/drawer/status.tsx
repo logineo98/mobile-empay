@@ -59,11 +59,11 @@ const Status: FC<COMPONENT_TYPE> = (props) => {
 
                 if (granted) {
                     Geolocation.getCurrentPosition(info => {
-                        if (host?.AmountToExchange && host?.AmountToExchange > 0 && host?.coordinates?.la && host?.coordinates?.lo) {
+                        if (host?.AmountToExchange && host?.AmountToExchange > 0 && host?.coordinates?.lat && host?.coordinates?.lng) {
                             setIsSwitchActive(true)
-                            if (host?.coordinates?.la !== info.coords.latitude.toString() || host?.coordinates?.lo !== info.coords.longitude.toString())
+                            if (host?.coordinates?.lat !== info.coords.latitude.toString() || host?.coordinates?.lng !== info.coords.longitude.toString())
                                 setDataToSend({ id: host?.id, AmountToExchange: host?.AmountToExchange.toString(), la: info.coords.latitude.toString(), lo: info.coords.longitude.toString() })
-                            else setDataToSend({ id: host?.id, AmountToExchange: host?.AmountToExchange.toString(), la: host?.coordinates.la, lo: host?.coordinates.lo })
+                            else setDataToSend({ id: host?.id, AmountToExchange: host?.AmountToExchange.toString(), la: host?.coordinates.lat, lo: host?.coordinates.lng })
                         } else {
                             setIsSwitchActive(false)
                             setDataToSend({ id: host?.id, AmountToExchange: '', la: info.coords.latitude.toString(), lo: info.coords.longitude.toString() })

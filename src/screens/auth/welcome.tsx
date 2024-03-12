@@ -1,5 +1,5 @@
-import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect } from 'react'
+import { ActivityIndicator, Image, ImageBackground, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Wrapper from '../../components/common/wrapper'
 import Container from '../../components/common/container'
 import { colors, roboto } from '../../libs/typography/typography'
@@ -9,27 +9,43 @@ import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../libs/services/store'
 import { checking } from '../../libs/services/user/user.action'
-import PrincipalLoader from '../../components/common/principal_loading'
 import Video from 'react-native-video';
 
 const Welcome = () => {
     const navigation = useNavigation<any>()
     const dispatch = useDispatch<any>()
-    const { user_loading } = useSelector((state: RootState) => state?.user)
+    const { host, user_loading } = useSelector((state: RootState) => state?.user)
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => { dispatch(checking()) }, [dispatch]);
 
 
-    if (user_loading)
-        return <PrincipalLoader text='Veuillez patienter pendant le chargement des données.' />
+    useEffect(() => {
+        const timer = setTimeout(() => { setLoading(false) }, 500)
+        return () => clearTimeout(timer)
+    }, []);
+
+
+    if (loading && !host && user_loading)
+        return (
+            <View style={{ flex: 1, paddingTop: StatusBar.currentHeight, width: "100%", alignItems: "center", justifyContent: "center", backgroundColor: colors.screen_bg_color }}>
+                <StatusBar translucent backgroundColor={"transparent"} />
+                <ActivityIndicator size={"large"} color={colors.white} />
+                <View style={styles.textbox}>
+                    <Text style={styles.text}>Veuillez patienter!</Text>
+                    <Text style={styles.text}>Traitement d'opération encours..</Text>
+                </View>
+            </View>
+        )
+
 
 
     return (
-        <Wrapper >
+        <Wrapper>
             <StatusBar translucent backgroundColor={"transparent"} />
             <Video source={videos.welcome} paused={false} repeat={true} resizeMode="cover" style={{ position: "absolute", height: "100%", top: 0, left: 0, right: 0, bottom: 0 }} />
 
-            <Container scoll position={"around"} style={{ alignItems: "center", backgroundColor: "#b41354A1" }}>
+            <Container scoll position={"around"} style={{ paddingTop: StatusBar.currentHeight, alignItems: "center", backgroundColor: "#b41354A1", height: "100%" }}>
                 <Spacer />
                 <View><Image source={images.logo_white} style={styles.logo} /></View>
 
@@ -62,5 +78,8 @@ const styles = StyleSheet.create({
     btnText: { fontFamily: roboto.medium, color: colors.black, fontSize: 17 },
     descriptionbox: { alignItems: "center", justifyContent: "center", gap: 8 },
     title: { fontSize: 28, color: colors.white, fontFamily: roboto.bold },
-    description: { fontSize: 14, color: colors.white, fontFamily: roboto.regular }
+    description: { fontSize: 14, color: colors.white, fontFamily: roboto.regular },
+    textbox: { alignItems: 'center', justifyContent: 'center', marginTop: 15 },
+    text: { fontSize: 12, color: colors.white },
 })
+

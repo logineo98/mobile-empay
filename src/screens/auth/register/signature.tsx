@@ -90,7 +90,6 @@ const Signature = () => {
     }
 
 
-
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });
 
 
@@ -134,6 +133,16 @@ const Signature = () => {
                         <Text style={{ color: colors.white, fontFamily: roboto.bold, }}>J'accepte les conditions générales*</Text>
                     </View>
                     <Spacer />
+
+                    <View>
+                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                            <Image source={images.logo_republic} style={{ width: 45, height: 45, resizeMode: "contain" }} />
+                            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <Image source={images.signature_logo} style={{ width: 50, height: 50, resizeMode: "contain", }} />
+                                <Image source={images.signature_text} style={{ width: 100, height: 100, resizeMode: "contain", tintColor: "white", marginLeft: -5 }} />
+                            </View>
+                        </View>
+                    </View>
                 </View>
                 <Animated.View style={[animatedStyle, { alignSelf: "flex-end" }]}>
                     <TouchableOpacity onPress={handle_validate} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>

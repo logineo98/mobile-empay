@@ -55,11 +55,11 @@ const ScreenContainer2: FC<COMPONENT_TYPE> = (props) => {
                 </View>
 
                 {scroll ?
-                    <ScrollView contentContainerStyle={{ flexGrow: 1, }} keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false}>
+                    <ScrollView contentContainerStyle={{ flexGrow: 1, }} keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false} >
                         {children}
                     </ScrollView> :
                     reload ?
-                        <ScrollView contentContainerStyle={{ flexGrow: 1, }} keyboardShouldPersistTaps='handled' refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} showsVerticalScrollIndicator={false}>
+                        <ScrollView contentContainerStyle={{ flexGrow: 1, }} keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                             {children}
                         </ScrollView> :
                         children

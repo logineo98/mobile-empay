@@ -162,9 +162,16 @@ const Recharge: FC<COMPONENT_TYPE> = (props) => {
                                                     </View>
 
                                                     <View style={styles.percent_partenaire}>
-                                                        <Text style={styles.percent_partenaire_text}>Montant après déduction des frais :</Text>
-                                                        <Text style={[styles.percent_partenaire_text, { fontFamily: roboto.black, color: colors.fond1, }]}> {vitepayData.montant ? (parseInt(vitepayData.montant, 10) - (parseInt(vitepayData.montant, 10) * 3.5) / 100) : 0} </Text>
-                                                        <Text style={styles.percent_partenaire_text}>FCFA</Text>
+                                                        <Text style={styles.percent_partenaire_text}>Montant après déduction des frais : </Text>
+                                                        <Text style={[styles.percent_partenaire_text, { fontFamily: roboto.black, color: colors.fond1, }]}>
+                                                            {vitepayData.montant ?
+                                                                parseInt(vitepayData.montant, 10) <= 70000 ?
+                                                                    parseInt(vitepayData.montant, 10) - ((parseInt(vitepayData.montant, 10) * 0.02) + 1170) :
+                                                                    parseInt(vitepayData.montant, 10) - ((parseInt(vitepayData.montant, 10) * 0.015) + ((parseInt(vitepayData.montant, 10) * 0.015) * 0.17)) :
+                                                                0
+                                                            }
+                                                        </Text>
+                                                        <Text style={styles.percent_partenaire_text}> FCFA</Text>
                                                     </View>
                                                 </View>
 

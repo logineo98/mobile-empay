@@ -1,4 +1,4 @@
-import { Alert, Image, Modal, ScrollView, Share, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { ActivityIndicator, Alert, Image, Modal, PermissionsAndroid, ScrollView, Share, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { FC, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
@@ -9,8 +9,8 @@ import CustomLinearGradient from './gradient/custom_linear_gradient'
 import { RootState } from '../../../libs/services/store'
 import { logout } from '../../../libs/services/user/user.action'
 import ModalServiceClient from './modal/modal_service_client'
-import SecondaryLoading from '../secondary_loading'
 import { _end_point } from '../../../libs/services/endpoints'
+import ModalAskCloseLocalisation from './modal/modal_ask_ask_localisation'
 
 type COMPONENT_TYPE = { navigation: DrawerNavigationHelpers, }
 
@@ -24,6 +24,7 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
 
     const [visibleLogoutModal, setVisibleLogoutModal] = useState(false)
     const [visibleServiceClientModal, setVisibleServiceClientModal] = useState(false)
+    const [visibleModalAskLocalisation, setVisibleModalAskLocalisation] = useState(false)
     const [click, setClick] = useState(false);
 
     const onShare = async () => {
@@ -31,6 +32,16 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
         catch (error: any) {
             Alert.alert('Message d\'erreur', error?.message, [{ text: 'OK' }])
         }
+    }
+
+    const handleLocation = async () => {
+        try {
+            const geolocalisationPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+
+            if (geolocalisationPermission === 'granted') {
+                setVisibleModalAskLocalisation(true)
+            } else ToastAndroid.showWithGravity(`Veuillez autoriser la localisation !`, ToastAndroid.CENTER, ToastAndroid.TOP)
+        } catch (error) { }
     }
 
     return (
@@ -55,6 +66,14 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
                         <Image source={images.status} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
                         <Text style={styles.item_name}>Statut/Disponibilité</Text>
                     </TouchableOpacity>
+
+                    <View style={{ marginBottom: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
+                        <TouchableOpacity activeOpacity={0.5} style={[styles.item_container, { marginBottom: 0, }]} onPress={handleLocation}>
+                            <Image source={images.location} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
+                            <Text style={styles.item_name}>Localisation</Text>
+                        </TouchableOpacity>
+                        <Text style={{ height: 15, width: 15, borderRadius: 20, backgroundColor: (host?.coordinates?.lat && host.coordinates.lng) ? colors.success : colors.error, }}></Text>
+                    </View>
 
                     <TouchableOpacity activeOpacity={0.5} style={styles.item_container} onPress={() => navigation.navigate('tarif')}>
                         <Image source={images.tarif} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
@@ -104,24 +123,32 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
                 <View style={styles.modal_global_container}>
                     <View style={styles.modal_container}>
                         <Text style={styles.modal_title}>Déconnexion</Text>
-                        <Text style={styles.deconnexion_content}>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo facere tenetur alias! A, optio. Enim dignissimos molestias in accusamus vel.</Text>
+                        <Text style={styles.deconnexion_content}>Voulez-vous vraiment vous déconnecter ?</Text>
                         <View style={styles.back_validate_container}>
                             <TouchableOpacity activeOpacity={0.5} style={[styles.back_validate, { padding: 10, }]} onPress={() => setVisibleLogoutModal(false)}>
                                 <Text style={styles.back_validate_name}>Annuler</Text>
                             </TouchableOpacity>
                             <TouchableOpacity activeOpacity={0.5} style={styles.back_validate} onPress={() => { dispatch(logout()); setClick(true) }}>
                                 <CustomLinearGradient style={styles.validate_gradient}>
-                                    <Text style={[styles.back_validate_name, { color: colors.black, }]}>Se déconnecter</Text>
+                                    <Text style={[styles.back_validate_name, { color: colors.white, }]}>Se déconnecter</Text>
                                 </CustomLinearGradient>
                             </TouchableOpacity>
                         </View>
                     </View>
+
+                    {(click && user_loading) &&
+                        <View style={{ backgroundColor: colors.black, position: 'absolute', height: '100%', width: width, justifyContent: 'center', }}>
+                            <ActivityIndicator size='large' color={colors.white} />
+                        </View>
+                    }
                 </View>
             </Modal>
-            {click && user_loading && <SecondaryLoading text={'Déconnexion en cours...'} />}
 
             {/* modal service client */}
             <ModalServiceClient visibleServiceClientModal={visibleServiceClientModal} setVisibleServiceClientModal={setVisibleServiceClientModal} />
+
+            {/* modal localisation */}
+            <ModalAskCloseLocalisation visibleAskModal={visibleModalAskLocalisation} setVisibleAskModal={setVisibleModalAskLocalisation} />
         </View>
     )
 }
@@ -160,10 +187,9 @@ const styles = StyleSheet.create({
     deconnexion_content: { color: colors.black, fontFamily: roboto.regular, textAlign: 'center', marginVertical: 20, },
 
     back_validate_container: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', },
-    back_validate: { width: 130, backgroundColor: colors.screen_bg_color, borderRadius: 20, },
+    back_validate: { width: '49%', backgroundColor: colors.screen_bg_color, borderRadius: 20, },
     back_validate_name: { color: colors.white, fontFamily: roboto.regular, textAlign: 'center', },
     validate_gradient: { padding: 10, borderRadius: 20, },
-
 })
 
 export default CustomDrawerContent

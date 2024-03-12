@@ -9,7 +9,7 @@ import CustomLinearGradient from '../gradient/custom_linear_gradient'
 import { RootState } from '../../../../libs/services/store'
 import ModalServiceClient from '../modal/modal_service_client'
 import { _end_point } from '../../../../libs/services/endpoints'
-import ModalAsk from '../modal/modal_ask'
+import ModalAskCloseCard from '../modal/modal_ask_close_card'
 
 type COMPONENT_TYPE = {
     children: JSX.Element | JSX.Element[]
@@ -99,7 +99,8 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
                         <TouchableOpacity activeOpacity={0.5} style={[styles.bottom_item_container, { backgroundColor: colors.black }]} onPress={() => setShow(false)}>
                             <Image source={images.minus} style={styles.bottom_item} tintColor={colors.profil_bg_color} />
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => setVisibleServiceClientModal(true)}>
+                        {/* <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => setVisibleServiceClientModal(true)}> */}
+                        <TouchableOpacity activeOpacity={0.5} style={styles.bottom_item_container} onPress={() => navigation.navigate('chatbot')}>
                             <Image source={images.service_client} style={styles.bottom_item} tintColor={colors.black} />
                         </TouchableOpacity>
                     </View>
@@ -110,7 +111,7 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
             <ModalServiceClient visibleServiceClientModal={visibleServiceClientModal} setVisibleServiceClientModal={setVisibleServiceClientModal} />
 
             {/* modal service client */}
-            <ModalAsk visibleAskModal={visibleAskModal} setVisibleAskModal={setVisibleAskModal} setDisplayVisaCard={setDisplayVisaCard} />
+            <ModalAskCloseCard visibleAskModal={visibleAskModal} setVisibleAskModal={setVisibleAskModal} setDisplayVisaCard={setDisplayVisaCard} />
         </View>
     )
 }

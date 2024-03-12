@@ -43,7 +43,7 @@ const Geolocalisation: FC<COMPONENT_TYPE> = (props) => {
 
                 if (granted) {
                     Geolocation.getCurrentPosition(info => {
-                        setInitialRegion({ ...initialRegion, latitude: info.coords.latitude, longitude: info.coords.longitude })
+                        setInitialRegion({ ...initialRegion, latitude: info?.coords?.latitude, longitude: info?.coords?.longitude })
                     })
                 }
             })()
@@ -63,10 +63,13 @@ const Geolocalisation: FC<COMPONENT_TYPE> = (props) => {
                                 <View style={styles.geolocalisation_container}>
                                     <MapView style={{ width: '100%', height: '100%' }} initialRegion={initialRegion}>
                                         {allUsers?.map((user) => (
-                                            (user?.AmountToExchange && user?.coordinates?.lat && user?.coordinates?.lng) ?
+                                            // (user?.AmountToExchange && user?.coordinates?.lat && user?.coordinates?.lng) ?
+                                            (user?.coordinates?.lat && user?.coordinates?.lng) ?
                                                 <Marker key={user?.id}
                                                     coordinate={{ latitude: parseInt(user?.coordinates?.lat, 10), longitude: parseInt(user?.coordinates?.lng, 10) }}
-                                                    title={user?.name} description={`${user?.AmountToExchange} FCFA`}
+                                                    title={user?.name}
+                                                    // description={`${user?.AmountToExchange} FCFA`}
+                                                    description=''
                                                 /> :
                                                 <View key={user?.id} />
                                         ))}
