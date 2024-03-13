@@ -16,6 +16,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { inscription_inputs_request } from '../../../libs/services/user/user.request'
 import ToastContainer from '../../../components/common/toast'
 import NoPermissionCard from '../../../components/card/drawer/no_permission_card'
+import DeviceInfo from 'react-native-device-info'
+
 
 const Selfie = () => {
     const cameraRef = useRef<any>(null);
@@ -29,6 +31,8 @@ const Selfie = () => {
     const isFocused = useIsFocused()
 
     const [imageSource, setImageSource] = useState('');
+
+    console.log(DeviceInfo.getBrand())
 
     //----- get camera permission useeffect
     useEffect(() => { getCameraPermission() }, [device]);
@@ -58,7 +62,7 @@ const Selfie = () => {
 
         if (cameraRef.current !== null) {
             try {
-                const photo = await cameraRef.current.takePhoto({ orientation: "portrait" })
+                const photo = await cameraRef.current.takePhoto({ orientation: "portrait", })
                 setImageSource('file:///' + photo.path)
                 setInputs({ ...inputs, profil: { uri: 'file:///' + photo.path, type: 'image/jpeg', name: "profile" + '-image.jpg' } })
 
@@ -131,7 +135,14 @@ const Selfie = () => {
                         <View style={styles.uploadedbox}>
                             {imageSource ?
                                 <Image source={{ uri: imageSource }} style={[styles.uploadedImg, StyleSheet.absoluteFill]} /> :
-                                <Camera orientation="portrait" device={device} ref={cameraRef} style={[StyleSheet.absoluteFill]} photo={true} isActive={isFocused} />}
+                                <Camera
+                                    orientation="portrait"
+                                    device={device}
+                                    ref={cameraRef}
+                                    style={[StyleSheet.absoluteFill]}
+                                    photo={true}
+                                    isActive={isFocused} />
+                            }
                         </View>
                         <Spacer />
                         <Spacer />
@@ -162,7 +173,7 @@ const styles = StyleSheet.create({
     title: { fontSize: 24, color: colors.white, fontFamily: roboto.bold, textTransform: "uppercase" },
 
     uploadedbox: { width: "80%", height: 315, borderRadius: 90, backgroundColor: colors.gray, borderWidth: 2, borderColor: colors.white, overflow: "hidden", },
-    uploadedImg: { transform: [{ rotate: "90deg" }], resizeMode: "cover" },
+    uploadedImg: { transform: [{ rotate: ["Samsung", "samsung"]?.includes(DeviceInfo.getBrand()) ? "90deg" : "0deg" }], resizeMode: "cover" },
 
     description: { fontSize: 13, textAlign: "center", color: colors.white, fontFamily: roboto.regular },
     registerBtn: { marginTop: 2, backgroundColor: colors.ika_wari_taa_bg_color, width: "35%", borderRadius: 15, alignItems: "center", padding: 2 },

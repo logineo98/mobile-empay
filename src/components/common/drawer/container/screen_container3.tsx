@@ -9,6 +9,7 @@ import { colors, roboto } from '../../../../libs/typography/typography'
 import GradientText from '../gradient/gradient_text'
 import { RootState } from '../../../../libs/services/store'
 import { _end_point } from '../../../../libs/services/endpoints'
+import DeviceInfo from 'react-native-device-info'
 
 type COMPONENT_TYPE = {
     children: JSX.Element | JSX.Element[]
@@ -39,7 +40,7 @@ const ScreenContainer3: FC<COMPONENT_TYPE> = (props) => {
                     <View style={styles.profil_info_container}>
                         <View style={styles.profil_img_container}>
                             {host?.photo ?
-                                <Image source={{ uri: `${_end_point.api_img}/${host.photo}` }} style={[styles.profil_img, { transform: [{ rotate: '90deg' }] }]} /> :
+                                <Image source={{ uri: `${_end_point.api_img}/${host.photo}` }} style={[styles.profil_img, { transform: [{ rotate: ["Samsung", "samsung"]?.includes(DeviceInfo.getBrand()) ? "90deg" : "0deg" }] }]} /> :
                                 <Image source={images.avatar} style={styles.profil_img} />
                             }
                         </View>

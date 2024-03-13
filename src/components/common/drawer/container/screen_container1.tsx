@@ -10,6 +10,7 @@ import { RootState } from '../../../../libs/services/store'
 import ModalServiceClient from '../modal/modal_service_client'
 import { _end_point } from '../../../../libs/services/endpoints'
 import ModalAskCloseCard from '../modal/modal_ask_close_card'
+import DeviceInfo from 'react-native-device-info'
 
 type COMPONENT_TYPE = {
     children: JSX.Element | JSX.Element[]
@@ -66,7 +67,7 @@ const ScreenContainer1: FC<COMPONENT_TYPE> = (props) => {
                 <TouchableOpacity activeOpacity={0.5} style={styles.profil_info_container} onPress={() => navigation.openDrawer()}>
                     <View style={styles.profil_img_container}>
                         {host?.photo ?
-                            <Image source={{ uri: `${_end_point.api_img}/${host.photo}` }} style={[styles.profil_img, { transform: [{ rotate: '90deg' }] }]} /> :
+                            <Image source={{ uri: `${_end_point.api_img}/${host.photo}` }} style={[styles.profil_img, { transform: [{ rotate: ["Samsung", "samsung"]?.includes(DeviceInfo.getBrand()) ? "90deg" : "0deg" }] }]} /> :
                             <Image source={images.avatar} style={styles.profil_img} />
                         }
                     </View>

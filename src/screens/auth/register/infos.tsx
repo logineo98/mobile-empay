@@ -186,8 +186,8 @@ const Infos = () => {
 
                 <Modal visible={modalVisible} animationType="slide" transparent={true} onRequestClose={toggleModal} style={{ alignItems: "center" }}>
                     <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-                        <View style={styles.modal}>
-                            <View style={{ backgroundColor: "white", paddingVertical: 10, paddingHorizontal: 5, paddingBottom: 0, borderRadius: 15, width: "85%", alignItems: "center" }}>
+                        <View style={[styles.modal, { paddingHorizontal: 15 }]}>
+                            <View style={{ backgroundColor: "white", paddingVertical: 10, paddingHorizontal: 5, paddingBottom: 0, borderRadius: 15, width: "100%", alignItems: "center" }}>
                                 <DatePicker
                                     date={birthday as Date}
                                     onDateChange={(_date) => { setBirthday(_date); setSwitchBirthDay(!switchBirthDay) }}

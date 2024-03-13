@@ -240,7 +240,7 @@ const Document = () => {
                 {typeModal === "delivery" &&
                     <TouchableWithoutFeedback onPress={() => setVisible(false)}>
                         <View style={styles.date_modal}>
-                            <View style={{ backgroundColor: "white", paddingVertical: 10, paddingHorizontal: 5, paddingBottom: 0, borderRadius: 15, width: "95%", alignItems: "center" }}>
+                            <View style={{ backgroundColor: "white", paddingVertical: 10, paddingHorizontal: 10, paddingBottom: 0, borderRadius: 15, width: "100%", alignItems: "center" }}>
                                 <DatePicker
                                     date={deliveryDate as Date}
                                     onDateChange={(_date) => { setDeliveryDate(_date); }}
@@ -260,12 +260,12 @@ const Document = () => {
                 {typeModal === "expire" &&
                     <TouchableWithoutFeedback onPress={() => setVisible(false)}>
                         <View style={styles.date_modal}>
-                            <View style={{ backgroundColor: "white", paddingVertical: 10, paddingHorizontal: 5, paddingBottom: 0, borderRadius: 15, width: "95%", alignItems: "center" }}>
+                            <View style={{ backgroundColor: "white", paddingVertical: 10, paddingHorizontal: 5, paddingBottom: 0, borderRadius: 15, width: "100%", alignItems: "center" }}>
                                 <DatePicker
                                     date={expireDate as Date}
                                     onDateChange={(_date) => { setExpireDate(_date); }}
                                     mode="date"
-                                    style={{ backgroundColor: "white" }}
+                                    style={{ backgroundColor: "white", width: 320 }}
                                     textColor={colors.black}
                                 />
                                 <TouchableOpacity activeOpacity={0.8} onPress={() => openModal("delivery")} style={[styles.date_button, { width: 320, borderRadius: 15 }]}>
