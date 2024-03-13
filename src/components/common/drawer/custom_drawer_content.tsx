@@ -50,7 +50,8 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
             {/* profil container */}
             <TouchableOpacity activeOpacity={0.5} style={styles.profil_info_container} onPress={() => navigation.closeDrawer()}>
                 <View style={styles.profil_img_container}>
-                    {host?.photo ? <Image source={{ uri: `${_end_point.api_img}/${host.photo}` }} style={[styles.profil_img, { transform: [{ rotate: ["Samsung", "samsung"]?.includes(DeviceInfo.getBrand()) ? "90deg" : "0deg" }] }]} /> :
+                    {host?.photo ?
+                        <Image source={{ uri: `${_end_point.api_img}/${host.photo}` }} style={[styles.profil_img, { transform: [{ rotate: "90deg" }] }]} /> :
                         <Image source={images.avatar} style={styles.profil_img} />
                     }
                 </View>

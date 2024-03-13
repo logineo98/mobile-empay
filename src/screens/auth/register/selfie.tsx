@@ -52,7 +52,7 @@ const Selfie = () => {
 
     //----- get camera permission
     async function getCameraPermission() {
-        if (device) device.sensorOrientation = "portrait-upside-down";
+        if (device) device.sensorOrientation = "landscape-left";
         const cameraPermission = await Camera.requestCameraPermission();
         setGranted(cameraPermission === 'granted');
     }
@@ -62,9 +62,11 @@ const Selfie = () => {
 
         if (cameraRef.current !== null) {
             try {
-                const photo = await cameraRef.current.takePhoto({ orientation: "portrait", })
+                const photo = await cameraRef.current.takePhoto({ orientation: "portrait" });
+                console.log(photo)
                 setImageSource('file:///' + photo.path)
                 setInputs({ ...inputs, profil: { uri: 'file:///' + photo.path, type: 'image/jpeg', name: "profile" + '-image.jpg' } })
+
 
             } catch (error: any) {
                 console.log(error.message)
@@ -134,9 +136,10 @@ const Selfie = () => {
 
                         <View style={styles.uploadedbox}>
                             {imageSource ?
-                                <Image source={{ uri: imageSource }} style={[styles.uploadedImg, StyleSheet.absoluteFill]} /> :
+                                <Image source={{ uri: imageSource }} style={[styles.uploadedImg, StyleSheet.absoluteFill]} />
+                                :
                                 <Camera
-                                    orientation="portrait"
+                                    orientation="landscape-left"
                                     device={device}
                                     ref={cameraRef}
                                     style={[StyleSheet.absoluteFill]}
@@ -173,7 +176,7 @@ const styles = StyleSheet.create({
     title: { fontSize: 24, color: colors.white, fontFamily: roboto.bold, textTransform: "uppercase" },
 
     uploadedbox: { width: "80%", height: 315, borderRadius: 90, backgroundColor: colors.gray, borderWidth: 2, borderColor: colors.white, overflow: "hidden", },
-    uploadedImg: { transform: [{ rotate: ["Samsung", "samsung"]?.includes(DeviceInfo.getBrand()) ? "90deg" : "0deg" }], resizeMode: "cover" },
+    uploadedImg: { transform: [{ rotate: "90deg" }], resizeMode: "cover" },
 
     description: { fontSize: 13, textAlign: "center", color: colors.white, fontFamily: roboto.regular },
     registerBtn: { marginTop: 2, backgroundColor: colors.ika_wari_taa_bg_color, width: "35%", borderRadius: 15, alignItems: "center", padding: 2 },
