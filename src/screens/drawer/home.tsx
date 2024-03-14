@@ -92,7 +92,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                     const service_center = (response.data as Array<SETTING_TYPE>).find(setting => setting.name === 'service_center')?.value
 
                     if (last_sms_date) {
-                        const list_sms: SMS_TYPE[] = service_center ? JSON.parse(smsList).filter((sms: SMS_TYPE) => ((sms?.address?.includes(service_center) || sms?.service_center?.includes(service_center)) && sms?.body?.includes('Prepaid Card') && sms?.body?.includes(getFourthLastCaractere(host?.cardNumber as string)) && (sms?.body?.includes('Received :Cr') || sms?.body?.includes('POS: Dr')) && sms?.date_sent > parseInt(last_sms_date, 10))) : []
+                        const list_sms: SMS_TYPE[] = service_center ? JSON.parse(smsList).filter((sms: SMS_TYPE) => (sms?.address?.includes(service_center) && sms?.body?.includes('Prepaid Card') && sms?.body?.includes(getFourthLastCaractere(host?.cardNumber as string)) && (sms?.body?.includes('Received :Cr') || sms?.body?.includes('POS: Dr')) && sms?.date_sent > parseInt(last_sms_date, 10))) : []
 
                         if (list_sms.length === 0) {
                             if (clickSend) {
@@ -104,7 +104,7 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                             host && dispatch(sendSms({ customerId: host?.id as string, messages: list_sms.map((sms: SMS_TYPE) => sms.body) }, list_sms[0].date_sent.toString(), clickSend, clickSend ? setSendSmsLoading : undefined))
                         }
                     } else {
-                        const list_sms: SMS_TYPE[] = service_center ? JSON.parse(smsList).filter((sms: SMS_TYPE) => ((sms?.address?.includes(service_center) || sms?.service_center?.includes(service_center)) && sms?.body?.includes('Prepaid Card') && sms?.body?.includes(getFourthLastCaractere(host?.cardNumber as string)) && (sms?.body?.includes('Received :Cr') || sms?.body?.includes('POS: Dr')))) : []
+                        const list_sms: SMS_TYPE[] = service_center ? JSON.parse(smsList).filter((sms: SMS_TYPE) => (sms?.address?.includes(service_center) && sms?.body?.includes('Prepaid Card') && sms?.body?.includes(getFourthLastCaractere(host?.cardNumber as string)) && (sms?.body?.includes('Received :Cr') || sms?.body?.includes('POS: Dr')))) : []
 
                         if (list_sms.length === 0) {
                             if (clickSend) {
