@@ -120,7 +120,7 @@ const Verify = () => {
                     <View style={styles.forms}>
                         <View style={styles.input_wrapper}>
                             {inputs?.code && <SmallLabel text='Code' left={18} />}
-                            <TextInput value={inputs?.code} onChangeText={text => handleChangeMobile("code", text, setInputs)} keyboardType="phone-pad" placeholder='Numéro de téléphone' placeholderTextColor={colors.gray} style={styles.input} />
+                            <TextInput value={inputs?.code} onChangeText={text => handleChangeMobile("code", text, setInputs)} keyboardType="phone-pad" placeholder='Code de vérification' placeholderTextColor={colors.gray} style={styles.input} />
                         </View>
 
                         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
@@ -128,7 +128,7 @@ const Verify = () => {
                             <TouchableOpacity onPress={handleRetry} activeOpacity={0.8}><Text style={{ color: colors.ika_wari_taa_bg_color }}>réessayer</Text></TouchableOpacity>
                         </View>
 
-                        {debugCode && <View style={{ flexDirection: "row", alignItems: "center" }}><Text style={{ color: colors.white }}>Debug code</Text><Text style={{ color: colors.ika_wari_taa_bg_color }}>{debugCode}</Text></View>}
+                        {/* {debugCode && <View style={{ flexDirection: "row", alignItems: "center" }}><Text style={{ color: colors.white }}>Debug code</Text><Text style={{ color: colors.ika_wari_taa_bg_color }}>{debugCode}</Text></View>} */}
                     </View>
                     <Spacer height={10} />
                     <Spacer />
