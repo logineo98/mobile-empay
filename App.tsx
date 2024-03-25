@@ -37,8 +37,6 @@ const App = () => {
       // suppression de compte
       if (notif?.title === 'Suppression de compte') Store.dispatch<any>(receiveDeleteAccountNotification())
 
-      console.log(notif)
-
       Alert.alert(notif?.title || "Notifications", notif?.body, [{ text: "D'accord" }])
     })
 
