@@ -6,7 +6,7 @@ import { ToastAndroid } from 'react-native'
 // my importations
 import { RECHARGE_TYPE, scanModel, STATUS_TYPE, userModel } from './user.model'
 import { _end_point, get_credentials, set_credentials } from '../endpoints'
-import { actived_unactivated_location, card_losted, get_all_users, get_qr_code, get_user, receive_card_losted_notification, receive_recharge_notification_canceled, receive_recharge_notification_success, receive_scan_notification, recharge_compte, reset_all_users, reset_qr_code, scan_qr_code, send_sms_list, send_sms_loading, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
+import { actived_unactivated_location, card_losted, get_all_users, get_qr_code, get_user, receive_card_losted_notification, receive_delete_account_notification, receive_recharge_notification_canceled, receive_recharge_notification_success, receive_scan_notification, recharge_compte, reset_all_users, reset_qr_code, scan_qr_code, send_sms_list, send_sms_loading, user_errors, user_forgot_success, user_loading, user_login_success, user_logout_success, user_register_success, user_resent_success, user_reset_success, user_status_geo_montant, user_verify_success } from './user.constant'
 import { Expired, debug } from '../../constants/utils'
 import { connexion_request, forgot_request, reset_request, verify_request } from './user.request'
 
@@ -374,6 +374,19 @@ export const receiveCardLostedNotification = (usr: userModel) => async (dispatch
         dispatch({ type: receive_card_losted_notification, payload: usr })
     } catch (error: any) {
         debug('RECEIVE CARD LOSTED NOTIFICATION', error?.response?.data || error.message)
+        dispatch(user_error(error?.response?.data || error.message))
+    }
+}
+
+export const receiveDeleteAccountNotification = () => async (dispatch: any) => {
+    try {
+        dispatch({ type: user_loading })
+
+        await AsyncStorage.removeItem('credentials')
+
+        dispatch({ type: receive_delete_account_notification, payload: null })
+    } catch (error: any) {
+        debug('RECEIVE DETELE ACOUNT NOTIFICATION', error?.response?.data || error.message)
         dispatch(user_error(error?.response?.data || error.message))
     }
 }

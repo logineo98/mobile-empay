@@ -25,8 +25,8 @@ export const set_credentials = async (usr: userModel, accessToken: string) => {
 }
 
 //----------- endpoints
-const _API_BASE = 'https://empay-api.appemploietmoi.com/api/v1'
-// const _API_BASE = 'http://192.168.50.82:8080/api/v1'
+// const _API_BASE = 'https://empay-api.appemploietmoi.com/api/v1'
+const _API_BASE = 'http://192.168.50.82:8080/api/v1'
 
 export const _end_point = {
     api_img: 'https://empay-file.appemploietmoi.com',
