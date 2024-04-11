@@ -1,7 +1,11 @@
+import { ToastAndroid } from 'react-native'
 import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+// my importations
 import { ERROR_HISTORY, ERROR_TRANSACTION_DAY, ERROR_TRANSACTION_YEAR, GET_ALL_HISTORYS, GET_TRANSACTIONS_DAYS, GET_TRANSACTIONS_YEAR, LOADING_HISTORY, LOADING_TRANSACTION_DAY, LOADING_TRANSACTION_YEAR, RESET_HISTORY, RESET_HISTORY_SEM_YEAR } from './history.constant'
 import { _end_point, get_credentials } from '../endpoints'
 import { debug } from '../../constants/utils'
+import { user_logout_success } from '../user/user.constant'
 
 const loadingHistory = () => (dispatch: any) => {
     dispatch({ type: LOADING_HISTORY })
@@ -38,7 +42,11 @@ export const getAllHistorys = (id: string) => async (dispatch: any) => {
         dispatch({ type: GET_ALL_HISTORYS, payload: response.data })
     } catch (error: any) {
         debug('GET ALL HISTORYS', error?.response?.data || error.message)
-        dispatch(errorHistory(true))
+        if (error?.response?.data === 'Compte client indisponible') {
+            await AsyncStorage.removeItem('credentials')
+            dispatch({ type: user_logout_success })
+            ToastAndroid.showWithGravity(`Votre compte a été supprimé.`, ToastAndroid.CENTER, ToastAndroid.TOP)
+        } else dispatch(errorHistory(true))
     }
 }
 

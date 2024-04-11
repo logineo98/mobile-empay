@@ -55,7 +55,7 @@ const Historique: FC<COMPONENT_TYPE> = (props) => {
                         allTransactionsDays.length === 0 ? <NoElement height={200} message={`Aucune transaction n'a été effectuée cette semaine.`} /> :
 
                             <View style={styles.statistic_recent_container}>
-                                <Text style={styles.statistic_recent_title}>Dépenses récentes sur mon compte</Text>
+                                <Text style={styles.statistic_recent_title}>Opérations récentes sur mon compte</Text>
                                 <BarChart
                                     style={styles.statistic_recent}
                                     data={{

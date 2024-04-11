@@ -10,7 +10,7 @@ import SplashScreen from 'react-native-splash-screen';
 import Store from './src/libs/services/store'
 import RootNavigation from './src/libs/navigations/root_navigation'
 import { requestUserPermission } from './src/libs/constants/utils'
-import { checking, receiveCardLostedNotification, receiveRechargeNotificationCanceled, receiveRechargeNotificationSuccess, receiveScanNotification } from './src/libs/services/user/user.action'
+import { checking, receiveCardLostedNotification, receiveDeleteAccountNotification, receiveRechargeNotificationCanceled, receiveRechargeNotificationSuccess, receiveScanNotification } from './src/libs/services/user/user.action'
 
 const App = () => {
   useEffect(() => { Store.dispatch<any>(checking()) }, []);
@@ -34,6 +34,8 @@ const App = () => {
 
       // carte perdue 
       if (notif?.title === 'Réactivation de la carte de crédit') Store.dispatch<any>(receiveCardLostedNotification(usr))
+      // suppression de compte
+      if (notif?.title === 'Suppression de compte') Store.dispatch<any>(receiveDeleteAccountNotification())
 
       Alert.alert(notif?.title || "Notifications", notif?.body, [{ text: "D'accord" }])
     })
@@ -60,6 +62,8 @@ const App = () => {
 
       // carte perdue
       if (notif?.title === 'Réactivation de la carte de crédit') Store.dispatch<any>(receiveCardLostedNotification(usr))
+      // suppression de compte
+      if (notif?.title === 'Suppression de compte') Store.dispatch<any>(receiveDeleteAccountNotification())
 
       // Show a local notification
       PushNotification.localNotification({

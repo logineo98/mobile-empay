@@ -16,6 +16,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { inscription_inputs_request } from '../../../libs/services/user/user.request'
 import ToastContainer from '../../../components/common/toast'
 import NoPermissionCard from '../../../components/card/drawer/no_permission_card'
+import DeviceInfo from 'react-native-device-info'
+
 
 const Selfie = () => {
     const cameraRef = useRef<any>(null);
@@ -29,6 +31,8 @@ const Selfie = () => {
     const isFocused = useIsFocused()
 
     const [imageSource, setImageSource] = useState('');
+
+    console.log(DeviceInfo.getBrand())
 
     //----- get camera permission useeffect
     useEffect(() => { getCameraPermission() }, [device]);
@@ -48,7 +52,7 @@ const Selfie = () => {
 
     //----- get camera permission
     async function getCameraPermission() {
-        if (device) device.sensorOrientation = "portrait-upside-down";
+        if (device) device.sensorOrientation = "landscape-left";
         const cameraPermission = await Camera.requestCameraPermission();
         setGranted(cameraPermission === 'granted');
     }
@@ -58,9 +62,11 @@ const Selfie = () => {
 
         if (cameraRef.current !== null) {
             try {
-                const photo = await cameraRef.current.takePhoto({ orientation: "portrait" })
+                const photo = await cameraRef.current.takePhoto({ orientation: "portrait" });
+                console.log(photo)
                 setImageSource('file:///' + photo.path)
                 setInputs({ ...inputs, profil: { uri: 'file:///' + photo.path, type: 'image/jpeg', name: "profile" + '-image.jpg' } })
+
 
             } catch (error: any) {
                 console.log(error.message)
@@ -130,8 +136,16 @@ const Selfie = () => {
 
                         <View style={styles.uploadedbox}>
                             {imageSource ?
-                                <Image source={{ uri: imageSource }} style={[styles.uploadedImg, StyleSheet.absoluteFill]} /> :
-                                <Camera orientation="portrait" device={device} ref={cameraRef} style={[StyleSheet.absoluteFill]} photo={true} isActive={isFocused} />}
+                                <Image source={{ uri: imageSource }} style={[styles.uploadedImg, StyleSheet.absoluteFill]} />
+                                :
+                                <Camera
+                                    orientation="landscape-left"
+                                    device={device}
+                                    ref={cameraRef}
+                                    style={[StyleSheet.absoluteFill]}
+                                    photo={true}
+                                    isActive={isFocused} />
+                            }
                         </View>
                         <Spacer />
                         <Spacer />
