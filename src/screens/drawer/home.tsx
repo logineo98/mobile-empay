@@ -1,25 +1,25 @@
-import { ActivityIndicator, Image, ImageBackground, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions, } from 'react-native'
-import React, { FC, useCallback, useEffect, useState } from 'react'
-import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
-import { useDispatch, useSelector } from 'react-redux'
-import { PERMISSIONS, request } from 'react-native-permissions'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import SmsAndroid from 'react-native-get-sms-android'
+import { useDispatch, useSelector } from 'react-redux'
+import { PERMISSIONS, request } from 'react-native-permissions'
+import React, { FC, useCallback, useEffect, useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
+import { ActivityIndicator, Image, ImageBackground, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions, } from 'react-native'
 // my importations
-import ScreenContainer1 from '../../components/common/drawer/container/screen_container1'
-import GradientText from '../../components/common/drawer/gradient/gradient_text'
-import { images } from '../../libs/constants/constants'
-import CustomLinearGradient from '../../components/common/drawer/gradient/custom_linear_gradient'
-import { colors, roboto } from '../../libs/typography/typography'
-import HistoriqueCard from '../../components/card/drawer/historique_card'
 import { RootState } from '../../libs/services/store'
-import { debug, formatCardNumber, getFourthLastCaractere } from '../../libs/constants/utils'
+import { images } from '../../libs/constants/constants'
 import { SMS_TYPE } from '../../libs/services/sms/sms.model'
+import { colors, roboto } from '../../libs/typography/typography'
 import { getUser, sendSms } from '../../libs/services/user/user.action'
-import { getAllHistorys } from '../../libs/services/history/history.action'
-import { _end_point, get_credentials } from '../../libs/services/endpoints'
 import { SETTING_TYPE } from '../../libs/services/setting/setting.model'
+import HistoriqueCard from '../../components/card/drawer/historique_card'
+import { _end_point, get_credentials } from '../../libs/services/endpoints'
+import { getAllHistorys } from '../../libs/services/history/history.action'
+import GradientText from '../../components/common/drawer/gradient/gradient_text'
+import ScreenContainer1 from '../../components/common/drawer/container/screen_container1'
+import { debug, formatCardNumber, getFourthLastCaractere } from '../../libs/constants/utils'
+import CustomLinearGradient from '../../components/common/drawer/gradient/custom_linear_gradient'
 // my icons
 import Feather from 'react-native-vector-icons/Feather'
 
@@ -191,8 +191,8 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                 </View>
                 {/* menu ika wari taa, facture, recharge */}
                 <View style={styles.menu_global_container}>
-                    <View style={styles.menu_title_container}>
-                        <TouchableOpacity activeOpacity={0.5} style={[styles.menu_icon_container, { backgroundColor: colors.ika_wari_taa_bg_color, padding: 15, opacity: 0.4, }]} onPress={() => ToastAndroid.showWithGravity('En cours développement pour le moment.', ToastAndroid.CENTER, ToastAndroid.TOP) /*navigation.navigate('ika_wari_taa')*/}>
+                    {/* <View style={styles.menu_title_container}>
+                        <TouchableOpacity activeOpacity={0.5} style={[styles.menu_icon_container, { backgroundColor: colors.ika_wari_taa_bg_color, padding: 15, opacity: 0.4, }]} onPress={() => ToastAndroid.showWithGravity('En cours développement pour le moment.', ToastAndroid.CENTER, ToastAndroid.TOP)}>
                             <Image source={images.clock} tintColor={colors.white} style={styles.menu_clock} />
                             <Image source={images.ika_wari_taa} tintColor={colors.white} style={styles.menu_icon} />
                         </TouchableOpacity>
@@ -200,13 +200,13 @@ const Home: FC<COMPONENT_TYPE> = (props) => {
                     </View>
                     <View style={styles.menu_title_container}>
                         <CustomLinearGradient style={[styles.gradient, { opacity: 0.4, }]}>
-                            <TouchableOpacity activeOpacity={0.5} style={[styles.menu_icon_container, { padding: 15, }]} onPress={() => ToastAndroid.showWithGravity('En cours développement pour le moment.', ToastAndroid.CENTER, ToastAndroid.TOP) /*navigation.navigate('payment_stack')*/}>
+                            <TouchableOpacity activeOpacity={0.5} style={[styles.menu_icon_container, { padding: 15, }]} onPress={() => ToastAndroid.showWithGravity('En cours développement pour le moment.', ToastAndroid.CENTER, ToastAndroid.TOP)}>
                                 <Image source={images.clock} tintColor={colors.black} style={styles.menu_clock} />
                                 <Image source={images.facture} style={styles.menu_icon} />
                             </TouchableOpacity>
                         </CustomLinearGradient>
                         <Text style={styles.menu_title}>Facture</Text>
-                    </View>
+                    </View> */}
                     <View style={styles.menu_title_container}>
                         <TouchableOpacity activeOpacity={0.5} style={[styles.menu_icon_container, { backgroundColor: colors.recharge_bg_color, }]} onPress={() => navigation.navigate('recharge')}>
                             <Image source={images.recharge} style={[styles.menu_icon, { borderRadius: 15, objectFit: 'contain', }]} />

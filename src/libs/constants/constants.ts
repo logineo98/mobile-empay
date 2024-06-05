@@ -60,6 +60,7 @@ export const images = {
     clock: require('../assets/images/clock.png'),
     coin: require('../assets/images/coin.png'),
     location: require('../assets/images/location.png'),
+    shield: require('../assets/images/shield.png'),
 }
 
 export const videos = {

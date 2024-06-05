@@ -78,7 +78,6 @@ const Login = () => {
                         <Text style={styles.description}>Gerer vos finances avec la neocarte EM</Text>
                     </View>
 
-
                     <Spacer />
 
                     <View style={styles.forms}>

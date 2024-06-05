@@ -1,4 +1,4 @@
-import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Linking, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import CheckBox from '@react-native-community/checkbox';
 import FontAwesome from "react-native-vector-icons/FontAwesome"
@@ -31,7 +31,6 @@ const Signature = () => {
     const [ok, setOk] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
 
-
     //----- display errors
     useEffect(() => { if (error && error !== null) { Toast.show({ type: 'error', text1: 'Avertissement', text2: error, }); setError("") }; }, [error, dispatch]);
 
@@ -46,7 +45,6 @@ const Signature = () => {
 
     //----- get local storage data and hydrate form
     useEffect(() => { getLocalStorage() }, []);
-
 
     const resetSign = () => { signatureRef.current.resetImage(); setInputs({ ...inputs, signature: null }) };
     const _onSaveEvent = (result: any) => { setSign(result?.pathName); setOk(!ok) };
@@ -89,9 +87,7 @@ const Signature = () => {
         setNext(true)
     }
 
-
     const animatedStyle = useAnimatedStyle(() => { return { transform: [{ scale: scale.value }], }; });
-
 
     return (
         <Wrapper image imageData={images.register_signature_bg_img}   >
@@ -123,7 +119,8 @@ const Signature = () => {
                         <TouchableOpacity onPress={resetSign} activeOpacity={0.8} style={styles.close} ><FontAwesome name="close" size={24} color={"blue"} /></TouchableOpacity>
                     </View>
                     <Spacer height={15} />
-                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+
+                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", }}>
                         <CheckBox
                             disabled={false}
                             tintColors={{ true: colors.white, false: colors.white }}
@@ -132,10 +129,15 @@ const Signature = () => {
                         />
                         <Text style={{ color: colors.white, fontFamily: roboto.bold, }}>J'accepte les conditions générales*</Text>
                     </View>
-                    <Spacer />
+                    <Spacer height={15} />
+
+                    <TouchableOpacity activeOpacity={0.5} onPress={async () => await Linking.openURL('https://emploietmoi.com/neocarte/privacy-policy')}>
+                        <Text style={{ color: colors.white, fontFamily: roboto.bold, }}>Politique de confidentialité</Text>
+                    </TouchableOpacity>
+                    <Spacer height={15} />
 
                     <View>
-                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <View style={{ flexDirection: "row", alignItems: "center", }}>
                             <Image source={images.logo_republic} style={{ width: 45, height: 45, resizeMode: "contain" }} />
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <Image source={images.signature_logo} style={{ width: 50, height: 50, resizeMode: "contain", }} />
@@ -144,6 +146,7 @@ const Signature = () => {
                         </View>
                     </View>
                 </View>
+
                 <Animated.View style={[animatedStyle, { alignSelf: "flex-end" }]}>
                     <TouchableOpacity onPress={handle_validate} activeOpacity={0.8} style={styles.actionBtn}><Image source={images.auth_action} style={styles.btnImage} /></TouchableOpacity>
                 </Animated.View>

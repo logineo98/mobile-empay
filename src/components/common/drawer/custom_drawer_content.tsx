@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Image, Modal, PermissionsAndroid, ScrollView, Share, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { ActivityIndicator, Alert, Image, Linking, Modal, PermissionsAndroid, ScrollView, Share, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { FC, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types'
@@ -45,6 +45,10 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
         } catch (error) { }
     }
 
+    const openUrl = () => {
+
+    }
+
     return (
         <View style={styles.drawer_container}>
             {/* profil container */}
@@ -56,18 +60,18 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
                     }
                 </View>
                 <View style={styles.info_container}>
-                    <Text numberOfLines={1} style={styles.info_name}> {host?.name} </Text>
-                    <Text numberOfLines={1} style={styles.info_email}> {host?.email} </Text>
+                    <Text numberOfLines={1} style={styles.info_name}>{host?.name}</Text>
+                    <Text numberOfLines={1} style={styles.info_email}>{host?.email}</Text>
                 </View>
             </TouchableOpacity>
 
             {/* menus */}
             <View style={[styles.item_global_container, { height: height - (135 + 70), marginTop: 10, }]}>
                 <ScrollView contentContainerStyle={{}} showsVerticalScrollIndicator={false}>
-                    <TouchableOpacity activeOpacity={0.5} style={[styles.item_container, { marginTop: 20, opacity: 0.4, }]} onPress={() => ToastAndroid.showWithGravity('En cours développement pour le moment.', ToastAndroid.CENTER, ToastAndroid.TOP) /*navigation.navigate('status')*/}>
+                    {/* <TouchableOpacity activeOpacity={0.5} style={[styles.item_container, { marginTop: 20, opacity: 0.4, }]} onPress={() => ToastAndroid.showWithGravity('En cours développement pour le moment.', ToastAndroid.CENTER, ToastAndroid.TOP)}>
                         <Image source={images.status} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
                         <Text style={styles.item_name}>Statut/Disponibilité</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <View style={{ marginBottom: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
                         <TouchableOpacity activeOpacity={0.5} style={[styles.item_container, { marginBottom: 0, }]} onPress={handleLocation}>
@@ -102,10 +106,15 @@ const CustomDrawerContent: FC<COMPONENT_TYPE> = (props) => {
                         <Text style={styles.item_name}>Parrainage</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity activeOpacity={0.5} style={[styles.item_container, { opacity: 0.4, }]} onPress={() => ToastAndroid.showWithGravity('En cours développement pour le moment.', ToastAndroid.CENTER, ToastAndroid.TOP)}>
+                    <TouchableOpacity activeOpacity={0.5} style={styles.item_container} onPress={async () => await Linking.openURL('https://emploietmoi.com/neocarte/privacy-policy')}>
+                        <Image source={images.shield} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
+                        <Text style={[styles.item_name, { fontSize: 16, }]}>Politique de confidentialité</Text>
+                    </TouchableOpacity>
+
+                    {/* <TouchableOpacity activeOpacity={0.5} style={[styles.item_container, { opacity: 0.4, }]} onPress={() => ToastAndroid.showWithGravity('En cours développement pour le moment.', ToastAndroid.CENTER, ToastAndroid.TOP)}>
                         <Image source={images.update} style={styles.item_icon} tintColor={colors.drawer_icon_color} />
                         <Text style={styles.item_name}>Mise à jour disponible</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <View style={styles.divider} />
                 </ScrollView>
